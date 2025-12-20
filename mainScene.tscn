@@ -1,7 +1,10 @@
-[gd_scene load_steps=3 format=3 uid="uid://cwyc3bi48q0dq"]
+[gd_scene load_steps=4 format=3 uid="uid://cwyc3bi48q0dq"]
 
 [ext_resource type="Script" uid="uid://cmvuo3msac32f" path="res://Chunk.cs" id="1_g4qto"]
 [ext_resource type="Script" uid="uid://brwqho7jxh6a6" path="res://Camera.cs" id="1_iwpey"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_g4qto"]
+albedo_color = Color(1, 0.5019608, 1, 1)
 
 [node name="Game" type="Node3D"]
 
@@ -21,6 +24,7 @@ size = Vector2i(288, 162)
 render_target_update_mode = 4
 
 [node name="Chunk" type="MeshInstance3D" parent="SubViewportContainer/SubViewport"]
+material_override = SubResource("StandardMaterial3D_g4qto")
 skeleton = NodePath("../../..")
 script = ExtResource("1_g4qto")
 

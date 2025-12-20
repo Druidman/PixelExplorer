@@ -1,23 +1,24 @@
 
 
 using System.Collections.Generic;
-
+using System.Linq;
 using Godot;
 
 public partial class Chunk : MeshInstance3D
 {
 	List<Godot.Vector3> vertices = new List<Godot.Vector3>();
+
+	// List< GameObject > gameObjects;
+	List< WorldTile > worldTiles = new List<WorldTile>();
 	public override void _Ready()
 	{
 		
-		vertices.Add(new Vector3(0, 1, 0));
-		vertices.Add(new Vector3(1, 0, 0));
-		vertices.Add(new Vector3(0, 0, 1));
-		
+		worldTiles.Add(new WorldTile(new Godot.Vector3(0.0f,0.0f,0.0f), 1.0f));
+		vertices.AddRange(worldTiles[0].GetVertices());
+		setMesh();
 		
 	}
-
-	public override void _Process(double delta)
+	private void setMesh()
 	{
 		var newMesh = new Godot.ArrayMesh();
 		
@@ -31,5 +32,9 @@ public partial class Chunk : MeshInstance3D
 		newMesh.AddSurfaceFromArrays(Mesh.PrimitiveType.Triangles, arrays);
 		
 		this.Mesh = newMesh;
+	}
+	public override void _Process(double delta)
+	{
+		
 	}
 }
