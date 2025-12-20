@@ -1,11 +1,13 @@
 
 using System.Collections.Generic;
+using System.Text;
 using Godot;
 public class WorldTile
 {
     float Size;
     Godot.Vector3 Position;
     private List<Godot.Vector3> Vertices = new List<Godot.Vector3>();
+    private List<Godot.Vector3> Normals = new List<Godot.Vector3>();
 
     public WorldTile(Godot.Vector3 pos, float tile_size)
     {
@@ -18,18 +20,30 @@ public class WorldTile
     {
         return Vertices;
     }
+    public List<Godot.Vector3> GetNormals()
+    {
+        return Normals;
+    }
+    private void AddFace(Godot.Vector3 normal)
+    {
+        this.Vertices.AddRange(CreateFaceVertices(normal));
+        this.Normals.AddRange(GetVertexNormals(normal));
+    }
 
     private void SetVertices()
     {
-        this.Vertices.AddRange(CreateFace(Godot.Vector3.Up));
-        this.Vertices.AddRange(CreateFace(Godot.Vector3.Down));
-        this.Vertices.AddRange(CreateFace(Godot.Vector3.Left));
-        this.Vertices.AddRange(CreateFace(Godot.Vector3.Right));
-        this.Vertices.AddRange(CreateFace(Godot.Vector3.Forward));
-        this.Vertices.AddRange(CreateFace(Godot.Vector3.Back));
+        this.AddFace(Godot.Vector3.Up);
+        this.AddFace(Godot.Vector3.Down);
+        this.AddFace(Godot.Vector3.Left);
+        this.AddFace(Godot.Vector3.Right);
+        this.AddFace(Godot.Vector3.Forward);
+        this.AddFace(Godot.Vector3.Back);
     }
-
-    private List<Godot.Vector3> CreateFace(Godot.Vector3 direction)
+    private List<Godot.Vector3> GetVertexNormals(Godot.Vector3 normal)
+    {
+        return [normal, normal, normal, normal, normal, normal]; // TODO XDDD
+    }
+    private List<Godot.Vector3> CreateFaceVertices(Godot.Vector3 direction)
     {
         List<Godot.Vector3> vertices = new List<Godot.Vector3>();
 
