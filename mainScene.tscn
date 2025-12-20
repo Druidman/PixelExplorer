@@ -1,24 +1,44 @@
-[gd_scene load_steps=3 format=3 uid="uid://cwyc3bi48q0dq"]
+[gd_scene load_steps=5 format=3 uid="uid://cwyc3bi48q0dq"]
 
 [ext_resource type="Script" uid="uid://brwqho7jxh6a6" path="res://Camera.cs" id="1_iwpey"]
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_iwpey"]
+albedo_color = Color(1, 1, 0.36078432, 1)
+
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_g4qto"]
 
-[node name="Node3D" type="Node3D"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hr5et"]
+albedo_color = Color(1, 0.5294118, 1, 1)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.90838003, 0, 0)
+[node name="Game" type="Node3D"]
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="."]
+texture_filter = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+stretch_shrink = 5
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
+size = Vector2i(230, 129)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="SubViewportContainer/SubViewport"]
+transform = Transform3D(0.9999996, 0, 0.0008901178, 0, 1, 0, -0.0008901178, 0, 0.9999996, -1, 0, 0)
+material_override = SubResource("StandardMaterial3D_iwpey")
 mesh = SubResource("CapsuleMesh_g4qto")
-skeleton = NodePath("../Camera3D")
 
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.8837983, 0.46786812, 0, -0.46786812, 0.8837983, 0, 3.204742, 3.8123162)
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="SubViewportContainer/SubViewport"]
+transform = Transform3D(0.9999996, 0, 0.0008901178, 0, 1, 0, -0.0008901178, 0, 0.9999996, 1, 0, 0)
+material_override = SubResource("StandardMaterial3D_hr5et")
+mesh = SubResource("CapsuleMesh_g4qto")
+skeleton = NodePath("../../..")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="SubViewportContainer/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 0.8677481, 0.49700427, 0, -0.49700427, 0.8677481, 0, 1.8849877, 2.6425052)
+
+[node name="Camera3D" type="Camera3D" parent="SubViewportContainer/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 0.8677481, 0.49700427, 0, -0.49700427, 0.8677481, 0, 1.8849877, 2.6425052)
 script = ExtResource("1_iwpey")
-
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.92812395, 0, 0)
-mesh = SubResource("CapsuleMesh_g4qto")
-skeleton = NodePath("../Camera3D")
-
-[node name="OmniLight3D" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.377236, 0)
