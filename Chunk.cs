@@ -5,16 +5,14 @@ using System.Collections.Generic;
 using System.Linq;
 using Godot;
 [Tool]
-public partial class Chunk : MeshInstance3D
+public partial class Chunk : Node3D
 {
-	List<Godot.Vector3> vertices = new List<Godot.Vector3>();
-	List<Godot.Vector3> normals = new List<Godot.Vector3>();
 
 	// List< GameObject > gameObjects;
 	List< WorldTile > worldTiles = new List<WorldTile>();
 	FastNoiseLite noise = new Godot.FastNoiseLite();
 
-	int width = 64;
+	int width = 32;
 	public override void _Ready()
 	{
 		int startXpos = -(width/2);
@@ -37,39 +35,16 @@ public partial class Chunk : MeshInstance3D
 			}	
 		}
 
-		
-		
-		
-	
-		GenMesh();
-
-
-		setMesh();
-		
-	}
-	private void GenMesh()
-	{
-		for (int i = 0; i<this.worldTiles.Count(); i++){
-			this.vertices.AddRange(this.worldTiles[i].GetVertices());
-			this.normals.AddRange(this.worldTiles[i].GetNormals());
+		for (int i =0; i< this.worldTiles.Count(); i++)
+		{
+			worldTiles[i].setUpMesh();
+			MeshInstance3D mesh = worldTiles[i].getMeshInstance();
+			AddChild(mesh);
 		}
-	}
-	private void setMesh()
-	{
-		var newMesh = new Godot.ArrayMesh();
-		
 
-		var arrays = new Godot.Collections.Array();
-		
-		arrays.Resize((int)Mesh.ArrayType.Max);
-		arrays[(int)Mesh.ArrayType.Vertex] = vertices.ToArray();
-		arrays[(int)Mesh.ArrayType.Normal] = normals.ToArray();
+		GD.Print(GetChildCount());
 
 		
-		
-		newMesh.AddSurfaceFromArrays(Mesh.PrimitiveType.Triangles, arrays);
-		
-		this.Mesh = newMesh;
 	}
 	public override void _Process(double delta)
 	{
