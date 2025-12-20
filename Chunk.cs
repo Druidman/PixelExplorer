@@ -13,10 +13,23 @@ public partial class Chunk : MeshInstance3D
 	public override void _Ready()
 	{
 		
-		worldTiles.Add(new WorldTile(new Godot.Vector3(0.0f,0.0f,0.0f), 1.0f));
-		vertices.AddRange(worldTiles[0].GetVertices());
+		worldTiles.Add(new WorldTile(new Godot.Vector3(0.5f,0.0f,0.5f), 1.0f));
+		worldTiles.Add(new WorldTile(new Godot.Vector3(-0.5f,0.0f,0.5f), 1.0f));
+		worldTiles.Add(new WorldTile(new Godot.Vector3(0.5f,0.0f,-0.5f), 1.0f));
+		worldTiles.Add(new WorldTile(new Godot.Vector3(-0.5f,0.0f,-0.5f), 1.0f));
+		
+
+		GenMesh();
+
+
 		setMesh();
 		
+	}
+	private void GenMesh()
+	{
+		for (int i = 0; i<this.worldTiles.Count(); i++){
+			this.vertices.AddRange(this.worldTiles[i].GetVertices());
+		}
 	}
 	private void setMesh()
 	{
