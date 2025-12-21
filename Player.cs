@@ -9,7 +9,10 @@ public partial class Player : CharacterBody3D
 
 	public override void _Input(InputEvent inputEvent)
 	{
-	   GD.Print(inputEvent);
+	   if (inputEvent.GetType() == typeof(InputEventMouseMotion))
+		{
+			
+		}
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -20,7 +23,6 @@ public partial class Player : CharacterBody3D
 		if (!IsOnFloor())
 		{
 			velocity += GetGravity() * (float)delta;
-			GD.Print("Fall");
 		}
 
 		// Handle Jump.

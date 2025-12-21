@@ -1,5 +1,6 @@
-[gd_scene load_steps=5 format=3 uid="uid://cwyc3bi48q0dq"]
+[gd_scene load_steps=6 format=3 uid="uid://cwyc3bi48q0dq"]
 
+[ext_resource type="PackedScene" uid="uid://bxbdurtrp6it3" path="res://fpsCounter.tscn" id="1_61od6"]
 [ext_resource type="Script" uid="uid://cmvuo3msac32f" path="res://Chunk.cs" id="1_g4qto"]
 [ext_resource type="PackedScene" uid="uid://s2uye1o3mxru" path="res://player.tscn" id="1_hr5et"]
 
@@ -19,6 +20,8 @@ grow_horizontal = 2
 grow_vertical = 2
 stretch = true
 stretch_shrink = 4
+
+[node name="Node2D" parent="SubViewportContainer" instance=ExtResource("1_61od6")]
 
 [node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
 handle_input_locally = false
