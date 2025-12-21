@@ -12,7 +12,7 @@ public partial class Chunk : Node3D
 	List< WorldTile > worldTiles = new List<WorldTile>();
 	FastNoiseLite noise = new Godot.FastNoiseLite();
 
-	int width = 32;
+	int width = 16;
 	public override void _Ready()
 	{
 		int startXpos = -(width/2);
@@ -39,6 +39,8 @@ public partial class Chunk : Node3D
 		{
 			worldTiles[i].setUpMesh();
 			MeshInstance3D mesh = worldTiles[i].getMeshInstance();
+			mesh.CreateTrimeshCollision();
+			
 			AddChild(mesh);
 		}
 
