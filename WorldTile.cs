@@ -6,11 +6,9 @@ public class WorldTile
 {
     float Size;
     Godot.Vector3 Position;
+   
     private List<Godot.Vector3> Vertices = new List<Godot.Vector3>();
     private List<Godot.Vector3> Normals = new List<Godot.Vector3>();
-
-
-    private MeshInstance3D mesh = new MeshInstance3D();
     public WorldTile(Godot.Vector3 pos, float tile_size)
     {
         this.Position = pos;
@@ -18,30 +16,8 @@ public class WorldTile
         this.SetVertices();
     }
 
-    public MeshInstance3D getMeshInstance()
-    {
-        return this.mesh;
-    }
-    public void setUpMesh()
-    {
-        var newMesh = new Godot.ArrayMesh();
-		
+  
 
-		var arrays = new Godot.Collections.Array();
-		
-		arrays.Resize((int)Godot.Mesh.ArrayType.Max);
-		arrays[(int)Godot.Mesh.ArrayType.Vertex] = this.Vertices.ToArray();
-		arrays[(int)Godot.Mesh.ArrayType.Normal] = this.Normals.ToArray();
-
-		
-		
-		newMesh.AddSurfaceFromArrays(Godot.Mesh.PrimitiveType.Triangles, arrays);
-		
-        var m = new Godot.MeshInstance3D();
-		this.mesh.Mesh = newMesh;
-        
-        
-    }
     public List<Godot.Vector3> GetVertices()
     {
         return Vertices;
