@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Godot;
+
 public class WorldTile
 {
     float Size;
@@ -9,6 +10,8 @@ public class WorldTile
    
     private List<Godot.Vector3> Vertices = new List<Godot.Vector3>();
     private List<Godot.Vector3> Normals = new List<Godot.Vector3>();
+    private List<Godot.Vector2> Uvs = new List<Godot.Vector2>();
+
     public WorldTile(Godot.Vector3 pos, float tile_size)
     {
         this.Position = pos;
@@ -26,11 +29,17 @@ public class WorldTile
     {
         return Normals;
     }
+    public List<Godot.Vector2> GetUvs()
+    {
+        return Uvs;
+    }
     private void AddFace(Godot.Vector3 normal)
     {
         this.Vertices.AddRange(CreateFaceVertices(normal));
         this.Normals.AddRange(GetVertexNormals(normal));
+        this.Uvs.AddRange(GetVertexUvs(normal));
     }
+    
 
     private void SetVertices()
     {
@@ -40,6 +49,13 @@ public class WorldTile
         this.AddFace(Godot.Vector3.Right);
         this.AddFace(Godot.Vector3.Forward);
         this.AddFace(Godot.Vector3.Back);
+    }
+    private List<Godot.Vector2> GetVertexUvs(Godot.Vector3 normal)
+    {
+        return [
+            GameGlobals.baseBlockUvSector[0], GameGlobals.baseBlockUvSector[1], GameGlobals.baseBlockUvSector[3],
+            GameGlobals.baseBlockUvSector[1], GameGlobals.baseBlockUvSector[2], GameGlobals.baseBlockUvSector[3]
+        ];
     }
     private List<Godot.Vector3> GetVertexNormals(Godot.Vector3 normal)
     {
