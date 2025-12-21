@@ -1,13 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://cwyc3bi48q0dq"]
+[gd_scene load_steps=4 format=3 uid="uid://cwyc3bi48q0dq"]
 
 [ext_resource type="PackedScene" uid="uid://bxbdurtrp6it3" path="res://fpsCounter.tscn" id="1_61od6"]
 [ext_resource type="Script" uid="uid://cmvuo3msac32f" path="res://Chunk.cs" id="1_g4qto"]
 [ext_resource type="PackedScene" uid="uid://s2uye1o3mxru" path="res://player.tscn" id="1_hr5et"]
-
-[sub_resource type="BoxMesh" id="BoxMesh_iwpey"]
-
-[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_g4qto"]
-data = PackedVector3Array(-0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, -0.5)
 
 [node name="Game" type="Node3D"]
 
@@ -28,21 +23,12 @@ handle_input_locally = false
 size = Vector2i(480, 270)
 render_target_update_mode = 4
 
+[node name="MeshInstance3D" type="MeshInstance3D" parent="SubViewportContainer/SubViewport"]
+skeleton = NodePath("../../..")
+script = ExtResource("1_g4qto")
+
 [node name="Player" parent="SubViewportContainer/SubViewport" instance=ExtResource("1_hr5et")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.91666657, 8.8089285, -2.4166665)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="SubViewportContainer/SubViewport"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 16.118969, 0)
-mesh = SubResource("BoxMesh_iwpey")
-skeleton = NodePath("../../..")
-
-[node name="StaticBody3D" type="StaticBody3D" parent="SubViewportContainer/SubViewport/MeshInstance3D"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="SubViewportContainer/SubViewport/MeshInstance3D/StaticBody3D"]
-shape = SubResource("ConcavePolygonShape3D_g4qto")
-
-[node name="Chunk" type="MeshInstance3D" parent="SubViewportContainer/SubViewport"]
-script = ExtResource("1_g4qto")
 
 [node name="Camera3D" type="Camera3D" parent="SubViewportContainer/SubViewport"]
 transform = Transform3D(-0.9998657, 0, 0.016387833, 0.011997195, 0.68121934, 0.7319811, -0.011163709, 0.7320794, -0.68112785, 0, 20.07032, -11.816227)

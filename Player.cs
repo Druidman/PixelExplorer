@@ -1,7 +1,6 @@
 using Godot;
 using System;
 
-[Tool]
 public partial class Player : CharacterBody3D
 {
 	public const float Speed = 5.0f;
