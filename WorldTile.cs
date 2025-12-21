@@ -6,15 +6,17 @@ public class WorldTile
 {
     float Size;
     Godot.Vector3 Position;
+   
     private List<Godot.Vector3> Vertices = new List<Godot.Vector3>();
     private List<Godot.Vector3> Normals = new List<Godot.Vector3>();
-
     public WorldTile(Godot.Vector3 pos, float tile_size)
     {
         this.Position = pos;
         this.Size = tile_size;
         this.SetVertices();
     }
+
+  
 
     public List<Godot.Vector3> GetVertices()
     {
