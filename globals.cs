@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 class GameGlobals
 {
+
+    public static int TileWidth = 1;
     public static Godot.Vector2 TextureAtlasSize = new Godot.Vector2(48,64);
     public static int YAxisCells = 4;
     public static int XAxisCells = 3;

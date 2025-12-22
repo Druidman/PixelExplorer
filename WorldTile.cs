@@ -5,24 +5,22 @@ using Godot;
 
 public class WorldTile
 {
-    float Size;
-    Godot.Vector3 Position;
+    float Size = GameGlobals.TileWidth;
+    public Godot.Vector3 Position;
    
     private List<Godot.Vector3> Vertices = new List<Godot.Vector3>();
     private List<Godot.Vector3> Normals = new List<Godot.Vector3>();
     private List<Godot.Vector2> Uvs = new List<Godot.Vector2>();
 
-    private BlockType blockType = BlockType.Sand;
+    public BlockType blockType = BlockType.Sand;
 
-    public WorldTile(Godot.Vector3 pos, float tile_size)
+    public WorldTile(Godot.Vector3 pos, BlockType typeB)
     {
         this.Position = pos;
-        this.Size = tile_size;
+        this.blockType = typeB;
+        
         this.SetVertices();
     }
-
-  
-
     public List<Godot.Vector3> GetVertices()
     {
         return Vertices;
@@ -35,6 +33,8 @@ public class WorldTile
     {
         return Uvs;
     }
+    
+
     private void AddFace(Godot.Vector3 normal)
     {
         this.Vertices.AddRange(CreateFaceVertices(normal));

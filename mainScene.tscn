@@ -1,23 +1,8 @@
-[gd_scene load_steps=7 format=4 uid="uid://cwyc3bi48q0dq"]
+[gd_scene load_steps=4 format=3 uid="uid://cwyc3bi48q0dq"]
 
 [ext_resource type="PackedScene" uid="uid://bxbdurtrp6it3" path="res://fpsCounter.tscn" id="1_61od6"]
-[ext_resource type="Script" uid="uid://cmvuo3msac32f" path="res://Chunk.cs" id="1_g4qto"]
 [ext_resource type="PackedScene" uid="uid://s2uye1o3mxru" path="res://player.tscn" id="1_hr5et"]
-[ext_resource type="Texture2D" uid="uid://dot80ftfmxxmv" path="res://images/customTexture.png" id="3_61od6"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6mfv6"]
-albedo_texture = ExtResource("3_61od6")
-
-[sub_resource type="ArrayMesh" id="ArrayMesh_2qqqv"]
-_surfaces = [{
-"aabb": AABB(-0.5, 5.5, -0.5, 1, 1, 1),
-"attribute_data": PackedByteArray("AAAAAAAAAAAAAIA+AAAAAAAAAADNzMw9AACAPgAAAAAAAIA+zczMPQAAAADNzMw9AAAAPwAAAAAAAEA/AAAAAAAAAD/NzMw9AABAPwAAAAAAAEA/zczMPQAAAD/NzMw9AACAPgAAAAAAAAA/AAAAAAAAgD7NzMw9AAAAPwAAAAAAAAA/zczMPQAAgD7NzMw9AACAPgAAAAAAAAA/AAAAAAAAgD7NzMw9AAAAPwAAAAAAAAA/zczMPQAAgD7NzMw9AACAPgAAAAAAAAA/AAAAAAAAgD7NzMw9AAAAPwAAAAAAAAA/zczMPQAAgD7NzMw9AACAPgAAAAAAAAA/AAAAAAAAgD7NzMw9AAAAPwAAAAAAAAA/zczMPQAAgD7NzMw9"),
-"format": 34359738391,
-"primitive": 3,
-"uv_scale": Vector4(0, 0, 0, 0),
-"vertex_count": 36,
-"vertex_data": PackedByteArray("AAAAvwAA0EAAAAC/AAAAPwAA0EAAAAC/AAAAvwAA0EAAAAA/AAAAPwAA0EAAAAC/AAAAPwAA0EAAAAA/AAAAvwAA0EAAAAA/AAAAvwAAsEAAAAA/AAAAPwAAsEAAAAA/AAAAvwAAsEAAAAC/AAAAPwAAsEAAAAA/AAAAPwAAsEAAAAC/AAAAvwAAsEAAAAC/AAAAvwAA0EAAAAC/AAAAvwAA0EAAAAA/AAAAvwAAsEAAAAC/AAAAvwAA0EAAAAA/AAAAvwAAsEAAAAA/AAAAvwAAsEAAAAC/AAAAPwAA0EAAAAA/AAAAPwAA0EAAAAC/AAAAPwAAsEAAAAA/AAAAPwAA0EAAAAC/AAAAPwAAsEAAAAC/AAAAPwAAsEAAAAA/AAAAPwAA0EAAAAC/AAAAvwAA0EAAAAC/AAAAPwAAsEAAAAC/AAAAvwAA0EAAAAC/AAAAvwAAsEAAAAC/AAAAPwAAsEAAAAC/AAAAvwAA0EAAAAA/AAAAPwAA0EAAAAA/AAAAvwAAsEAAAAA/AAAAPwAA0EAAAAA/AAAAPwAAsEAAAAA/AAAAvwAAsEAAAAA//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//38AAAAA/7//fwAAAAD/v/9/AAAAAP+//38AAAAA/7//fwAAAAD/v/9/AAAAAP+/AAD/f/9//78AAP9//3//vwAA/3//f/+/AAD/f/9//78AAP9//3//vwAA/3//f/+/////f/9//7////9//3//v////3//f/+/////f/9//7////9//3//v////3//f/+///////9/AID//////38AgP//////fwCA//////9/AID//////38AgP//////fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA")
-}]
+[ext_resource type="Script" uid="uid://cwhwq7874mqpk" path="res://World.cs" id="3_hr5et"]
 
 [node name="Game" type="Node3D"]
 
@@ -39,14 +24,11 @@ size = Vector2i(960, 540)
 render_target_update_mode = 4
 
 [node name="Player" parent="SubViewportContainer/SubViewport" instance=ExtResource("1_hr5et")]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -0.91666657, 8.8089285, -2.4166665)
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -0.91666657, 57.902847, -2.4166665)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="SubViewportContainer/SubViewport"]
+[node name="World" type="Node3D" parent="SubViewportContainer/SubViewport"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.028299809, -0.02318573, -0.0021038055)
-material_override = SubResource("StandardMaterial3D_6mfv6")
-mesh = SubResource("ArrayMesh_2qqqv")
-skeleton = NodePath("../../..")
-script = ExtResource("1_g4qto")
+script = ExtResource("3_hr5et")
 
 [node name="SpotLight3D" type="SpotLight3D" parent="SubViewportContainer/SubViewport"]
 transform = Transform3D(0.9659259, 0.2588191, 1.0433497e-08, -0.012796633, 0.047757596, 0.9987771, 0.25850263, -0.96474457, 0.04944226, 0, 32, -0.7825546)

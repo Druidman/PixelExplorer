@@ -1,4 +1,4 @@
-enum Face
+public enum Face
 {
     Top,
     Bottom,
@@ -7,11 +7,11 @@ enum Face
     Front,
     Back
 }
-enum BlockType
+public enum BlockType
 {
-    Grass, Sand, Stone
+    Grass, Sand, Stone, NONE
 }
-enum BlockSideUvInd
+public enum BlockSideUvInd
 {
     Top,
     Side,
