@@ -12,7 +12,7 @@ public class WorldTile
     private List<Godot.Vector3> Normals = new List<Godot.Vector3>();
     private List<Godot.Vector2> Uvs = new List<Godot.Vector2>();
 
-    private BlockType blockType = BlockType.Grass;
+    private BlockType blockType = BlockType.Sand;
 
     public WorldTile(Godot.Vector3 pos, float tile_size)
     {
@@ -54,7 +54,7 @@ public class WorldTile
     }
     private List<Godot.Vector2> GetVertexUvs(Godot.Vector3 normal)
     {
-        Godot.Vector2 baseAppend = new Vector2(0, (int)this.blockType * 4);
+        Godot.Vector2 baseAppend = new Vector2(0, (int)this.blockType * GameGlobals.YAxisMove);
 
         Godot.Vector2 add = new Vector2();
         if (normal == Godot.Vector3.Up)
