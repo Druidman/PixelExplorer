@@ -12,6 +12,8 @@ public class WorldTile
     private List<Godot.Vector3> Normals = new List<Godot.Vector3>();
     private List<Godot.Vector2> Uvs = new List<Godot.Vector2>();
 
+    private BlockType blockType = BlockType.Grass;
+
     public WorldTile(Godot.Vector3 pos, float tile_size)
     {
         this.Position = pos;
@@ -52,10 +54,36 @@ public class WorldTile
     }
     private List<Godot.Vector2> GetVertexUvs(Godot.Vector3 normal)
     {
-        return [
-            GameGlobals.baseBlockUvSector[0], GameGlobals.baseBlockUvSector[1], GameGlobals.baseBlockUvSector[3],
-            GameGlobals.baseBlockUvSector[1], GameGlobals.baseBlockUvSector[2], GameGlobals.baseBlockUvSector[3]
+        Godot.Vector2 baseAppend = new Vector2(0, (int)this.blockType * 4);
+
+        Godot.Vector2 add = new Vector2();
+        if (normal == Godot.Vector3.Up)
+        {
+            add = new Vector2(0,0);
+        }
+        else if (normal == Godot.Vector3.Down)
+        {
+            add = new Vector2((int)BlockSideUvInd.Bottom * GameGlobals.XAxisMove,0);
+        }
+        else if (normal == Godot.Vector3.Left || normal == Godot.Vector3.Right || normal == Godot.Vector3.Forward || normal == Godot.Vector3.Back)
+        {
+            add = new Vector2((int)BlockSideUvInd.Side * GameGlobals.XAxisMove,0);
+        }
+
+        List<Vector2> BaseUvs = [
+            GameGlobals.baseBlockUvSector[0] + baseAppend + add,
+            GameGlobals.baseBlockUvSector[1] + baseAppend + add,
+            GameGlobals.baseBlockUvSector[2] + baseAppend + add,
+            GameGlobals.baseBlockUvSector[3] + baseAppend + add
         ];
+
+        List<Vector2> uvs = BaseUvs;
+        
+        return [
+            uvs[0], uvs[1], uvs[3],
+            uvs[1], uvs[2], uvs[3],
+        ];
+        
     }
     private List<Godot.Vector3> GetVertexNormals(Godot.Vector3 normal)
     {
@@ -89,30 +117,35 @@ public class WorldTile
         {
             vertices = new List<Godot.Vector3>
             {
-                this.Position + new Godot.Vector3(-0.5f, -0.5f, -0.5f) * this.Size,
+                
+                
                 this.Position + new Godot.Vector3(-0.5f,  0.5f, -0.5f) * this.Size,
                 this.Position + new Godot.Vector3(-0.5f,  0.5f,  0.5f) * this.Size,
-                this.Position + new Godot.Vector3(-0.5f, -0.5f,  0.5f) * this.Size
+                this.Position + new Godot.Vector3(-0.5f, -0.5f,  0.5f) * this.Size,
+                this.Position + new Godot.Vector3(-0.5f, -0.5f, -0.5f) * this.Size,
             };
         }
         else if (direction == Godot.Vector3.Right)
         {
             vertices = new List<Godot.Vector3>
             {
-                this.Position + new Godot.Vector3( 0.5f, -0.5f,  0.5f) * this.Size,
                 this.Position + new Godot.Vector3( 0.5f,  0.5f,  0.5f) * this.Size,
                 this.Position + new Godot.Vector3( 0.5f,  0.5f, -0.5f) * this.Size,
-                this.Position + new Godot.Vector3( 0.5f, -0.5f, -0.5f) * this.Size
+                this.Position + new Godot.Vector3( 0.5f, -0.5f, -0.5f) * this.Size,
+                this.Position + new Godot.Vector3( 0.5f, -0.5f,  0.5f) * this.Size,
+                
+                
             };
         }
         else if (direction == Godot.Vector3.Forward)
         {
             vertices = new List<Godot.Vector3>
             {
+                
+                this.Position + new Godot.Vector3( 0.5f,  0.5f, -0.5f) * this.Size,
+                this.Position + new Godot.Vector3(-0.5f,  0.5f, -0.5f) * this.Size,
                 this.Position + new Godot.Vector3(-0.5f, -0.5f, -0.5f) * this.Size,
                 this.Position + new Godot.Vector3( 0.5f, -0.5f, -0.5f) * this.Size,
-                this.Position + new Godot.Vector3( 0.5f,  0.5f, -0.5f) * this.Size,
-                this.Position + new Godot.Vector3(-0.5f,  0.5f, -0.5f) * this.Size
             };
         }
         else if (direction == Godot.Vector3.Back)
@@ -122,7 +155,8 @@ public class WorldTile
                 this.Position + new Godot.Vector3(-0.5f,  0.5f,  0.5f) * this.Size,
                 this.Position + new Godot.Vector3( 0.5f,  0.5f,  0.5f) * this.Size,
                 this.Position + new Godot.Vector3( 0.5f, -0.5f,  0.5f) * this.Size,
-                this.Position + new Godot.Vector3(-0.5f, -0.5f,  0.5f) * this.Size
+                this.Position + new Godot.Vector3(-0.5f, -0.5f,  0.5f) * this.Size,
+                
             };
         }
 

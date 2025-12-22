@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
+
+[Tool]
 public partial class Chunk : MeshInstance3D
 {
 
@@ -14,7 +16,7 @@ public partial class Chunk : MeshInstance3D
 	private List<Godot.Vector3> Normals = new List<Godot.Vector3>();
 	private List<Godot.Vector2> Uvs = new List<Godot.Vector2>();
 
-	int width = 64;
+	int width = 1;
 	public override void _Ready()
 	{
 		noise.NoiseType = FastNoiseLite.NoiseTypeEnum.Value;
@@ -52,11 +54,15 @@ public partial class Chunk : MeshInstance3D
 		ImageTexture texture = new ImageTexture();
 		Image img = new Image();
 		img.Load("res://images/texture.png");
+		
 		texture.SetImage(img);
+		
+		mat.TextureFilter = BaseMaterial3D.TextureFilterEnum.Nearest;
 
 		mat.AlbedoTexture = texture;
 
 		this.MaterialOverride = mat; // IMPORTANT
+
 		
 		
 		var arrays = new Godot.Collections.Array();
@@ -69,6 +75,7 @@ public partial class Chunk : MeshInstance3D
 		
 		
 		newMesh.AddSurfaceFromArrays(Godot.Mesh.PrimitiveType.Triangles, arrays);
+		
 		
 		
 		
