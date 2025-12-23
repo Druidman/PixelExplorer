@@ -6,14 +6,14 @@ using System.Linq;
 using Godot;
 
 // chunk Position is declared as bottom center pos !!!
-public partial class Chunk
+public class Chunk
 {
-	static int Width = 32;
-	static int Height = 64;
+	static int Width = 64;
+	static int Height = 100;
 
 	Godot.Vector3 chunkPos;
 	Godot.Vector3 chunkTopLeft; // -z, -x
-	FastNoiseLite noise;
+	WorldNoise noise;
 
 
 	List< List< List< WorldTile > > > tiles = new List<List<List<WorldTile>>>();
@@ -22,7 +22,7 @@ public partial class Chunk
 	private List<Godot.Vector2> Uvs = new List<Godot.Vector2>();
 	
 	
-	public Chunk(Godot.Vector3 chunkPosition, FastNoiseLite worldNoise)
+	public Chunk(Godot.Vector3 chunkPosition, WorldNoise worldNoise)
 	{
 		this.chunkPos = chunkPosition;
 		this.chunkTopLeft = chunkPos - new Godot.Vector3((Width/2), 0, (Width/2));
@@ -31,7 +31,6 @@ public partial class Chunk
 	}
 	public MeshInstance3D InitMesh()
 	{
-		this.CreateDefaultTilePlatforms();
 
 		generateTiles();
 
@@ -104,9 +103,9 @@ public partial class Chunk
 
 	public int getPlatformGlobalY(float y)
 	{	
-		if (y < 0 || (int)y >= tiles.Count()) return -1;
+		if (y < 0 || (int)y >= Height) return -1;
 
-		return (int)y;
+		return (int)(y / (float)GameGlobals.TileWidth);
 	}
 
 	public int getRowGlobalZ(float z)
@@ -114,18 +113,18 @@ public partial class Chunk
 
 		float localPos = this.ConvertToLocalChunkPos(new Godot.Vector3(0.0f, 0.0f,z)).Z;
 
-		return (int)localPos;
+		return (int)(localPos / (float)GameGlobals.TileWidth);
 	}
 	public int getColGlobalX(float x)
 	{	
 
 		float localPos = this.ConvertToLocalChunkPos(new Godot.Vector3(x, 0.0f,0.0f)).X;
 
-		return (int)localPos;
+		return (int)(localPos / (float)GameGlobals.TileWidth);
 	}
 	public Godot.Vector3 getGlobalPositionOfTile(int platform, int row, int col)
 	{
-		return ConvertToGlobalPosition(new Godot.Vector3(col + 0.5f, platform + 0.5f, row + 0.5f ));
+		return ConvertToGlobalPosition(new Godot.Vector3((col * GameGlobals.TileWidth)  + (GameGlobals.TileWidth / 2), (platform * GameGlobals.TileWidth) + (GameGlobals.TileWidth / 2), (row * GameGlobals.TileWidth) + (GameGlobals.TileWidth / 2) ));
 	}
 	public Godot.Vector3 ConvertToLocalChunkPos(Godot.Vector3 globalPos)
 	{
@@ -138,56 +137,147 @@ public partial class Chunk
 
 	private void generateTiles()
 	{
-		for (float x = this.chunkTopLeft.X + 0.5f; x < this.chunkTopLeft.X + Width; x += GameGlobals.TileWidth)
+		int minY = 0;
+		int maxY = 0;
+		for (float x = this.chunkTopLeft.X + (GameGlobals.TileWidth / 2.0f); x <= this.chunkTopLeft.X + Width - (GameGlobals.TileWidth / 2.0f); x += GameGlobals.TileWidth)
 		{
-			for (float z = this.chunkTopLeft.Z + 0.5f; z < this.chunkTopLeft.Z + Width; z += GameGlobals.TileWidth)
+			for (float z = this.chunkTopLeft.Z + (GameGlobals.TileWidth / 2.0f); z <= this.chunkTopLeft.Z + Width - (GameGlobals.TileWidth / 2.0f); z += GameGlobals.TileWidth)
 			{
 				int y = generateTileHeight(x,z);
+				if (y < minY)
+				{
+					minY = y;
+				}
+				if (y > maxY)
+				{
+					maxY = y;
+				}
 
 
 				int platform = getPlatformGlobalY(y);
 				int row = getRowGlobalZ(z);
 				int col = getColGlobalX(x);
 				
-				if (platform >= this.tiles.Count())
+				if (!CheckIfValidTileIndicies(platform, 0, 0))
 				{
-					continue; // skip if height bigger than max height
+					platform = 0;
 				}
-				GD.Print(platform, " ", row, " ", col);
+				// GD.Print(platform, " ", row, " ", col);
+				BlockType blockType = BlockType.Grass;
 				
-				this.tiles[platform][row][col] = new WorldTile(getGlobalPositionOfTile(platform, row, col), BlockType.Grass);
+				UpdateTile(platform, row, col, new WorldTile(getGlobalPositionOfTile(platform, row, col), blockType));
+				
 
 
 			
 			}	
 		}
+		GD.Print("MAX: " + maxY + " MIN: " + minY);
 	}
 
+	private bool UpdateTile(int platform, int row, int col, WorldTile tile)
+	{	
+		if (!CheckIfTileFits(platform, row, col))
+		{
+			if (!ResizeTilesToPlatform(platform)) return false;
+			if (!ResizeTilesToRow(platform,row)) return false;
+			if (!ResizeTilesToCol(platform,row,col)) return false;
+		}
+
+		// GD.Print("Plat: " + platform + " Row: " + row + " Col: " + col);
+		// GD.Print(this.tiles[platform]);
+		// GD.Print(this.tiles[platform][row]);
+		// GD.Print(this.tiles[platform][row][col]);
+		this.tiles[platform][row][col] = tile;
+		return true;
+	}
+
+	private bool ResizeTilesToPlatform(int platform)
+	{
+		if (!CheckIfValidTileIndicies(platform, 0, 0)) return false;
+		
+
+		
+		
+		for (int i = this.tiles.Count(); i<platform + 1; i++)
+		{
+			this.tiles.Add(new List<List<WorldTile>>());
+		}
+		return true;
+	}
+	private bool ResizeTilesToRow(int platform, int row)
+	{
+		// GD.Print("Plat: " + platform + " Row: " + row + " FROM RESIZE ROW");
+		if (!CheckIfValidTileIndicies(platform, row, 0)) return false;
+
+		if (!CheckIfTilePlatformFits(platform)) return false;
+
+		// GD.Print("Pass " + this.tiles[platform].Count());
+		
+		for (int i = this.tiles[platform].Count(); i<row + 1; i++)
+		{
+			// GD.Print("Adding on " + i);
+			this.tiles[platform].Add(new List<WorldTile>());
+		}
+		return true;
+	}
+	private bool ResizeTilesToCol(int platform, int row, int col)
+	{
+
+		if (!CheckIfValidTileIndicies(platform, row, col)) return false;
+
+		if (!CheckIfTileRowFits(platform, row)) return false;
+
+		
+		for (int i = this.tiles[platform][row].Count(); i<col + 1; i++)
+		{
+			this.tiles[platform][row].Add(new WorldTile(getGlobalPositionOfTile(platform, row, i),BlockType.NONE));
+		}
+		return true;
+	}
+
+	private bool CheckIfTileFits(int platform, int row, int col)
+	{
+		if (!CheckIfTileColFits(platform, row, col)) return false;
+
+		return true;
+	}
+
+	private bool CheckIfTilePlatformFits(int platform)
+	{
+		if (platform < 0 || platform >= this.tiles.Count()) return false;
+		return true;
+	}
+	private bool CheckIfTileRowFits(int platform, int row)
+	{
+		if (!CheckIfTilePlatformFits(platform)) return false;
+		if (row < 0 || row >= this.tiles[platform].Count()) return false;
+		return true;
+	}
+	private bool CheckIfTileColFits(int platform, int row, int col)
+	{
+		if (!CheckIfTileRowFits(platform, row)) return false;
+		if (col < 0 || col >= this.tiles[platform][row].Count()) return false;
+		return true;
+	}
+
+	private bool CheckIfValidTileIndicies(int platform, int row, int col)
+	{
+
+		if (platform < 0 || platform > Height / GameGlobals.TileWidth) return false;
+		if (row < 0 || row > Width / GameGlobals.TileWidth) return false;
+		if (col < 0 || col > Width / GameGlobals.TileWidth) return false;
+
+		return true;
+	}
 	private int generateTileHeight(float x, float z)
 	{
-		float y = noise.GetNoise2D(x,z);
-		// y is in -0.5 to 0.5
-		y =  (y + 0.5f) * 10; // move it to 0-1, move it to 0-50
+		float y = noise.GetValue(x,z) * 15f;
+		
+		
 
 		// now y is a float which we don't like for our world so we put it in 0-1-2-3..-50range for tiling
 		return (int)y;
 	}
-	private void CreateDefaultTilePlatforms()
-	{
-		for (float y=this.chunkTopLeft.Y + 0.5f; y<this.chunkTopLeft.Y + Height; y+=GameGlobals.TileWidth)
-		{
-			tiles.Add(new List<List<WorldTile>>());	
-			int platform = getPlatformGlobalY(y);
-
-			for (float z=this.chunkTopLeft.Z + 0.5f; z<this.chunkTopLeft.Z + Width; z+=GameGlobals.TileWidth)
-			{
-				tiles[platform].Add(new List<WorldTile>());
-				int row = getRowGlobalZ(z);
-				for (float x=this.chunkTopLeft.X + 0.5f; x<this.chunkTopLeft.X + Width; x+=GameGlobals.TileWidth)
-				{
-					tiles[platform][row].Add(new WorldTile(getGlobalPositionOfTile(platform,row,getColGlobalX(x)), BlockType.NONE));
-				}
-			}
-		}
-	}
+	
 }
