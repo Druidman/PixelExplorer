@@ -1,6 +1,7 @@
 using Godot;
 using System;
 
+
 public partial class Player : CharacterBody3D
 {
 	public const float Speed = 5.0f;
@@ -24,6 +25,10 @@ public partial class Player : CharacterBody3D
 			float angle = eventMouseMotion.Relative.X * change * this.MouseSensitivity;
 			RotateY(-Mathf.DegToRad(angle));
 			
+		}
+		if (inputEvent.IsActionPressed("exit"))
+		{
+			Input.MouseMode = Input.MouseModeEnum.Visible;
 		}
 	}
 
