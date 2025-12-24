@@ -15,6 +15,10 @@ public class Chunk
 	Godot.Vector3 chunkTopLeft; // -z, -x
 	WorldNoise noise;
 
+	ImageTexture BlockTexture;
+
+	public MeshInstance3D mesh = new MeshInstance3D();
+	private bool meshReady = false;
 
 	List< List< List< WorldTile > > > tiles = new List<List<List<WorldTile>>>();
 	private List<Godot.Vector3> Vertices = new List<Godot.Vector3>();
@@ -22,14 +26,23 @@ public class Chunk
 	private List<Godot.Vector2> Uvs = new List<Godot.Vector2>();
 	
 	
-	public Chunk(Godot.Vector3 chunkPosition, WorldNoise worldNoise)
+	public Chunk(Godot.Vector3 chunkPosition, WorldNoise worldNoise, ImageTexture tex)
 	{
 		this.chunkPos = chunkPosition;
 		this.chunkTopLeft = chunkPos - new Godot.Vector3((Width/2), 0, (Width/2));
 		this.noise = worldNoise;
+		this.BlockTexture = tex;
+
+		
 
 	}
-	public MeshInstance3D InitMesh()
+
+
+	public bool isMeshReady()
+	{
+		return meshReady;
+	}
+	public void InitMesh()
 	{
 
 		generateTiles();
@@ -53,21 +66,17 @@ public class Chunk
 			}
 		}
 
-		MeshInstance3D mesh = new MeshInstance3D();
+
 
 		var newMesh = new Godot.ArrayMesh();
 
 		StandardMaterial3D mat = new StandardMaterial3D();
 
-		ImageTexture texture = new ImageTexture();
-		Image img = new Image();
-		img.Load("res://images/customTexture.png");
 		
-		texture.SetImage(img);
 		
 		mat.TextureFilter = BaseMaterial3D.TextureFilterEnum.Nearest;
 
-		mat.AlbedoTexture = texture;
+		mat.AlbedoTexture = BlockTexture;
 
 		mesh.MaterialOverride = mat; // IMPORTANT
 
@@ -88,17 +97,24 @@ public class Chunk
 		
 		
 		mesh.Mesh = newMesh;
-		mesh.CreateTrimeshCollision();
-
-		// GD.Print(tiles[0][0][0].Position);
-		// GD.Print(tiles[0][Width-1][Width-1].Position);
-		// GD.Print(getGlobalPositionOfTile(0,0,0));
-		// GD.Print(getGlobalPositionOfTile(0,Width-1,Width-1));
 		
 
-		return mesh;
+		StaticBody3D bdy = new StaticBody3D();
+		CollisionShape3D collisionShape = new CollisionShape3D();
+		collisionShape.Shape = this.GenerateCollisionShape();
+		
+		bdy.AddChild(collisionShape);
+		mesh.AddChild(bdy);
+		
+		
+		this.meshReady = true;
 
 		
+	}
+
+	private Shape3D GenerateCollisionShape()
+	{
+		return this.mesh.Mesh.CreateTrimeshShape(); // TODO make custom shaper to now overhead main thread
 	}
 
 	public int getPlatformGlobalY(float y)
