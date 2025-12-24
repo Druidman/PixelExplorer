@@ -13,7 +13,6 @@ public partial class Player : CharacterBody3D
 	CollisionShape3D characterCollider;
 	Camera camera;
 
-	Godot.Vector3 destiny;
 	public override void _Ready()
 	{
 		Input.MouseMode = Input.MouseModeEnum.Confined;
@@ -21,20 +20,14 @@ public partial class Player : CharacterBody3D
 		this.characterCollider = (CollisionShape3D)GetNode("CharacterCollider");
 		this.camera = (Camera)GetNode("Camera3D");
 
-		destiny = this.Position;
 
 		
 	}
 
 	public override void _Input(InputEvent inputEvent)
 	{
-		if (inputEvent.IsActionPressed("exit"))
+		if (inputEvent is InputEventMouseMotion eventMouseMotion)
 		{
-			Input.MouseMode = Input.MouseModeEnum.Visible;
-		}
-		if (inputEvent.IsPressed() && inputEvent is InputEventMouseButton)
-		{
-			
 			Godot.Vector2 mousePos = GetViewport().GetMousePosition(); 
 
 			Godot.Vector3 origin = this.camera.ProjectRayOrigin(mousePos);
@@ -52,24 +45,79 @@ public partial class Player : CharacterBody3D
 				this.character.RotateY(-(angle + this.character.Rotation.Y));
 				this.characterCollider.RotateY(-(angle + this.character.Rotation.Y));
 				
-
-				
-
-
-				this.destiny = hitPos;
-				
-				
-				
 			}
 			
+		}
+		if (inputEvent.IsActionPressed("exit"))
+		{
+			Input.MouseMode = Input.MouseModeEnum.Visible;
 		}
 	}
 
 	public override void _PhysicsProcess(double delta)
 	{
-		// Implement path finder
+		Vector3 velocity = Velocity;
+
+		// Add the gravity.
+		if (IsOnFloor())
+		{
+			velocity.Y = 0;
+		}
+		else
+		{
+			velocity.Y -= this.GravitySpeed * (float)delta;
+		}
+		Godot.Vector3 movement = new Godot.Vector3(0.0f,0.0f, 0.0f);
+
+		// Handle Jump.
+		if (Input.IsActionJustPressed("move_up") && IsOnFloor())
+		{
+			velocity.Y = JumpForce;
+		}
+
+		
+		if (Input.IsActionPressed("move_forward"))
+		{
+			movement.X += 1.0f;
+		}
+		if (Input.IsActionPressed("move_backward"))
+		{
+			movement.X += -1.0f;
+		}
+		if (Input.IsActionPressed("move_left"))
+		{
+			movement.Z += -1.0f;
+		}
+		if (Input.IsActionPressed("move_right"))
+		{
+			movement.Z += 1.0f;
+		}
+		movement *= Speed;
+
+		movement = movement.Rotated(Godot.Vector3.Up, this.character.Rotation.Y);
+		if (movement.Z != 0.0f)
+		{
+			velocity.Z = movement.Z;
+		}
+		else
+		{
+			velocity.Z = Mathf.MoveToward(velocity.Z, 0, DecelerationSpeed);
+		}
+
+		if (movement.X != 0.0f)
+		{
+			velocity.X = movement.X;
+		}
+		else
+		{
+			velocity.X = Mathf.MoveToward(velocity.X, 0, DecelerationSpeed);
+		}
+
+		Velocity = velocity;
 		
 		MoveAndSlide();
+
+	
 
 	}
 }
