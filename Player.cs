@@ -15,7 +15,7 @@ public partial class Player : CharacterBody3D
 
 	public override void _Ready()
 	{
-		Input.MouseMode = Input.MouseModeEnum.Confined;
+		Input.MouseMode = Input.MouseModeEnum.ConfinedHidden;
 		this.character = (MeshInstance3D)GetNode("Character");
 		this.characterCollider = (CollisionShape3D)GetNode("CharacterCollider");
 		this.camera = (Camera)GetNode("Camera3D");
@@ -30,22 +30,18 @@ public partial class Player : CharacterBody3D
 		{
 			Godot.Vector2 mousePos = GetViewport().GetMousePosition(); 
 
-			Godot.Vector3 origin = this.camera.ProjectRayOrigin(mousePos);
-			Godot.Vector3 end = origin + this.camera.ProjectRayNormal(mousePos) * 1000;
+			var Player2DPos = new Godot.Vector2(this.Position.X, this.Position.Z);
 
+			var mousePointPos = Player2DPos + (mousePos - (DisplayServer.WindowGetSize() / 2));
 
-			PhysicsDirectSpaceState3D space_state = this.GetWorld3D().DirectSpaceState;
-			PhysicsRayQueryParameters3D query = PhysicsRayQueryParameters3D.Create(origin, end);
-			var result = space_state.IntersectRay(query);
-			if (result.Count > 0)
-			{
-				var hitPos = (Godot.Vector3)result["position"];	
+		
 
-				var angle = new Vector2(this.Position.X, this.Position.Z).AngleToPoint(new Vector2(hitPos.X, hitPos.Z));
-				this.character.RotateY(-(angle + this.character.Rotation.Y));
-				this.characterCollider.RotateY(-(angle + this.character.Rotation.Y));
+			var angle = Player2DPos.AngleToPoint(mousePointPos);
+			
+			this.character.RotateY(-(angle + this.character.Rotation.Y));
+			this.characterCollider.RotateY(-(angle + this.character.Rotation.Y));
 				
-			}
+			
 			
 		}
 		if (inputEvent.IsActionPressed("exit"))
