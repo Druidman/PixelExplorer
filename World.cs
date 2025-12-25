@@ -9,14 +9,19 @@ public partial class World : Node3D
 {
 
 	WorldNoise noise = new WorldNoise();
-	List<Chunk> chunks = new List<Chunk>();
-	List<Chunk> stagedChunks = new List<Chunk>();
+
+	List<List<Chunk>> chunks = new List<List<Chunk>>();
 	float Xpos = 0f;
 	bool exitApp = false;
 	Thread chunkManagerThread;
 	ImageTexture texture = new ImageTexture();
+
+	CharacterBody3D player;
+	Godot.Vector3 WorldTopLeftPos = GameGlobals.WorldMiddle - new Godot.Vector3(GameGlobals.WorldWidth / 2, 0, GameGlobals.WorldWidth / 2);
 	public override void _Ready()
 	{
+
+		player = (CharacterBody3D)GetNode("../Player");
 		
 		Image img = new Image();
 		img.Load("res://images/customTexture.png");
@@ -26,44 +31,41 @@ public partial class World : Node3D
 		
 		this.chunkManagerThread = new Thread(chunkManager);
 		this.chunkManagerThread.Start();
-		Chunk chunk = new Chunk(new Godot.Vector3(0f,0f,0f), noise, texture);
-		chunk.InitMesh();
-		CallDeferred("add_child", chunk.mesh);
-		chunks.Add(chunk);
-
-		
-
 	}
 	private void chunkManager()
 	{
-		while (!exitApp){
-			
-		
-			Thread.Sleep(3000);
-		
-			Thread t = this.startChunkGenThread(new Godot.Vector3(Xpos,0f,0f));
-			Xpos += 32;
-		}
-			
-		
-	}
-	public void smth()
-	{
-		
-	}
-	public override void _Process(double delta)
-	{
+		int count = 0;
+		for (int i=0; i<GameGlobals.WorldWidth / GameGlobals.ChunkWidth; i++)
+		{
+			this.chunks.Add(new List<Chunk>());
+			for (int j=0; j<GameGlobals.WorldWidth / GameGlobals.ChunkWidth; j++)
+			{
+				Godot.Vector3 pos = new Godot.Vector3(GameGlobals.ChunkWidth,0,GameGlobals.ChunkWidth) + 
+					this.WorldTopLeftPos + 
+					new Godot.Vector3(j*GameGlobals.ChunkWidth, 0, i*GameGlobals.ChunkWidth);
 
-		
+				Chunk chunk = new Chunk(pos, this.noise, texture);
+				this.chunks[i].Add(chunk);
+
+				Thread t = this.startChunkGenThread(
+					chunk
+
+				);
+				GD.Print("Count: " + count);
+				count++;
+				Thread.Sleep(100);
+				
+			}	
+		}
 	}
+
 	public override void _ExitTree()
 	{
 		this.exitApp = true;
 		this.chunkManagerThread.Join();
 	}
-	private Thread startChunkGenThread(Godot.Vector3 pos)
+	private Thread startChunkGenThread(Chunk chunk)
 	{
-		Chunk chunk = new Chunk(pos, this.noise, texture);
 		
 		Thread chunkThread = new Thread(()=>GenChunk(chunk));
 		chunkThread.Start();
@@ -71,9 +73,23 @@ public partial class World : Node3D
 	}
 	private void GenChunk(Chunk chunk)
 	{
-		
+
+		GD.Print("StartUp");
 		chunk.InitMesh();
+		GD.Print("Chunk inited");
+
+		// AddChild(chunk.mesh);
 		CallDeferred("add_child", chunk.mesh);
-		chunks.Add(chunk);
+		GD.Print("Chunk mesh added");
+
+		Godot.Vector3 localPos = (chunk.chunkTopLeft - this.WorldTopLeftPos);
+		int row = (int)localPos.Z / (int)GameGlobals.ChunkWidth;
+		int col = (int)localPos.X / (int)GameGlobals.ChunkWidth;
+		GD.Print(row + " " + col);
+		var reff = this.chunks.ElementAt(row).ElementAt(col);
+		reff = chunk;
+		
+
+		
 	}
 }

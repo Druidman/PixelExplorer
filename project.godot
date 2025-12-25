@@ -77,6 +77,4 @@ exit={
 
 [physics]
 
-common/physics_ticks_per_second=200
-common/max_physics_steps_per_frame=100
-common/physics_jitter_fix=2.0
+3d/physics_engine="GodotPhysics3D"

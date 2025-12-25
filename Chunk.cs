@@ -8,11 +8,11 @@ using Godot;
 // chunk Position is declared as bottom center pos !!!
 public class Chunk
 {
-	static int Width = 32;
+	static int Width = GameGlobals.ChunkWidth;
 	static int Height = 100;
 
-	Godot.Vector3 chunkPos;
-	Godot.Vector3 chunkTopLeft; // -z, -x
+	public Godot.Vector3 chunkPos;
+	public Godot.Vector3 chunkTopLeft; // -z, -x
 	WorldNoise noise;
 
 	ImageTexture BlockTexture;
@@ -90,18 +90,22 @@ public class Chunk
 		arrays[(int)Godot.Mesh.ArrayType.Normal] = this.Normals.ToArray();
 		arrays[(int)Godot.Mesh.ArrayType.TexUV] = this.Uvs.ToArray();
 
-		
 		newMesh.AddSurfaceFromArrays(Godot.Mesh.PrimitiveType.Triangles, arrays);
+	
+		
 		
 		mesh.Mesh = newMesh;
-		
 
-		mesh.CreateTrimeshCollision();
+		mesh.CreateTrimeshCollision(); // Fix performance
+
+		// mesh.CallDeferred(MeshInstance3D.MethodName.CreateTrimeshCollision);
 		
 		this.meshReady = true;
 
 		
 	}
+
+
 
 	public int getPlatformGlobalY(float y)
 	{	

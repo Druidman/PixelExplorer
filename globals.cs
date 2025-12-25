@@ -3,6 +3,12 @@ using System.Collections.Generic;
 
 class GameGlobals
 {
+    public static int ChunkWidth = 32;
+    public static int ChunkRowCount = 8;
+    public static int WorldWidth = ChunkWidth * ChunkRowCount;
+    public static Godot.Vector3 WorldMiddle = new Godot.Vector3(0,0,0);
+
+
 
     public static int TileWidth = 1;
     public static Godot.Vector2 TextureAtlasSize = new Godot.Vector2(48,64);
