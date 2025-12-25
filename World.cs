@@ -17,8 +17,12 @@ public partial class World : Node3D
 	ImageTexture texture = new ImageTexture();
 
 	CharacterBody3D player;
-	Godot.Vector3 WorldTopLeftPos = GameGlobals.WorldMiddle - new Godot.Vector3(GameGlobals.WorldWidth / 2, 0, GameGlobals.WorldWidth / 2);
+	Godot.Vector3 WorldPos = GameGlobals.StartWorldMiddle;
+
+	bool chunksReady = false;
+	Godot.Vector3 WorldTopLeftPos = GameGlobals.StartWorldMiddle - new Godot.Vector3(GameGlobals.WorldWidth / 2, 0, GameGlobals.WorldWidth / 2);
 	public override void _Ready()
+
 	{
 
 		player = (CharacterBody3D)GetNode("../Player");
@@ -35,6 +39,7 @@ public partial class World : Node3D
 	private void chunkManager()
 	{
 		int count = 0;
+
 		for (int i=0; i<GameGlobals.WorldWidth / GameGlobals.ChunkWidth; i++)
 		{
 			this.chunks.Add(new List<Chunk>());
@@ -57,6 +62,48 @@ public partial class World : Node3D
 				
 			}	
 		}
+
+		this.chunksReady = true;
+	}
+
+	public override void _Process(double delta)
+	{
+		if (!chunksReady)
+		{
+			return;
+		}
+		Chunk currentPlayerChunk = getChunkByPos(this.player.GlobalPosition);
+		if (currentPlayerChunk == getChunkByPos(this.WorldPos))
+		{
+			return; // player didn't change chunks so nothing to do here
+		}
+
+		GD.Print("PLayer changed chunk");
+		
+		updateWorldPos(currentPlayerChunk.chunkPos);
+
+		//Add chunk transport and new gen queue
+	}
+	private void updateWorldPos(Godot.Vector3 pos)
+	{
+		this.WorldPos = pos;
+		this.WorldTopLeftPos = this.WorldPos - new Godot.Vector3(GameGlobals.WorldWidth / 2, 0, GameGlobals.WorldWidth / 2);
+
+	}
+
+	public Chunk getChunkByPos(Godot.Vector3 pos)
+	{
+		Godot.Vector3 localPos = this.ConvertToLocalWorldPos(pos);
+		int row = (int)localPos.Z / (int)GameGlobals.ChunkWidth;
+		int col = (int)localPos.X / (int)GameGlobals.ChunkWidth;
+		GD.Print(localPos);
+		GD.Print(row, " ", col);
+
+		return this.chunks.ElementAt(row).ElementAt(col);
+	}
+	public Godot.Vector3 ConvertToLocalWorldPos(Godot.Vector3 pos)
+	{
+		return pos - this.WorldTopLeftPos;
 	}
 
 	public override void _ExitTree()
@@ -82,11 +129,9 @@ public partial class World : Node3D
 		CallDeferred("add_child", chunk.mesh);
 		GD.Print("Chunk mesh added");
 
-		Godot.Vector3 localPos = (chunk.chunkTopLeft - this.WorldTopLeftPos);
-		int row = (int)localPos.Z / (int)GameGlobals.ChunkWidth;
-		int col = (int)localPos.X / (int)GameGlobals.ChunkWidth;
-		GD.Print(row + " " + col);
-		var reff = this.chunks.ElementAt(row).ElementAt(col);
+		
+		
+		var reff = getChunkByPos(chunk.chunkTopLeft);
 		reff = chunk;
 		
 

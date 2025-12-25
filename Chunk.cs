@@ -98,7 +98,7 @@ public class Chunk
 
 		mesh.CreateTrimeshCollision(); // Fix performance
 
-		// mesh.CallDeferred(MeshInstance3D.MethodName.CreateTrimeshCollision);
+		
 		
 		this.meshReady = true;
 
