@@ -42,7 +42,7 @@ public partial class World : Node3D
 			Thread.Sleep(3000);
 		
 			Thread t = this.startChunkGenThread(new Godot.Vector3(Xpos,0f,0f));
-			Xpos += 64;
+			Xpos += 32;
 		}
 			
 		
