@@ -62,6 +62,7 @@ public partial class World : Node3D
 					chunk
 
 				);
+
 				GD.Print("Count: " + count);
 				count++;
 				Thread.Sleep(100);
@@ -121,10 +122,26 @@ public partial class World : Node3D
 		}
 		if (currIndices.X < prevIndices.X) // for smaller row so move -z
 		{
-			int chunksChanged = currIndices.X - prevIndices.X;
+			int chunksChanged = prevIndices.X - currIndices.X;
 			for (int i=0; i < chunksChanged; i++)
 			{
-				
+				for (int j = 0; j<this.chunks.Last().Count; j++)
+				{
+					RemoveChild(this.chunks.Last()[j].mesh);
+				}
+				this.chunks.RemoveAt(this.chunks.Count - 1);
+				List<Chunk> newRow = new List<Chunk>();
+				for (float j=0; j < GameGlobals.ChunkRowCount; j++)
+				{
+					Chunk chunk = new Chunk(
+						new Godot.Vector3(this.WorldTopLeftPos.X + (j*GameGlobals.ChunkWidth) + (GameGlobals.ChunkWidth / 2), this.WorldPos.Y, this.WorldTopLeftPos.Z + (GameGlobals.ChunkWidth / 2)), 
+						this.noise, 
+						this.texture
+					);
+					Thread t = startChunkGenThread(chunk);
+					newRow.Add(chunk);
+				}
+				this.chunks.Insert(0, newRow);
 			}
 		}
 		if (currIndices.Y > prevIndices.Y) // for bigger col so move +x
@@ -132,15 +149,49 @@ public partial class World : Node3D
 			int chunksChanged = currIndices.Y - prevIndices.Y;
 			for (int i=0; i < chunksChanged; i++)
 			{
+				for (int j = 0; j<GameGlobals.ChunkRowCount; j++)
+				{
+					RemoveChild(this.chunks[j].First().mesh);
+					this.chunks[j].RemoveAt(0);
+				}
 				
+				List<Chunk> newCol = new List<Chunk>();
+				for (int j=0; j < GameGlobals.ChunkRowCount; j++)
+				{
+					Chunk chunk = new Chunk(
+						new Godot.Vector3(this.WorldTopLeftPos.X + GameGlobals.WorldWidth - (GameGlobals.ChunkWidth / 2), this.WorldPos.Y, this.WorldTopLeftPos.Z + (GameGlobals.ChunkWidth / 2) + (j*GameGlobals.ChunkWidth)), 
+						this.noise, 
+						this.texture
+					);
+					Thread t = startChunkGenThread(chunk);
+					newCol.Add(chunk);
+					this.chunks[j].Add(chunk);
+				}
 			}
 		}
 		if (currIndices.Y < prevIndices.Y) // for smaller row so move +z
 		{
-			int chunksChanged = currIndices.Y - prevIndices.Y;
+			int chunksChanged = prevIndices.Y - currIndices.Y;
 			for (int i=0; i < chunksChanged; i++)
 			{
+				for (int j = 0; j<GameGlobals.ChunkRowCount; j++)
+				{
+					RemoveChild(this.chunks[j].Last().mesh);
+					this.chunks[j].RemoveAt(this.chunks[j].Count - 1);
+				}
 				
+				List<Chunk> newCol = new List<Chunk>();
+				for (int j=0; j < GameGlobals.ChunkRowCount; j++)
+				{
+					Chunk chunk = new Chunk(
+						new Godot.Vector3(this.WorldTopLeftPos.X + (GameGlobals.ChunkWidth / 2), this.WorldPos.Y, this.WorldTopLeftPos.Z + (GameGlobals.ChunkWidth / 2) + (j*GameGlobals.ChunkWidth)), 
+						this.noise, 
+						this.texture
+					);
+					Thread t = startChunkGenThread(chunk);
+					newCol.Add(chunk);
+					this.chunks[j].Insert(0, chunk);
+				}
 			}
 		}
 		
@@ -195,11 +246,6 @@ public partial class World : Node3D
 		// AddChild(chunk.mesh);
 		CallDeferred("add_child", chunk.mesh);
 		GD.Print("Chunk mesh added");
-
-		
-		
-		var reff = getChunkByPos(chunk.chunkTopLeft);
-		reff = chunk;
 		
 
 		
