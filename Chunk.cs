@@ -6,6 +6,16 @@ using System.Linq;
 using Godot;
 
 // chunk Position is declared as bottom center pos !!!
+
+public class ChunkPlaceHolder : Chunk
+{
+	public ChunkPlaceHolder() : base(new Godot.Vector3(0,0,0), null, null) 
+	{
+		
+		
+
+	}
+}
 public class Chunk
 {
 	static int Width = GameGlobals.ChunkWidth;
@@ -26,7 +36,7 @@ public class Chunk
 	private List<Godot.Vector3> Normals = new List<Godot.Vector3>();
 	private List<Godot.Vector2> Uvs = new List<Godot.Vector2>();
 	
-	
+	public bool added = false;
 	public Chunk(Godot.Vector3 chunkPosition, WorldNoise worldNoise, ImageTexture tex)
 	{
 		this.chunkPos = chunkPosition;

@@ -4,7 +4,7 @@ using System;
 
 public partial class Player : CharacterBody3D
 {
-	public const float Speed = 5.0f;
+	public const float Speed = 500.0f;
 	public const float DecelerationSpeed = Speed * 0.1f;
 	public const float JumpForce = 10;
 	public float MouseSensitivity = 0.2f;
@@ -12,6 +12,7 @@ public partial class Player : CharacterBody3D
 	MeshInstance3D character;
 	CollisionShape3D characterCollider;
 	Camera camera;
+	bool DebugMode = true;
 
 	public override void _Ready()
 	{
@@ -19,9 +20,6 @@ public partial class Player : CharacterBody3D
 		this.character = (MeshInstance3D)GetNode("Character");
 		this.characterCollider = (CollisionShape3D)GetNode("CharacterCollider");
 		this.camera = (Camera)GetNode("Camera3D");
-
-
-		
 	}
 
 	public override void _Input(InputEvent inputEvent)
@@ -55,14 +53,18 @@ public partial class Player : CharacterBody3D
 		Vector3 velocity = Velocity;
 
 		// Add the gravity.
-		if (IsOnFloor())
-		{
-			velocity.Y = 0;
+		if (!DebugMode)
+		{	
+			if (IsOnFloor())
+			{
+				velocity.Y = 0;
+			}
+			else
+			{
+				velocity.Y -= this.GravitySpeed * (float)delta;
+			}
 		}
-		else
-		{
-			velocity.Y -= this.GravitySpeed * (float)delta;
-		}
+		
 		Godot.Vector3 movement = new Godot.Vector3(0.0f,0.0f, 0.0f);
 
 		// Handle Jump.
