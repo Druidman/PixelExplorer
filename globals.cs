@@ -4,7 +4,7 @@ using System.Collections.Generic;
 class GameGlobals
 {
     public static int ChunkWidth = 32;
-    public static int ChunkRowCount = 8;
+    public static int ChunkRowCount = 5;
     public static int WorldWidth = ChunkWidth * ChunkRowCount;
     public static Godot.Vector3 StartWorldMiddle = new Godot.Vector3(0,0,0);
 

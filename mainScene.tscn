@@ -45,7 +45,6 @@ size = Vector2i(1920, 1080)
 render_target_update_mode = 4
 
 [node name="World" type="Node3D" parent="SubViewportContainer/SubViewport"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.028299809, -0.02318573, -0.0021038055)
 script = ExtResource("3_hr5et")
 
 [node name="Player" parent="SubViewportContainer/SubViewport" instance=ExtResource("3_61od6")]
