@@ -15,7 +15,7 @@ public partial class World : Node3D
 {
 
 	WorldNoise noise = new WorldNoise();
-
+	int c = 0;
 	private int threadId = 0;
 
 	List<List<Chunk>> chunks = new List<List<Chunk>>();
@@ -41,17 +41,14 @@ public partial class World : Node3D
 	}
 	public void ThreadWrapper(Action threadFunc, int id)
 	{
-		Thread t = new Thread(()=>threadFunc());
-		t.Start();
-		t.Join();
-		GD.Print("id: ", id);
+		threadFunc();
 		this.threadsToJoin.Add(id);
 
 	}
 	public static List<Chunk> genPlaceholderChunkRow()
 	{
 		List<Chunk> row = new List<Chunk>(GameGlobals.ChunkRowCount);
-		for (int i=0; i<GameGlobals.ChunkRowCount; i++) row.Add(new ChunkPlaceHolder());
+		for (int i=0; i<GameGlobals.ChunkRowCount; i++) row.Add(null);
 		return row;
 	}
 	public override void _Ready()
@@ -88,7 +85,7 @@ public partial class World : Node3D
 				Godot.Vector3 pos = new Godot.Vector3(GameGlobals.ChunkWidth / 2,0,GameGlobals.ChunkWidth / 2) + 
 					this.WorldTopLeftPos + 
 					new Godot.Vector3(j*GameGlobals.ChunkWidth, 0, i*GameGlobals.ChunkWidth);
-
+			
 				Chunk chunk = new Chunk(pos, this.noise, texture);
 
 				
@@ -117,25 +114,32 @@ public partial class World : Node3D
 			indices.Y < 0 || indices.Y >= GameGlobals.ChunkRowCount
 		)
 		{
+			
+			CleanUpChunk(this.stagedChunks.First());
 			this.stagedChunks.RemoveAt(0);
 			return;
 		}
 
 		if (!this.stagedChunks.First().isMeshReady())
 		{
+			
+			CleanUpChunk(this.stagedChunks.First());
 			this.stagedChunks.RemoveAt(0);
 			return ;
 		}
 
-		if (this.chunks[indices.X][indices.Y] is not ChunkPlaceHolder)
+		if (this.chunks[indices.X][indices.Y] is null)
 		{
+		
+			CleanUpChunk(this.stagedChunks.First());
 			this.stagedChunks.RemoveAt(0);
 			return ;
 		}
 
 
 		this.stagedChunks.First().addedToTree = true;
-		CallDeferred(Node3D.MethodName.AddChild, this.stagedChunks.First().mesh);
+		AddChild(this.stagedChunks.First().mesh);
+		
 		this.chunks[indices.X][indices.Y] = this.stagedChunks.First();
 
 		this.stagedChunks.RemoveAt(0);
@@ -145,15 +149,19 @@ public partial class World : Node3D
 
 	private void CleanUpChunk(Chunk chunk)
 	{
-		if (chunk is ChunkPlaceHolder)
+		if (chunk is null)
 		{
 			return;
 		}
-		if (chunk.addedToTree)
+
+
+		if (chunk.addedToTree && chunk.mesh.GetParent() != null)
 		{
-			chunk.mesh.GetParent()?.RemoveChild(chunk.mesh);
+			RemoveChild(chunk.mesh);
 		}
+		
 		chunk.mesh.QueueFree();
+		chunk.mesh = null;
 	}
 	private void RemoveRow(ChunksSequence rowSeq)
 	{
@@ -187,8 +195,8 @@ public partial class World : Node3D
 			CleanUpChunk(row[ind]);
 			row.RemoveAt(ind);
 			
-			if (colSeq == ChunksSequence.First) row.Add(new ChunkPlaceHolder());
-			else if (colSeq == ChunksSequence.Last) row.Insert(0,new ChunkPlaceHolder());
+			if (colSeq == ChunksSequence.First) row.Add(null);
+			else if (colSeq == ChunksSequence.Last) row.Insert(0,null);
 			else return;
 
 		}
@@ -390,8 +398,8 @@ public partial class World : Node3D
 	{
 
 	
-		chunk.InitMesh();
-
+		// chunk.InitMesh();
+		
 
 
 		this.stagedChunks.Add(chunk);

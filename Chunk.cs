@@ -6,16 +6,6 @@ using System.Linq;
 using Godot;
 
 // chunk Position is declared as bottom center pos !!!
-
-public class ChunkPlaceHolder : Chunk
-{
-	public ChunkPlaceHolder() : base(new Godot.Vector3(0,0,0), null, null) 
-	{
-		
-		
-
-	}
-}
 public class Chunk
 {
 	static int Width = GameGlobals.ChunkWidth;
@@ -43,6 +33,7 @@ public class Chunk
 		this.chunkTopLeft = chunkPos - new Godot.Vector3((Width/2), 0, (Width/2));
 		this.noise = worldNoise;
 		this.BlockTexture = tex;
+		
 
 		
 
@@ -59,7 +50,7 @@ public class Chunk
 		generateTiles();
 
 		
-
+		 
 		for (int i =0; i< this.tiles.Count(); i++)
 		{
 			for (int j =0; j< this.tiles[i].Count(); j++)
@@ -77,7 +68,7 @@ public class Chunk
 			}
 		}
 
-
+		
 
 		var newMesh = new Godot.ArrayMesh();
 		
@@ -106,8 +97,8 @@ public class Chunk
 		
 		
 		mesh.Mesh = newMesh;
-
-		mesh.CallDeferred(MeshInstance3D.MethodName.CreateTrimeshCollision); // Fix performance
+		// mesh.CreateTrimeshCollision();
+		// mesh.CallDeferred(MeshInstance3D.MethodName.CreateTrimeshCollision); // Fix performance
 
 		
 		
