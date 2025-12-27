@@ -36,7 +36,7 @@ public class Chunk
 	private List<Godot.Vector3> Normals = new List<Godot.Vector3>();
 	private List<Godot.Vector2> Uvs = new List<Godot.Vector2>();
 	
-	public bool added = false;
+	public bool addedToTree = false;
 	public Chunk(Godot.Vector3 chunkPosition, WorldNoise worldNoise, ImageTexture tex)
 	{
 		this.chunkPos = chunkPosition;
@@ -106,7 +106,7 @@ public class Chunk
 		
 		mesh.Mesh = newMesh;
 
-		mesh.CreateTrimeshCollision(); // Fix performance
+		mesh.CallDeferred(MeshInstance3D.MethodName.CreateTrimeshCollision); // Fix performance
 
 		
 		
