@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading;
 using Godot;
@@ -11,41 +12,46 @@ enum ChunksSequence
 	Last
 }
 
+
+public class ThreadWorkingData {
+	public Chunk chunk = null;
+	public bool ready;
+	public ThreadWorkingData(Chunk chunk) {
+		this.chunk = chunk;
+		this.ready = false;
+	}
+	
+}
 public partial class World : Node3D
 {
 
 	WorldNoise noise = new WorldNoise();
-	int c = 0;
-	private int threadId = 0;
+	private readonly object _dataLock = new();
 
 	List<List<Chunk>> chunks = new List<List<Chunk>>();
-	List<Chunk> stagedChunks = new List<Chunk>();
 
-	Dictionary<int, Thread> threads = new Dictionary<int, Thread>();
-	List<int> threadsToJoin = new List<int>();
-
-	float Xpos = 0f;
+	private int threadId = 0;
 	bool exitApp = false;
+
+
+	LinkedList<ThreadWorkingData> threadsWorkingData = new LinkedList<ThreadWorkingData>();
+	List<Thread> threads = new List<Thread>();
+
+	
 	ImageTexture texture = new ImageTexture();
 
-	CharacterBody3D player;
+	
 	Godot.Vector3 WorldPos = GameGlobals.StartWorldMiddle;
-
-	bool chunksReady = false;
 	Godot.Vector3 WorldTopLeftPos = GameGlobals.StartWorldMiddle - new Godot.Vector3(GameGlobals.WorldWidth / 2, 0, GameGlobals.WorldWidth / 2);
 
+	
+	CharacterBody3D player;
 	private int getThreadId()
 	{
 		this.threadId++;
 		return this.threadId;
 	}
-	public void ThreadWrapper(Action threadFunc, int id)
-	{
-		threadFunc();
-		this.threadsToJoin.Add(id);
-
-	}
-	public static List<Chunk> genPlaceholderChunkRow()
+	private static List<Chunk> genPlaceholderChunkRow()
 	{
 		List<Chunk> row = new List<Chunk>(GameGlobals.ChunkRowCount);
 		for (int i=0; i<GameGlobals.ChunkRowCount; i++) row.Add(null);
@@ -68,8 +74,8 @@ public partial class World : Node3D
 	private void StartThread(Action action)
 	{
 		int id = getThreadId();
-		Thread t = new Thread(()=>this.ThreadWrapper(action, id));
-		AddToThreads(id, t);
+		Thread t = new Thread(()=>action());
+		this.threads.Add(t);
 		t.Start();
 		
 	}
@@ -86,65 +92,74 @@ public partial class World : Node3D
 					this.WorldTopLeftPos + 
 					new Godot.Vector3(j*GameGlobals.ChunkWidth, 0, i*GameGlobals.ChunkWidth);
 			
-				Chunk chunk = new Chunk(pos, this.noise, texture);
 
 				
-				this.startChunkGenThread(chunk);
+				this.startChunkGenThread(pos);
 				
 
 	
 				
 			}	
 		}
-
-		this.chunksReady = true;
 	}
 
-	private void CommitChunks()
+	private bool UpdateChunkGenThread(ThreadWorkingData data)
 	{
-		if (this.stagedChunks.Count <= 0)
-		{
-			return;
-		}
-	
-	
-		Godot.Vector2I indices = GetIndicesFromLocalWorldPos(ConvertToLocalWorldPos(this.stagedChunks.First().chunkPos));
+		Godot.Vector2I indices = GetIndicesFromLocalWorldPos(ConvertToLocalWorldPos(data.chunk.chunkPos));
 		if (
 			indices.X < 0 || indices.X >= GameGlobals.ChunkRowCount ||
 			indices.Y < 0 || indices.Y >= GameGlobals.ChunkRowCount
-		)
-		{
-			
-			CleanUpChunk(this.stagedChunks.First());
-			this.stagedChunks.RemoveAt(0);
-			return;
-		}
-
-		if (!this.stagedChunks.First().isMeshReady())
-		{
-			
-			CleanUpChunk(this.stagedChunks.First());
-			this.stagedChunks.RemoveAt(0);
-			return ;
-		}
-
-		if (this.chunks[indices.X][indices.Y] is null)
-		{
-		
-			CleanUpChunk(this.stagedChunks.First());
-			this.stagedChunks.RemoveAt(0);
-			return ;
-		}
-
-
-		this.stagedChunks.First().addedToTree = true;
-		AddChild(this.stagedChunks.First().mesh);
-		
-		this.chunks[indices.X][indices.Y] = this.stagedChunks.First();
-
-		this.stagedChunks.RemoveAt(0);
+		) return false;
 
 		
+		
+		if (!data.chunk.isMeshReady())
+		{
+			data.chunk.BuildChunkMesh(this.texture);
+		}
+
+		if (!data.chunk.isMeshReady()) return false;
+	
+
+
+		if (this.chunks[indices.X][indices.Y] is not null) return false;
+
+
+		data.chunk.addedToTree = true;
+		AddChild(data.chunk.mesh);
+		
+		this.chunks[indices.X][indices.Y] = data.chunk;
+
+		return true;
+	}
+
+	private void UpdateChunkGenThreads()
+	{
+		lock (_dataLock)
+		{
+
+
+			LinkedListNode<ThreadWorkingData> node = this.threadsWorkingData.First;
+			while (node != null)
+			{
+				var next = node.Next;
+				if (node.Value.ready)
+				{
+					GD.Print("Regular");
+
+					if (!UpdateChunkGenThread(node.Value))
+					{
+						CleanUpChunk(node.Value.chunk);
+					}
+
+					this.threadsWorkingData.Remove(node);
+				}
+
+				node = next;
+			}
+				
+		}
+
 	}
 
 	private void CleanUpChunk(Chunk chunk)
@@ -160,7 +175,7 @@ public partial class World : Node3D
 			RemoveChild(chunk.mesh);
 		}
 		
-		chunk.mesh.QueueFree();
+		if (chunk.mesh != null) chunk.mesh.QueueFree();
 		chunk.mesh = null;
 	}
 	private void RemoveRow(ChunksSequence rowSeq)
@@ -211,28 +226,31 @@ public partial class World : Node3D
 			this.WorldTopLeftPos.Z + (indices.X * GameGlobals.ChunkWidth) + ( GameGlobals.ChunkWidth / 2)
 		);
 	}
-	public override void _Process(double delta)
+	
+	
+	private void JoinFinishedThreads()
 	{
-
-		GD.Print(this.chunks.Count, " ", this.chunks[0].Count);
-		for (int i =0; i< this.threadsToJoin.Count; i++)
+		for (int i =0; i< this.threads.Count; i++)
 		{
-			this.threads[this.threadsToJoin[i]].Join();
-			this.threads.Remove(this.threadsToJoin[i]);
-
-			this.threadsToJoin.RemoveAt(i);
-			i--;
+			if (!this.threads[i].IsAlive)
+			{
+				this.threads[i].Join();
+				this.threads.RemoveAt(i);
+				i--;
+			}
 		}
-
-		CommitChunks();
-		if (!chunksReady)
+	}
+	private void JoinAllThreads()
+	{
+		for (int i =0; i< this.threads.Count; i++)
 		{
-			return;
+			this.threads[i].Join();	
 		}
+		this.threads.Clear();
+	}
 
-		
-		
-		
+	private void UpdateChunks()
+	{
 		Godot.Vector2I currIndices = GetIndicesFromLocalWorldPos( ConvertToLocalWorldPos(this.player.GlobalPosition) );
 		Godot.Vector2I prevIndices = GetIndicesFromLocalWorldPos( ConvertToLocalWorldPos(this.WorldPos) );
 
@@ -240,9 +258,6 @@ public partial class World : Node3D
 		{
 			return; //player stayed in same chunk
 		}
-
-		
-
 
 		updateWorldPos(GetGlobalPosFromIndices(currIndices));
 
@@ -259,7 +274,7 @@ public partial class World : Node3D
 		else if (movedNegativeCol){ chunksChanged = prevIndices.Y - currIndices.Y; }
 
 
-		Dictionary<Godot.Vector3, Chunk> chunkToQueue = new Dictionary<Godot.Vector3, Chunk>();
+		List<Godot.Vector3> chunkToQueue = new List<Godot.Vector3>();
 		// calc player move dir
 		for (int i=0; i < chunksChanged; i++)
 		{
@@ -269,15 +284,11 @@ public partial class World : Node3D
 			
 				for (int j=0; j < GameGlobals.ChunkRowCount; j++)
 				{
-					Chunk chunk = new Chunk(
-						new Godot.Vector3(
+					
+					chunkToQueue.Add(new Godot.Vector3(
 							this.WorldTopLeftPos.X + (j*GameGlobals.ChunkWidth) + (GameGlobals.ChunkWidth / 2), 
 							this.WorldPos.Y, 
-							this.WorldTopLeftPos.Z + ((GameGlobals.ChunkRowCount - 1) * GameGlobals.ChunkWidth) + (GameGlobals.ChunkWidth / 2)), 
-						this.noise, 
-						this.texture
-					);
-					chunkToQueue[chunk.chunkPos] = chunk;
+							this.WorldTopLeftPos.Z + ((GameGlobals.ChunkRowCount - 1) * GameGlobals.ChunkWidth) + (GameGlobals.ChunkWidth / 2)));
 				}
 				
 				
@@ -289,12 +300,8 @@ public partial class World : Node3D
 				
 				for (float j=0; j < GameGlobals.ChunkRowCount; j++)
 				{
-					Chunk chunk = new Chunk(
-						new Godot.Vector3(this.WorldTopLeftPos.X + (j*GameGlobals.ChunkWidth) + (GameGlobals.ChunkWidth / 2), this.WorldPos.Y, this.WorldTopLeftPos.Z + (GameGlobals.ChunkWidth / 2)), 
-						this.noise, 
-						this.texture
-					);
-					chunkToQueue[chunk.chunkPos] = chunk;
+					
+					chunkToQueue.Add(new Godot.Vector3(this.WorldTopLeftPos.X + (j*GameGlobals.ChunkWidth) + (GameGlobals.ChunkWidth / 2), this.WorldPos.Y, this.WorldTopLeftPos.Z + (GameGlobals.ChunkWidth / 2)));
 				}
 				
 				
@@ -306,12 +313,8 @@ public partial class World : Node3D
 				
 				for (int j=0; j < GameGlobals.ChunkRowCount; j++)
 				{
-					Chunk chunk = new Chunk(
-						new Godot.Vector3(this.WorldTopLeftPos.X + GameGlobals.WorldWidth - (GameGlobals.ChunkWidth / 2), this.WorldPos.Y, this.WorldTopLeftPos.Z + (GameGlobals.ChunkWidth / 2) + (j*GameGlobals.ChunkWidth)), 
-						this.noise, 
-						this.texture
-					);
-					chunkToQueue[chunk.chunkPos] = chunk;
+				
+					chunkToQueue.Add(new Godot.Vector3(this.WorldTopLeftPos.X + GameGlobals.WorldWidth - (GameGlobals.ChunkWidth / 2), this.WorldPos.Y, this.WorldTopLeftPos.Z + (GameGlobals.ChunkWidth / 2) + (j*GameGlobals.ChunkWidth)));
 
 				}
 				
@@ -323,28 +326,27 @@ public partial class World : Node3D
 				
 				for (int j=0; j < GameGlobals.ChunkRowCount; j++)
 				{
-					Chunk chunk = new Chunk(
-						new Godot.Vector3(this.WorldTopLeftPos.X + (GameGlobals.ChunkWidth / 2), this.WorldPos.Y, this.WorldTopLeftPos.Z + (GameGlobals.ChunkWidth / 2) + (j*GameGlobals.ChunkWidth)), 
-						this.noise, 
-						this.texture
-					);
-					chunkToQueue[chunk.chunkPos] = chunk;
+					
+					chunkToQueue.Add(new Godot.Vector3(this.WorldTopLeftPos.X + (GameGlobals.ChunkWidth / 2), this.WorldPos.Y, this.WorldTopLeftPos.Z + (GameGlobals.ChunkWidth / 2) + (j*GameGlobals.ChunkWidth)));
 				}
 				
 			}
 		}
-		if (chunkToQueue.Keys.Count > 0)
+		if (chunkToQueue.Count > 0)
 		{
-			StartChunksGenerator(chunkToQueue);	
+			chunksGenerator(chunkToQueue);
 		}
+	}
+	public override void _Process(double delta)
+	{
+
+		JoinFinishedThreads();
 		
 
+		UpdateChunkGenThreads();
+
+		UpdateChunks();
 		
-		
-	}
-	private void AddToThreads(int id, Thread t)
-	{
-		this.threads[id] = t;
 	}
 	private void updateWorldPos(Godot.Vector3 pos)
 	{
@@ -371,38 +373,36 @@ public partial class World : Node3D
 	public override void _ExitTree()
 	{
 		this.exitApp = true;
-		foreach (int key in this.threads.Keys)
-		{
-			this.threads[key].Join();
-		}
+		JoinAllThreads();
 	}
-	private void startChunkGenThread(Chunk chunk)
-	{
-		StartThread(()=>GenChunk(chunk));
-	
-	}
-
-	private void StartChunksGenerator(Dictionary<Godot.Vector3, Chunk> chunksToGen)
+	private void startChunkGenThread(Godot.Vector3 pos)
 	{	
-
-		StartThread(()=>this.chunksGenerator(chunksToGen));
-
-	}
-	private void chunksGenerator(Dictionary<Godot.Vector3, Chunk> chunksToGen)
-	{
-		foreach (Godot.Vector3 key in chunksToGen.Keys){
-			startChunkGenThread(chunksToGen[key]);
+		ThreadWorkingData data = new ThreadWorkingData(null);
+		lock (_dataLock)
+		{
+			this.threadsWorkingData.AddLast(data);
+			// GenChunk(this.threadsWorkingData.Last(), pos);
+			StartThread(()=>GenChunk(data, pos));
 		}
 	}
-	private void GenChunk(Chunk chunk)
+
+	private void chunksGenerator(List<Godot.Vector3> chunksToGen)
 	{
-
-	
-		// chunk.InitMesh();
+		foreach (Godot.Vector3 pos in chunksToGen){
+			startChunkGenThread(pos);
+		}
+	}
+	private void GenChunk(ThreadWorkingData data, Godot.Vector3 pos)
+	{
+		Chunk chunk = new Chunk(pos, this.noise);
+		chunk.GenerateChunkMesh();
+		lock (this._dataLock)
+		{
+			data.chunk = chunk;
+			data.ready = true;
+			
+		}
 		
-
-
-		this.stagedChunks.Add(chunk);
 		
 	}
 }

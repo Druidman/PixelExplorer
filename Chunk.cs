@@ -15,9 +15,7 @@ public class Chunk
 	public Godot.Vector3 chunkTopLeft; // -z, -x
 	WorldNoise noise;
 
-	ImageTexture BlockTexture;
-
-	public MeshInstance3D mesh = new MeshInstance3D();
+	public MeshInstance3D mesh;
 	
 	private bool meshReady = false;
 
@@ -27,12 +25,12 @@ public class Chunk
 	private List<Godot.Vector2> Uvs = new List<Godot.Vector2>();
 	
 	public bool addedToTree = false;
-	public Chunk(Godot.Vector3 chunkPosition, WorldNoise worldNoise, ImageTexture tex)
+	public Chunk(Godot.Vector3 chunkPosition, WorldNoise worldNoise)
 	{
 		this.chunkPos = chunkPosition;
 		this.chunkTopLeft = chunkPos - new Godot.Vector3((Width/2), 0, (Width/2));
 		this.noise = worldNoise;
-		this.BlockTexture = tex;
+		
 		
 
 		
@@ -44,7 +42,7 @@ public class Chunk
 	{
 		return meshReady;
 	}
-	public void InitMesh()
+	public void GenerateChunkMesh()
 	{
 
 		generateTiles();
@@ -60,16 +58,22 @@ public class Chunk
 					if (tiles[i][j][k].blockType != BlockType.NONE)
 					{
 						this.Vertices.AddRange(tiles[i][j][k].GetVertices());
+						
 						this.Normals.AddRange(tiles[i][j][k].GetNormals());
+						
 						this.Uvs.AddRange(tiles[i][j][k].GetUvs());
+						
+						
+						
 					}
 					
 				}	
 			}
 		}
-
-		
-
+	}
+	public void BuildChunkMesh(ImageTexture BlockTexture)
+	{
+		mesh = new MeshInstance3D();
 		var newMesh = new Godot.ArrayMesh();
 		
 
