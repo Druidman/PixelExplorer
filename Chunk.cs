@@ -174,7 +174,7 @@ public class Chunk
 				{
 					platform = 0;
 				}
-				// GD.Print(platform, " ", row, " ", col);
+	
 				BlockType blockType = BlockType.Grass;
 				
 				UpdateTile(platform, row, col, new WorldTile(getGlobalPositionOfTile(platform, row, col), blockType));
@@ -184,7 +184,7 @@ public class Chunk
 			
 			}	
 		}
-		GD.Print("MAX: " + maxY + " MIN: " + minY);
+
 	}
 
 	private bool UpdateTile(int platform, int row, int col, WorldTile tile)
@@ -196,10 +196,7 @@ public class Chunk
 			if (!ResizeTilesToCol(platform,row,col)) return false;
 		}
 
-		// GD.Print("Plat: " + platform + " Row: " + row + " Col: " + col);
-		// GD.Print(this.tiles[platform]);
-		// GD.Print(this.tiles[platform][row]);
-		// GD.Print(this.tiles[platform][row][col]);
+
 		this.tiles[platform][row][col] = tile;
 		return true;
 	}
@@ -219,16 +216,16 @@ public class Chunk
 	}
 	private bool ResizeTilesToRow(int platform, int row)
 	{
-		// GD.Print("Plat: " + platform + " Row: " + row + " FROM RESIZE ROW");
+		
 		if (!CheckIfValidTileIndicies(platform, row, 0)) return false;
 
 		if (!CheckIfTilePlatformFits(platform)) return false;
 
-		// GD.Print("Pass " + this.tiles[platform].Count());
+		
 		
 		for (int i = this.tiles[platform].Count(); i<row + 1; i++)
 		{
-			// GD.Print("Adding on " + i);
+			
 			this.tiles[platform].Add(new List<WorldTile>());
 		}
 		return true;
