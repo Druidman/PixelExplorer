@@ -70,6 +70,8 @@ public class Chunk
 				}	
 			}
 		}
+
+		
 	}
 	public void BuildChunkMesh(ImageTexture BlockTexture)
 	{
@@ -102,7 +104,7 @@ public class Chunk
 		
 		mesh.Mesh = newMesh;
 		// mesh.CreateTrimeshCollision();
-		// mesh.CallDeferred(MeshInstance3D.MethodName.CreateTrimeshCollision); // Fix performance
+		mesh.CallDeferred(MeshInstance3D.MethodName.CreateTrimeshCollision); // Fix performance
 
 		
 		
