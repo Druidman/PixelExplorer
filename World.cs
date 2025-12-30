@@ -41,7 +41,7 @@ public partial class World : Node3D
 	
 	Godot.Vector3 WorldPos = GameGlobals.StartWorldMiddle;
 
-	int worldChunkRadius = 3;
+	int worldChunkRadius = 9;
 	CharacterBody3D player;
 	private int getThreadId()
 	{
@@ -58,8 +58,6 @@ public partial class World : Node3D
 		img.Load("res://images/customTexture.png");
 		
 		texture.SetImage(img);
-
-		GenWorldBase();
 		
 	}
 	private void StartThread(Action action)
@@ -70,18 +68,56 @@ public partial class World : Node3D
 		t.Start();
 		
 	}
-	private void GenWorldBase()
-	{
-		
-		
-	}
 
 	
+	private bool UpdateChunkGenThread(ThreadWorkingData data)
+	{
+		
+		if (!data.ready || !data.chunkDone || data.chunk == null)
+		{
+			return false;
+		}
+		
+		if (this.chunks.GetValueOrDefault(data.chunk.chunkPos) != null)
+		{
+			
+			CleanUpChunk(this.chunks.GetValueOrDefault(data.chunk.chunkPos));	
+			
+			
+		}
 
+		data.chunk.addedToTree = true;
+		CallDeferred(Node3D.MethodName.AddChild, data.chunk.mesh);
+		this.chunks[data.chunk.chunkPos] = data.chunk;
+
+		return true;
+	}
 	private void UpdateChunkGenThreads()
 	{
 			
+		LinkedListNode<ThreadWorkingData> node = this.threadsWorkingData.First;
 		
+		while (node != null)
+		{
+			var next = node.Next;
+			
+			
+			
+			if (UpdateChunkGenThread(node.Value))
+			{
+			
+				lock (_dataLock)
+				{
+					this.threadsWorkingData.Remove(node);
+					
+				}				
+
+			}
+
+
+			node = next;
+			
+		}
 
 	}
 
@@ -137,7 +173,23 @@ public partial class World : Node3D
 
 	private void UpdateChunks()
 	{
-		int i =0;
+
+		Godot.Vector2 newWorldPos = (
+			new Godot.Vector2(this.player.Position.X, this.player.Position.Z) / GameGlobals.ChunkWidth).Floor() * GameGlobals.ChunkWidth; 
+		
+
+		if (this.chunks.GetValueOrDefault(new Godot.Vector3(newWorldPos.X, this.WorldPos.Y, newWorldPos.Y)) != null)
+		{
+			if (this.chunks.GetValueOrDefault(new Godot.Vector3(newWorldPos.X, this.WorldPos.Y, newWorldPos.Y)) == this.chunks.GetValueOrDefault(this.WorldPos))
+			{
+				return;
+			}
+		}
+
+		
+		updateWorldPos(new Godot.Vector3(newWorldPos.X, this.WorldPos.Y, newWorldPos.Y));
+
+		
 		for (
 			int x = (int)this.WorldPos.X - ((this.worldChunkRadius - 1) * GameGlobals.ChunkWidth); 
 			x <= (int)this.WorldPos.X + ((this.worldChunkRadius - 1) * GameGlobals.ChunkWidth);
@@ -152,21 +204,32 @@ public partial class World : Node3D
 			)
 			{
 				
-				GD.Print(i, ": ", x ,  " " , z, " ");
 				
+				Godot.Vector3 pos = new Godot.Vector3(x,this.WorldPos.Y,z);
+				if (this.chunks.GetValueOrDefault(pos) == null)
+				{
 				
-				i++;
+					RequestChunkGenAt(pos);
+					this.chunks[pos] = new Chunk(pos, this.noise); // as placeholder
+				}
+				
+			
 			}
 			
 		}
 	}
+
+	private void RequestChunkGenAt(Godot.Vector3 pos)
+	{
+		startChunkGenThread(pos);
+	}
 	public override void _Process(double delta)
 	{
 
-		// JoinFinishedThreads();
+		JoinFinishedThreads();
 		
 
-		// UpdateChunkGenThreads();
+		UpdateChunkGenThreads();
 
 		UpdateChunks();
 		
@@ -187,13 +250,9 @@ public partial class World : Node3D
 		lock (_dataLock)
 		{
 			this.threadsWorkingData.AddLast(data);
-
-			StartThread(()=>GenChunk(data, position));
+			
 		}
-	}
-
-	private void chunksGenerator(Dictionary<Godot.Vector3, bool> chunksToGen)
-	{
+		StartThread(()=>GenChunk(data, position));
 		
 	}
 	private void GenChunk(ThreadWorkingData data, Godot.Vector3 position)
@@ -210,11 +269,6 @@ public partial class World : Node3D
 
 		}
 
-			
-			
-		
-		
-		
 		
 	}
 }
