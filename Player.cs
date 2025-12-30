@@ -4,7 +4,7 @@ using System;
 
 public partial class Player : CharacterBody3D
 {
-	public const float Speed = 50.0f;
+	public const float Speed = 10.0f;
 	public const float DecelerationSpeed = Speed * 0.1f;
 	public const float JumpForce = 10;
 	public float MouseSensitivity = 0.2f;
@@ -12,7 +12,7 @@ public partial class Player : CharacterBody3D
 	MeshInstance3D character;
 	CollisionShape3D characterCollider;
 	Camera camera;
-	bool DebugMode = true;
+	bool DebugMode = false;
 
 	public override void _Ready()
 	{

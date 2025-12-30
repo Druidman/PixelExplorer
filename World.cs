@@ -41,7 +41,8 @@ public partial class World : Node3D
 	
 	Godot.Vector3 WorldPos = GameGlobals.StartWorldMiddle;
 
-	int worldChunkRadius = 9;
+	int worldChunkRadius = GameGlobals.chunkRadius;
+	float maxChunkDist = (GameGlobals.chunkRadius) * GameGlobals.ChunkWidth;
 	CharacterBody3D player;
 	private int getThreadId()
 	{
@@ -169,6 +170,8 @@ public partial class World : Node3D
 	{
 		
 		return (Godot.Vector3I)(pos - this.WorldPos).Abs() / (int)GameGlobals.ChunkWidth;
+		
+		
 	}
 
 	private void UpdateChunks()
@@ -197,9 +200,14 @@ public partial class World : Node3D
 		)
 		{
 		
+			// for (
+			// 	int z = (int)this.WorldPos.Z + (int)((getDistanceFromWorldMiddleInChunksCount(new Godot.Vector3(x, this.WorldPos.Y, this.WorldPos.Z)).X - (this.worldChunkRadius - 1)) * GameGlobals.ChunkWidth); 			
+			// 	z <= (int)this.WorldPos.Z - (int)((getDistanceFromWorldMiddleInChunksCount(new Godot.Vector3(x, this.WorldPos.Y, this.WorldPos.Z)).X - (this.worldChunkRadius - 1))  * GameGlobals.ChunkWidth);
+			// 	z+=GameGlobals.ChunkWidth
+			// )
 			for (
-				int z = (int)this.WorldPos.Z + (int)((getDistanceFromWorldMiddleInChunksCount(new Godot.Vector3(x, this.WorldPos.Y, this.WorldPos.Z)).X - (this.worldChunkRadius - 1)) * GameGlobals.ChunkWidth); 			
-				z <= (int)this.WorldPos.Z - (int)((getDistanceFromWorldMiddleInChunksCount(new Godot.Vector3(x, this.WorldPos.Y, this.WorldPos.Z)).X - (this.worldChunkRadius - 1))  * GameGlobals.ChunkWidth);
+				int z = (int)this.WorldPos.Z - ((this.worldChunkRadius - 1) * GameGlobals.ChunkWidth); 
+				z <= (int)this.WorldPos.Z + ((this.worldChunkRadius - 1) * GameGlobals.ChunkWidth);
 				z+=GameGlobals.ChunkWidth
 			)
 			{
@@ -208,15 +216,55 @@ public partial class World : Node3D
 				Godot.Vector3 pos = new Godot.Vector3(x,this.WorldPos.Y,z);
 				if (this.chunks.GetValueOrDefault(pos) == null)
 				{
-				
+					
 					RequestChunkGenAt(pos);
 					this.chunks[pos] = new Chunk(pos, this.noise); // as placeholder
+
 				}
+
+
+
 				
 			
 			}
 			
 		}
+
+		// now removing old ones
+		foreach (Godot.Vector3 key in this.chunks.Keys)
+		{
+			Chunk chunk = this.chunks[key];
+			if (!chunk.addedToTree)
+			{
+				
+				continue;
+			}
+
+
+			if (!CheckIfPosFitsInWorld(chunk.chunkPos))
+			{
+				CleanUpChunk(chunk);
+				this.chunks.Remove(key);
+				// this.chunks[key] = null;
+			}
+		}
+	}
+
+	private bool CheckIfPosFitsInWorld(Godot.Vector3 pos)
+	{
+		Godot.Vector3 distance  = getDistanceFromWorldMiddleInChunksCount(pos);
+		if (
+			distance.X > this.worldChunkRadius - 1 ||
+			distance.Z > this.worldChunkRadius - 1
+		)
+		{
+				
+			return false;
+		}
+	
+		
+		return true;
+
 	}
 
 	private void RequestChunkGenAt(Godot.Vector3 pos)

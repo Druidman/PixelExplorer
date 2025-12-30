@@ -1,11 +1,12 @@
 
 using System.Collections.Generic;
+using Godot;
 
 class GameGlobals
 {
-    public static int ChunkWidth = 32;
+    public static int ChunkWidth = 8;
     public static Godot.Vector3 StartWorldMiddle = new Godot.Vector3(0,0,0);
-
+    public static int chunkRadius = 10;
 
 
     public static int TileWidth = 1;
