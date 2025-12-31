@@ -43,7 +43,7 @@ public partial class World : Node3D
 
 	int worldChunkRadius = GameGlobals.chunkRadius;
 	float maxChunkDist = (GameGlobals.chunkRadius) * GameGlobals.ChunkWidth;
-	CharacterBody3D player;
+	Player player;
 	private int getThreadId()
 	{
 		this.threadId++;
@@ -54,7 +54,8 @@ public partial class World : Node3D
 	{
 		ThreadGuard.Initialize();
 
-		player = (CharacterBody3D)GetNode("../Player");
+		player = (Player)GetNode("../Player");
+		player.world = this;
 		
 		Image img = new Image();
 		img.Load("res://images/customTexture.png");
@@ -269,21 +270,40 @@ public partial class World : Node3D
 			}
 		}
 
-		Chunk cChunk = this.chunks.GetValueOrDefault(this.WorldPos);
-		if (cChunk == null)
-		{
-			return;
-		}
-		if (!cChunk.meshReady)
-		{
-			return;
-		}
-		if (cChunk.chunkCollisionState != ChunkCollisionState.GENERATED)
-		{
-			cChunk.GenerateChunkCollision();
-		}
+		
 		
 	
+	}
+
+	public void GenChunkCollisions(){
+		List<Godot.Vector3> requiredCollisions = [
+			this.WorldPos,	
+			this.WorldPos + new Godot.Vector3(GameGlobals.ChunkWidth,0,0),
+			this.WorldPos + new Godot.Vector3(-GameGlobals.ChunkWidth,0,0),
+			this.WorldPos + new Godot.Vector3(0,0,GameGlobals.ChunkWidth),
+			this.WorldPos + new Godot.Vector3(0,0,-GameGlobals.ChunkWidth),
+
+			this.WorldPos + new Godot.Vector3(GameGlobals.ChunkWidth,0,GameGlobals.ChunkWidth),
+			this.WorldPos + new Godot.Vector3(GameGlobals.ChunkWidth,0,-GameGlobals.ChunkWidth),
+			this.WorldPos + new Godot.Vector3(-GameGlobals.ChunkWidth,0,-GameGlobals.ChunkWidth),
+			this.WorldPos + new Godot.Vector3(-GameGlobals.ChunkWidth,0,GameGlobals.ChunkWidth),
+		];
+		foreach (Godot.Vector3 pos in requiredCollisions)
+		{
+			Chunk cChunk = this.chunks.GetValueOrDefault(pos);
+			if (cChunk == null)
+			{
+				return;
+			}
+			if (!cChunk.meshReady)
+			{
+				return;
+			}
+			if (cChunk.chunkCollisionState != ChunkCollisionState.GENERATED)
+			{
+				cChunk.GenerateChunkCollision();
+			}
+		}
 	}
 
 	private bool CheckIfPosFitsInWorld(Godot.Vector3 pos)
@@ -316,8 +336,15 @@ public partial class World : Node3D
 		UpdateChunkGenThreads();
 
 		UpdateChunks();
+
+		GenChunkCollisions();
 		
 	}
+	private Godot.Vector3 GetChunkPos(Godot.Vector3 pos)
+	{
+		return (Godot.Vector3I)(new Godot.Vector3(pos.X, 0, pos.Z) / (int)GameGlobals.ChunkWidth) * GameGlobals.ChunkWidth;
+	}
+
 	private void updateWorldPos(Godot.Vector3 pos)
 	{
 		this.WorldPos = pos;

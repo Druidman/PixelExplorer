@@ -13,6 +13,7 @@ public partial class Player : CharacterBody3D
 	CollisionShape3D characterCollider;
 	Camera camera;
 	bool DebugMode = false;
+	public World world = null;
 
 	public override void _Ready()
 	{
@@ -52,6 +53,7 @@ public partial class Player : CharacterBody3D
 	{
 		Vector3 velocity = Velocity;
 
+		
 		// Add the gravity.
 		if (!DebugMode)
 		{	
