@@ -52,6 +52,7 @@ public partial class World : Node3D
 	public override void _Ready()
 
 	{
+		ThreadGuard.Initialize();
 
 		player = (CharacterBody3D)GetNode("../Player");
 		
@@ -86,6 +87,7 @@ public partial class World : Node3D
 			
 			
 		}
+		data.chunk.BuildChunkMesh(this.texture);
 
 		data.chunk.addedToTree = true;
 		CallDeferred(Node3D.MethodName.AddChild, data.chunk.mesh);
@@ -97,7 +99,7 @@ public partial class World : Node3D
 	{
 			
 		LinkedListNode<ThreadWorkingData> node = this.threadsWorkingData.First;
-		
+
 		while (node != null)
 		{
 			var next = node.Next;
@@ -110,10 +112,11 @@ public partial class World : Node3D
 				lock (_dataLock)
 				{
 					this.threadsWorkingData.Remove(node);
-					
+					break;
 				}				
 
 			}
+				
 
 
 			node = next;
@@ -308,7 +311,7 @@ public partial class World : Node3D
 		
 		Chunk chunk = new Chunk(position, this.noise);
 		chunk.GenerateChunkMesh();
-		chunk.BuildChunkMesh(this.texture);
+		
 		lock (this._dataLock)
 		{
 			data.chunk = chunk;

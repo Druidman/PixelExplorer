@@ -3,8 +3,17 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Godot;
 
+
+public enum ChunkCollisionState
+{
+	NONE,
+	QUEUED,
+	GENERATED
+}
 // chunk Position is declared as bottom center pos !!!
 public class Chunk
 {
@@ -17,14 +26,17 @@ public class Chunk
 
 	public MeshInstance3D mesh;
 	
-	private bool meshReady = false;
+	
 
 	List< List< List< WorldTile > > > tiles = new List<List<List<WorldTile>>>();
 	private List<Godot.Vector3> Vertices = new List<Godot.Vector3>();
 	private List<Godot.Vector3> Normals = new List<Godot.Vector3>();
 	private List<Godot.Vector2> Uvs = new List<Godot.Vector2>();
 	
+
+	public bool meshReady = false;
 	public bool addedToTree = false;
+	public ChunkCollisionState chunkCollisionState = ChunkCollisionState.NONE;
 	public Chunk(Godot.Vector3 chunkPosition, WorldNoise worldNoise)
 	{
 		this.chunkPos = chunkPosition;
@@ -35,12 +47,6 @@ public class Chunk
 
 		
 
-	}
-
-
-	public bool isMeshReady()
-	{
-		return meshReady;
 	}
 	public void GenerateChunkMesh()
 	{
@@ -75,6 +81,9 @@ public class Chunk
 	}
 	public void BuildChunkMesh(ImageTexture BlockTexture)
 	{
+		if (Thread.CurrentThread.ManagedThreadId != ThreadGuard.MainThreadId)
+			throw new InvalidOperationException("Method must be called from main thread");
+
 		mesh = new MeshInstance3D();
 		var newMesh = new Godot.ArrayMesh();
 		
@@ -103,13 +112,25 @@ public class Chunk
 		
 		
 		mesh.Mesh = newMesh;
-		// mesh.CreateTrimeshCollision();
-		mesh.CallDeferred(MeshInstance3D.MethodName.CreateTrimeshCollision); // Fix performance
-
 		
+		CreateMeshCollision();
 		
 		this.meshReady = true;
 
+		
+	}
+	private void CreateMeshCollision()
+	{
+		if (Thread.CurrentThread.ManagedThreadId != ThreadGuard.MainThreadId)
+			throw new InvalidOperationException("Method must be called from main thread");
+
+		this.chunkCollisionState = ChunkCollisionState.NONE;
+		
+		mesh.CallDeferred(MeshInstance3D.MethodName.CreateTrimeshCollision); 	
+
+		this.chunkCollisionState = ChunkCollisionState.QUEUED;
+		// TODO add done retrieval
+		
 		
 	}
 
