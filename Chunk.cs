@@ -113,22 +113,20 @@ public class Chunk
 		
 		mesh.Mesh = newMesh;
 		
-		CreateMeshCollision();
-		
 		this.meshReady = true;
 
 		
 	}
-	private void CreateMeshCollision()
+	public void GenerateChunkCollision()
 	{
 		if (Thread.CurrentThread.ManagedThreadId != ThreadGuard.MainThreadId)
 			throw new InvalidOperationException("Method must be called from main thread");
 
 		this.chunkCollisionState = ChunkCollisionState.NONE;
-		
-		mesh.CallDeferred(MeshInstance3D.MethodName.CreateTrimeshCollision); 	
+		mesh.CreateTrimeshCollision();
+		// mesh.CallDeferred(MeshInstance3D.MethodName.CreateTrimeshCollision); 	
 
-		this.chunkCollisionState = ChunkCollisionState.QUEUED;
+		this.chunkCollisionState = ChunkCollisionState.GENERATED;
 		// TODO add done retrieval
 		
 		

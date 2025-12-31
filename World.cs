@@ -88,6 +88,23 @@ public partial class World : Node3D
 			
 		}
 		data.chunk.BuildChunkMesh(this.texture);
+		if (data.chunk.chunkPos == this.WorldPos)
+		{
+			data.chunk.GenerateChunkCollision();
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 
 		data.chunk.addedToTree = true;
 		CallDeferred(Node3D.MethodName.AddChild, data.chunk.mesh);
@@ -251,6 +268,22 @@ public partial class World : Node3D
 				// this.chunks[key] = null;
 			}
 		}
+
+		Chunk cChunk = this.chunks.GetValueOrDefault(this.WorldPos);
+		if (cChunk == null)
+		{
+			return;
+		}
+		if (!cChunk.meshReady)
+		{
+			return;
+		}
+		if (cChunk.chunkCollisionState != ChunkCollisionState.GENERATED)
+		{
+			cChunk.GenerateChunkCollision();
+		}
+		
+	
 	}
 
 	private bool CheckIfPosFitsInWorld(Godot.Vector3 pos)

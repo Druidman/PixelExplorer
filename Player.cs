@@ -55,7 +55,9 @@ public partial class Player : CharacterBody3D
 		// Add the gravity.
 		if (!DebugMode)
 		{	
-			if (IsOnFloor())
+			// Area3D area = GetNode<Area3D>("Area");
+			// GD.Print(area.GetOverlappingBodies().Count);
+			if (IsOnFloor() )//|| area.GetOverlappingBodies().Count > 1)
 			{
 				velocity.Y = 0;
 			}
