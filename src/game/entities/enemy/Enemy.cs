@@ -35,6 +35,8 @@ public partial class Enemy : CharacterBody3D
 		}
 		else
 		{
+			velocity.X *= 0.5f;
+			velocity.Z *= 0.5f;
 			Velocity = velocity;
 		}
 
