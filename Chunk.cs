@@ -124,10 +124,10 @@ public class Chunk
 
 		this.chunkCollisionState = ChunkCollisionState.NONE;
 		mesh.CreateTrimeshCollision();
-		// mesh.CallDeferred(MeshInstance3D.MethodName.CreateTrimeshCollision); 	
+		
 
 		this.chunkCollisionState = ChunkCollisionState.GENERATED;
-		// TODO add done retrieval
+		
 		
 		
 	}

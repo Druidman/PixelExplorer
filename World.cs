@@ -226,6 +226,7 @@ public partial class World : Node3D
 			// 	z <= (int)this.WorldPos.Z - (int)((getDistanceFromWorldMiddleInChunksCount(new Godot.Vector3(x, this.WorldPos.Y, this.WorldPos.Z)).X - (this.worldChunkRadius - 1))  * GameGlobals.ChunkWidth);
 			// 	z+=GameGlobals.ChunkWidth
 			// )
+			// To use in future
 			for (
 				int z = (int)this.WorldPos.Z - ((this.worldChunkRadius - 1) * GameGlobals.ChunkWidth); 
 				z <= (int)this.WorldPos.Z + ((this.worldChunkRadius - 1) * GameGlobals.ChunkWidth);
@@ -270,9 +271,6 @@ public partial class World : Node3D
 			}
 		}
 
-		
-		
-	
 	}
 
 	public void GenChunkCollisions(){
