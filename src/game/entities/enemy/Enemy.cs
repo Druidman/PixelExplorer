@@ -4,9 +4,9 @@ using System;
 public partial class Enemy : CharacterBody3D
 {
 
-	float GravitySpeed = 20.0f;
+
 	public Godot.Vector3 moveDirection = new Godot.Vector3(0,0,0);
-	public float EnemySpeed = 10f;
+
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
@@ -15,19 +15,19 @@ public partial class Enemy : CharacterBody3D
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _PhysicsProcess(double delta)
 	{
-		Godot.Vector3 velocity = new Godot.Vector3(this.moveDirection.X * EnemySpeed, Velocity.Y, this.moveDirection.Z  * EnemySpeed);
+		Godot.Vector3 velocity = new Godot.Vector3(this.moveDirection.X * GameGlobals.PlayerSpeed * 1.1f, Velocity.Y, this.moveDirection.Z  * GameGlobals.PlayerSpeed * 1.1f);
 		if (IsOnFloor())
 		{
 			velocity.Y = 0;
 		}
 		else
 		{
-			velocity.Y -= this.GravitySpeed * (float)delta;
+			velocity.Y -= GameGlobals.GravitySpeed * (float)delta;
 		}
 
 		if (IsOnWall())
 		{
-			velocity.Y += 1;
+			velocity.Y = GameGlobals.PlayerJumpForce;
 		}
 		if (IsOnFloor())
 		{

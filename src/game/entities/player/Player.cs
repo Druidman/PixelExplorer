@@ -4,9 +4,6 @@ using System;
 
 public partial class Player : CharacterBody3D
 {
-	public const float Speed = 10.0f;
-	public const float DecelerationSpeed = Speed * 0.1f;
-	public const float JumpForce = 10;
 	public float MouseSensitivity = 0.2f;
 	float GravitySpeed = 20.0f;
 	MeshInstance3D character;
@@ -82,7 +79,7 @@ public partial class Player : CharacterBody3D
 		// Handle Jump.
 		if (Input.IsActionJustPressed("move_up") && IsOnFloor())
 		{
-			velocity.Y = JumpForce;
+			velocity.Y = GameGlobals.PlayerJumpForce;
 		}
 
 		
@@ -102,25 +99,29 @@ public partial class Player : CharacterBody3D
 		{
 			movement.Z += 1.0f;
 		}
-		movement *= Speed;
+		movement *= GameGlobals.PlayerSpeed;
+
+		movement = movement.Normalized();
 
 		movement = movement.Rotated(Godot.Vector3.Up, this.character.Rotation.Y);
+
+
 		if (movement.Z != 0.0f)
 		{
-			velocity.Z = movement.Z;
+			velocity.Z = movement.Z* GameGlobals.PlayerSpeed;
 		}
 		else
 		{
-			velocity.Z = Mathf.MoveToward(velocity.Z, 0, DecelerationSpeed);
+			velocity.Z = Mathf.MoveToward(velocity.Z, 0, GameGlobals.PlayerDecelerationSpeed);
 		}
 
 		if (movement.X != 0.0f)
 		{
-			velocity.X = movement.X;
+			velocity.X = movement.X * GameGlobals.PlayerSpeed;
 		}
 		else
 		{
-			velocity.X = Mathf.MoveToward(velocity.X, 0, DecelerationSpeed);
+			velocity.X = Mathf.MoveToward(velocity.X, 0, GameGlobals.PlayerDecelerationSpeed);
 		}
 
 		Velocity = velocity;

@@ -9,6 +9,13 @@ class GameGlobals
     public static int chunkRadius = 15;
 
     public static Godot.Vector3 PlayerStartPos = new Godot.Vector3(0,200,0);
+    public static float GravitySpeed = 20.0f;
+    public static float PlayerJumpForce = 10f;
+
+    
+    public static float PlayerSpeed = 10.0f;
+    public static float PlayerDecelerationSpeed = GameGlobals.PlayerSpeed * 0.1f;
+
     public static int TileWidth = 1;
     public static Godot.Vector2 TextureAtlasSize = new Godot.Vector2(48,64);
     public static int YAxisCells = 4;
