@@ -72,7 +72,7 @@ public partial class World : Node3D
 		{
 			
 		}
-		var e = GD.Load<PackedScene>("res://scenes/enemy.tscn");
+		var e = GD.Load<PackedScene>("res://scenes/objects/enemy.tscn");
 
 		enemy = e.Instantiate<Enemy>();
 		

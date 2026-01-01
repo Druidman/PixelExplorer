@@ -1,0 +1,3 @@
+[gd_scene format=3 uid="uid://gn43e3ofmpb8"]
+
+[node name="GamePause" type="Node2D"]

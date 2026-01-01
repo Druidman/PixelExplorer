@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://cwyc3bi48q0dq"]
+[gd_scene load_steps=7 format=3 uid="uid://cwyc3bi48q0dq"]
 
-[ext_resource type="PackedScene" uid="uid://bxbdurtrp6it3" path="res://fpsCounter.tscn" id="1_qbwvd"]
-[ext_resource type="PackedScene" uid="uid://clbu5yls05nll" path="res://game.tscn" id="2_i4801"]
+[ext_resource type="PackedScene" uid="uid://r7r2uri7tsuw" path="res://scenes/objects/ReturnButton/ReturnButton.tscn" id="1_iiptw"]
+[ext_resource type="PackedScene" uid="uid://bxbdurtrp6it3" path="res://scenes/objects/fpsCounter.tscn" id="1_qbwvd"]
+[ext_resource type="PackedScene" uid="uid://clbu5yls05nll" path="res://scenes/app/game/game.tscn" id="2_i4801"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_hr5et"]
 sky_horizon_color = Color(1.0723789, 1.150212, 1.2487786, 1)
@@ -35,6 +36,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 stretch = true
+
+[node name="ReturnButton" parent="SubViewportContainer" instance=ExtResource("1_iiptw")]
+layout_mode = 2
 
 [node name="Node2D" parent="SubViewportContainer" instance=ExtResource("1_qbwvd")]
 

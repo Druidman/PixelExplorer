@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://b1oygfamiwlw7"]
+
+[ext_resource type="PackedScene" uid="uid://r7r2uri7tsuw" path="res://scenes/objects/ReturnButton/ReturnButton.tscn" id="1_bf24f"]
+
+[node name="Settings" type="Node2D"]
+
+[node name="ReturnButton" parent="." instance=ExtResource("1_bf24f")]
