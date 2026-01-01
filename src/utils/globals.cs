@@ -8,7 +8,7 @@ class GameGlobals
     public static Godot.Vector3 StartWorldMiddle = new Godot.Vector3(0,0,0);
     public static int chunkRadius = 15;
 
-
+    public static Godot.Vector3 PlayerStartPos = new Godot.Vector3(0,200,0);
     public static int TileWidth = 1;
     public static Godot.Vector2 TextureAtlasSize = new Godot.Vector2(48,64);
     public static int YAxisCells = 4;

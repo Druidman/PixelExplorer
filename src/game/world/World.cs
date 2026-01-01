@@ -61,8 +61,8 @@ public partial class World : Node3D
 		img.Load("res://images/customTexture.png");
 		
 		texture.SetImage(img);
-
-		var enemy = GD.Load<PackedScene>("res://enemy.tscn");
+		
+		var enemy = GD.Load<PackedScene>("res://scenes/enemy.tscn");
 
 		CharacterBody3D instance = enemy.Instantiate<CharacterBody3D>();
 		instance.Position = this.player.Position;

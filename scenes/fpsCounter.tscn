@@ -1,8 +1,8 @@
 [gd_scene load_steps=2 format=3 uid="uid://bxbdurtrp6it3"]
 
-[ext_resource type="Script" uid="uid://dic3acx1lchxr" path="res://FpsCounter.cs" id="1_wxsth"]
+[ext_resource type="Script" uid="uid://dic3acx1lchxr" path="res://src/utils/FpsCounter.cs" id="1_wxsth"]
 
-[node name="Node2D" type="Node2D"]
+[node name="FpsCounter" type="Node2D"]
 
 [node name="Label" type="Label" parent="."]
 offset_right = 40.0

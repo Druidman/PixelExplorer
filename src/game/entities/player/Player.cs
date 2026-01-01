@@ -21,6 +21,8 @@ public partial class Player : CharacterBody3D
 		this.character = (MeshInstance3D)GetNode("Character");
 		this.characterCollider = (CollisionShape3D)GetNode("CharacterCollider");
 		this.camera = (Camera)GetNode("Camera3D");
+
+		this.GlobalPosition = GameGlobals.PlayerStartPos;
 	}
 
 	public override void _Input(InputEvent inputEvent)
