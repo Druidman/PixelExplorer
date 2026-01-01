@@ -15,6 +15,11 @@ public partial class Player : CharacterBody3D
 	bool DebugMode = false;
 	public World world = null;
 
+
+    public override void _EnterTree()
+    {
+        GlobalPosition = GameGlobals.PlayerStartPos;
+    }
 	public override void _Ready()
 	{
 		Input.MouseMode = Input.MouseModeEnum.ConfinedHidden;
@@ -23,6 +28,7 @@ public partial class Player : CharacterBody3D
 		this.camera = (Camera)GetNode("Camera3D");
 
 		this.GlobalPosition = GameGlobals.PlayerStartPos;
+
 	}
 
 	public override void _Input(InputEvent inputEvent)

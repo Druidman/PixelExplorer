@@ -44,10 +44,15 @@ public partial class World : Node3D
 	int worldChunkRadius = GameGlobals.chunkRadius;
 	float maxChunkDist = (GameGlobals.chunkRadius) * GameGlobals.ChunkWidth;
 	Player player;
+	Enemy enemy;
 	private int getThreadId()
 	{
 		this.threadId++;
 		return this.threadId;
+	}
+	public override void _EnterTree()
+	{
+		this.WorldPos = GameGlobals.StartWorldMiddle;
 	}
 	public override void _Ready()
 
@@ -57,16 +62,22 @@ public partial class World : Node3D
 		player = (Player)GetNode("../Player");
 		player.world = this;
 		
+		
 		Image img = new Image();
 		img.Load("res://images/customTexture.png");
 		
 		texture.SetImage(img);
-		
-		var enemy = GD.Load<PackedScene>("res://scenes/enemy.tscn");
 
-		CharacterBody3D instance = enemy.Instantiate<CharacterBody3D>();
-		instance.Position = this.player.Position;
-		AddChild(instance);
+		while (!player.IsInsideTree())
+		{
+			
+		}
+		var e = GD.Load<PackedScene>("res://scenes/enemy.tscn");
+
+		enemy = e.Instantiate<Enemy>();
+		
+		enemy.Position = this.player.GlobalPosition;
+		AddChild(enemy);
 		
 	}
 	private void StartThread(Action action)
@@ -341,7 +352,18 @@ public partial class World : Node3D
 
 		UpdateChunks();
 
+
 		GenChunkCollisions();
+
+		HandleEnemies();
+		
+	}
+	private void HandleEnemies()
+	{
+		Godot.Vector3 direction = this.player.Position - this.enemy.Position;
+
+		this.enemy.moveDirection = direction.Normalized();
+
 		
 	}
 	private Godot.Vector3 GetChunkPos(Godot.Vector3 pos)
