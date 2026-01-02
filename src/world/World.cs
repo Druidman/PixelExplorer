@@ -74,7 +74,14 @@ public partial class World : Node3D
 		Bush bush = bushScene.Instantiate<Bush>();
 
 		bush.Position = this.player.Position;
-		AddChild(bush);
+		// AddChild(bush);
+
+		PackedScene coinScene = GD.Load<PackedScene>("res://src/objects/Coin/Coin.tscn");
+
+		Coin coin = coinScene.Instantiate<Coin>();
+
+		coin.Position = this.player.Position;
+		AddChild(coin);
 
 		
 
