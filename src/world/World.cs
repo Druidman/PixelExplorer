@@ -42,7 +42,7 @@ public partial class World : Node3D
 	Godot.Vector3 WorldPos = GameGlobals.StartWorldMiddle;
 
 	int worldChunkRadius = GameGlobals.chunkRadius;
-	float maxChunkDist = new Godot.Vector3((GameGlobals.chunkRadius - 1) * GameGlobals.ChunkWidth, 0, 0).DistanceTo(new Godot.Vector3(0,0,0));
+	float maxChunkDist = (GameGlobals.chunkRadius) * GameGlobals.ChunkWidth;
 	Player player;
 	Enemy enemy;
 	private int getThreadId()
@@ -110,6 +110,19 @@ public partial class World : Node3D
 		{
 			data.chunk.GenerateChunkCollision();
 		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 
 		data.chunk.addedToTree = true;
 		CallDeferred(Node3D.MethodName.AddChild, data.chunk.mesh);
@@ -199,14 +212,6 @@ public partial class World : Node3D
 		
 	}
 
-	private Godot.Vector3 ConvertPosIntoChunkPos(Godot.Vector3 pos)
-	{
-		return (Godot.Vector3I)(pos / GameGlobals.ChunkWidth) * GameGlobals.chunkRadius;
-	}
-	private int ConvertPosIntoChunkPosValue(float value)
-	{
-		return (int)(value / GameGlobals.ChunkWidth) * GameGlobals.chunkRadius;
-	}
 	private void UpdateChunks()
 	{
 
@@ -226,43 +231,28 @@ public partial class World : Node3D
 		updateWorldPos(new Godot.Vector3(newWorldPos.X, this.WorldPos.Y, newWorldPos.Y));
 
 		
-		// for (
-		// 	int x = (int)this.WorldPos.X - ((this.worldChunkRadius - 1) * GameGlobals.ChunkWidth); 
-		// 	x <= (int)this.WorldPos.X + ((this.worldChunkRadius - 1) * GameGlobals.ChunkWidth);
-		// 	x+=GameGlobals.ChunkWidth
-		// )
-		// {
-
-		// 	for (
-		// 		int z = (int)this.WorldPos.Z - ((this.worldChunkRadius - 1) * GameGlobals.ChunkWidth); 
-		// 		z <= (int)this.WorldPos.Z + ((this.worldChunkRadius - 1) * GameGlobals.ChunkWidth);
-		// 		z+=GameGlobals.ChunkWidth
-		// 	)
-		// 	{
-		
-		GD.Print(this.maxChunkDist);
-		int cInd = 0;
-		int cIndMax = (int)this.maxChunkDist / GameGlobals.ChunkWidth;
-		bool cIndPlus = true;
 		for (
-			int x = (int)this.WorldPos.X - (int)this.maxChunkDist; 
-			x <= (int)this.WorldPos.X + (int)this.maxChunkDist;
+			int x = (int)this.WorldPos.X - ((this.worldChunkRadius - 1) * GameGlobals.ChunkWidth); 
+			x <= (int)this.WorldPos.X + ((this.worldChunkRadius - 1) * GameGlobals.ChunkWidth);
 			x+=GameGlobals.ChunkWidth
 		)
 		{
 		
+			// for (
+			// 	int z = (int)this.WorldPos.Z + (int)((getDistanceFromWorldMiddleInChunksCount(new Godot.Vector3(x, this.WorldPos.Y, this.WorldPos.Z)).X - (this.worldChunkRadius - 1)) * GameGlobals.ChunkWidth); 			
+			// 	z <= (int)this.WorldPos.Z - (int)((getDistanceFromWorldMiddleInChunksCount(new Godot.Vector3(x, this.WorldPos.Y, this.WorldPos.Z)).X - (this.worldChunkRadius - 1))  * GameGlobals.ChunkWidth);
+			// 	z+=GameGlobals.ChunkWidth
+			// )
+			// To use in future
 			for (
-				int z = (int)this.WorldPos.Z - (cInd * GameGlobals.ChunkWidth);
-				z <= (int)this.WorldPos.Z + (cInd * GameGlobals.ChunkWidth);
+				int z = (int)this.WorldPos.Z - ((this.worldChunkRadius - 1) * GameGlobals.ChunkWidth); 
+				z <= (int)this.WorldPos.Z + ((this.worldChunkRadius - 1) * GameGlobals.ChunkWidth);
 				z+=GameGlobals.ChunkWidth
 			)
 			{
 				
-		
-				
 				
 				Godot.Vector3 pos = new Godot.Vector3(x,this.WorldPos.Y,z);
-				GD.Print("Pos: ", pos);
 				if (this.chunks.GetValueOrDefault(pos) == null)
 				{
 					
@@ -270,20 +260,14 @@ public partial class World : Node3D
 					this.chunks[pos] = new Chunk(pos, this.noise); // as placeholder
 
 				}
-			
-			}
-			if (cInd >= cIndMax && cIndPlus)
-			{
-				cIndPlus = false;
+
+
+
 				
+			
 			}
-			
-			if (cIndPlus) cInd++;
-			else cInd--;
-			
 			
 		}
-		
 
 		// now removing old ones
 		foreach (Godot.Vector3 key in this.chunks.Keys)
@@ -300,6 +284,7 @@ public partial class World : Node3D
 			{
 				CleanUpChunk(chunk);
 				this.chunks.Remove(key);
+				// this.chunks[key] = null;
 			}
 		}
 
@@ -338,10 +323,10 @@ public partial class World : Node3D
 
 	private bool CheckIfPosFitsInWorld(Godot.Vector3 pos)
 	{
-		float distance = pos.DistanceTo(this.WorldPos);
+		Godot.Vector3 distance  = getDistanceFromWorldMiddleInChunksCount(pos);
 		if (
-			distance > this.maxChunkDist
-			
+			distance.X > this.worldChunkRadius - 1 ||
+			distance.Z > this.worldChunkRadius - 1
 		)
 		{
 				
