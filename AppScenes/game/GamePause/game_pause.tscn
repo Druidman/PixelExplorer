@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://gn43e3ofmpb8"]
+[gd_scene load_steps=5 format=3 uid="uid://gn43e3ofmpb8"]
 
 [ext_resource type="Script" uid="uid://du8b50htejcr6" path="res://AppScenes/game/GamePause/GamePause.cs" id="1_3kr33"]
 [ext_resource type="Shader" uid="uid://dv50fboro6ayb" path="res://AppScenes/game/GamePause/shader/game_pause.gdshader" id="1_5rum1"]
+[ext_resource type="PackedScene" uid="uid://dbuo1pe6qxy7o" path="res://src/buttons/SceneSwitcher/SceneSwitcher.tscn" id="3_hb641"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_3kr33"]
 shader = ExtResource("1_5rum1")
@@ -34,8 +35,23 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Button" type="Button" parent="CenterContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+layout_mode = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="CenterContainer/VBoxContainer/CenterContainer"]
 layout_mode = 2
 text = "Resume"
 
-[connection signal="pressed" from="CenterContainer/Button" to="." method="resume"]
+[node name="CenterContainer2" type="CenterContainer" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="SceneSwitcher" parent="CenterContainer/VBoxContainer/CenterContainer2" instance=ExtResource("3_hb641")]
+layout_mode = 2
+text = "Leave"
+scene = 3
+
+[connection signal="pressed" from="CenterContainer/VBoxContainer/CenterContainer/Button" to="." method="resume"]
+[connection signal="BeforeSceneChange" from="CenterContainer/VBoxContainer/CenterContainer2/SceneSwitcher" to="." method="Leave"]

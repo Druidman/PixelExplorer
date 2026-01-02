@@ -3,7 +3,9 @@ using System;
 
 public partial class GamePause : Control
 {
-	// Called when the node enters the scene tree for the first time.
+    // Called when the node enters the scene tree for the first time.
+
+    
 	public void resume()
 	{
 		Hide();
@@ -18,6 +20,10 @@ public partial class GamePause : Control
 		GetTree().Paused = true;
 	}
 
+	public void Leave()
+	{
+		resume();
+	}
 
 	public override void _Input(InputEvent ev)
 	{

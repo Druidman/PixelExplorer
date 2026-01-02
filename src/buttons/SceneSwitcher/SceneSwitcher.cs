@@ -9,7 +9,8 @@ public enum SceneEnum
 {
 	None,
 	Settings,
-	Game
+	Game,
+	MainMenu
 }
 
 public partial class SceneSwitcher : Button
@@ -24,16 +25,23 @@ public partial class SceneSwitcher : Button
 		{SceneEnum.None, ""},
 		{SceneEnum.Settings, baseScenePath + "settings/Settings.tscn"},
 		{SceneEnum.Game, baseScenePath + "game/GameScene.tscn"},
+		{SceneEnum.MainMenu, baseScenePath + "mainMenu/main_menu.tscn"}
 	};
 	
 
 	[Export]
 	public SceneEnum scene = SceneEnum.None;
 
+	[Signal]
+	public delegate void BeforeSceneChangeEventHandler();
 
 
-	public override void _Pressed()
+	public void on_pressed()
 	{
+
+		EmitSignal(SignalName.BeforeSceneChange);
+
+		
 		if (scene == SceneEnum.None)
 		{
 			return;

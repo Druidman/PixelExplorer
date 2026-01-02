@@ -6,3 +6,5 @@
 offset_right = 8.0
 offset_bottom = 8.0
 script = ExtResource("1_iyjdu")
+
+[connection signal="pressed" from="." to="." method="on_pressed"]
