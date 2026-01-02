@@ -11,7 +11,7 @@ size = Vector3(0.5, 2.571289, 1.1568604)
 script = ExtResource("1_4flbx")
 
 [node name="Camera" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.76613414, 0.6426807, 0, -0.6426807, 0.76613414, 0.016, 34, 30)
+transform = Transform3D(1, 0, 0, 0, 0.76613414, 0.6426807, 0, -0.6426807, 0.76613414, 0, 68, 120)
 current = true
 script = ExtResource("2_onrkg")
 
