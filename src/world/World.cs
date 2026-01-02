@@ -69,6 +69,15 @@ public partial class World : Node3D
 		
 		texture.SetImage(img);
 
+		PackedScene bushScene = GD.Load<PackedScene>("res://src/objects/Bush/bush.tscn");
+
+		Bush bush = bushScene.Instantiate<Bush>();
+
+		bush.Position = this.player.Position;
+		AddChild(bush);
+
+		
+
 		
 	}
 	private void StartThread(Action action)

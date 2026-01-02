@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://dwd351f34e5m6"]
+
+[ext_resource type="Script" uid="uid://b1udkt07i4r4s" path="res://src/objects/Bush/Bush.cs" id="1_l5j8o"]
+[ext_resource type="ArrayMesh" uid="uid://tns42j7r07fk" path="res://images/BushMesh.res" id="1_tj7o5"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_l5j8o"]
+size = Vector3(1.4, 0.6, 0.8)
+
+[node name="Bush" type="StaticBody3D"]
+script = ExtResource("1_l5j8o")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.2, 0, 0, 0, -8.742278e-09, 0.2, 0, -0.2, -8.742278e-09, -0.5, 0, -0.1)
+mesh = ExtResource("1_tj7o5")
+skeleton = NodePath("../CollisionShape3D")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(0.70710677, 0, 0.70710677, 0, 1, 0, -0.70710677, 0, 0.70710677, 0, 0.3, 0)
+shape = SubResource("BoxShape3D_l5j8o")

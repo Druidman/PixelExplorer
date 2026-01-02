@@ -87,6 +87,7 @@ public class Chunk
 		mesh = new MeshInstance3D();
 		var newMesh = new Godot.ArrayMesh();
 		
+		
 
 		StandardMaterial3D mat = new StandardMaterial3D();
 

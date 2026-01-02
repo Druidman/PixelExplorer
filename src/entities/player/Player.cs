@@ -12,7 +12,7 @@ public partial class Player : CharacterBody3D
 	public bool DebugMode = false;
 	public World world = null;
 
-
+	private int coins = 0;
 	public override void _EnterTree()
 	{
 		GlobalPosition = GameGlobals.PlayerStartPos;
@@ -23,6 +23,16 @@ public partial class Player : CharacterBody3D
 		this.character = (MeshInstance3D)GetNode("Character");
 		this.characterCollider = (CollisionShape3D)GetNode("CharacterCollider");
 		this.camera = (Camera)GetNode("Camera");
+	}
+
+	public int GetCoins()
+	{
+		return coins;
+	}
+
+	public void AddCoins(int coinsToAdd)
+	{
+		this.coins += coinsToAdd;
 	}
 
 	private void RotateCharacterFacingMousePointer(){
