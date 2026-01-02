@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://dbuo1pe6qxy7o"]
+
+[ext_resource type="Script" uid="uid://ox1cum6nblu4" path="res://src/buttons/SceneSwitcher/SceneSwitcher.cs" id="1_iyjdu"]
+
+[node name="Button" type="Button"]
+offset_right = 8.0
+offset_bottom = 8.0
+script = ExtResource("1_iyjdu")

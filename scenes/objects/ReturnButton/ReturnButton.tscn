@@ -1,9 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://r7r2uri7tsuw"]
-
-[ext_resource type="Script" uid="uid://ca1hpvi7gbcxt" path="res://scenes/objects/ReturnButton/ReturnButton.cs" id="1_g5m1w"]
-
-[node name="ReturnButton" type="Button"]
-text = "RETURN"
-script = ExtResource("1_g5m1w")
-
-[connection signal="pressed" from="." to="." method="_on_pressed"]

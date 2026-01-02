@@ -1,0 +1,52 @@
+[gd_scene load_steps=6 format=3 uid="uid://b7agqiud0h5d7"]
+
+[ext_resource type="Script" uid="uid://cvtbrs4io30xe" path="res://GameScenes/mainMenu/MainMenu.cs" id="1_8ysov"]
+[ext_resource type="PackedScene" uid="uid://dbuo1pe6qxy7o" path="res://src/buttons/SceneSwitcher/SceneSwitcher.tscn" id="1_lcwuh"]
+[ext_resource type="PackedScene" uid="uid://cwyc3bi48q0dq" path="res://GameScenes/game/GameScene.tscn" id="2_8ysov"]
+[ext_resource type="PackedScene" uid="uid://b1oygfamiwlw7" path="res://GameScenes/settings/settings.tscn" id="3_edgpi"]
+[ext_resource type="PackedScene" uid="uid://bnvy4w4842ce" path="res://src/buttons/Quit/QuitButton.tscn" id="4_v5tkv"]
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_8ysov")
+settingsScene = ExtResource("3_edgpi")
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+layout_mode = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Play" parent="CenterContainer/VBoxContainer/CenterContainer" instance=ExtResource("1_lcwuh")]
+layout_mode = 2
+text = "Play"
+scene = ExtResource("2_8ysov")
+
+[node name="CenterContainer2" type="CenterContainer" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Settings" type="Button" parent="CenterContainer/VBoxContainer/CenterContainer2"]
+layout_mode = 2
+text = "Settings"
+
+[node name="CenterContainer3" type="CenterContainer" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="QuitButton" parent="CenterContainer/VBoxContainer/CenterContainer3" instance=ExtResource("4_v5tkv")]
+layout_mode = 2
+text = "Quit"
+
+[connection signal="pressed" from="CenterContainer/VBoxContainer/CenterContainer2/Settings" to="." method="on_settings_pressed"]

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bnvy4w4842ce"]
+
+[ext_resource type="Script" uid="uid://cc1256oyk4f66" path="res://src/buttons/Quit/quitButton.cs" id="1_uox5q"]
+
+[node name="QuitButton" type="Button"]
+script = ExtResource("1_uox5q")
