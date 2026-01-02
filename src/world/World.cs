@@ -60,7 +60,7 @@ public partial class World : Node3D
 		ThreadGuard.Initialize();
 
 		player = (Player)GetNode("../Player");
-		player.world = this;
+	
 		
 		
 		Image img = new Image();

@@ -8,13 +8,13 @@ public partial class GamePause : Control
 	{
 		Hide();
 		GetTree().Paused = false;
-		DisplayServer.MouseSetMode(DisplayServer.MouseMode.ConfinedHidden);
+		// DisplayServer.MouseSetMode(DisplayServer.MouseMode.Confined);
 	}
 
 	public void pause()
 	{
 		Show();
-		DisplayServer.MouseSetMode(DisplayServer.MouseMode.Visible);
+		// DisplayServer.MouseSetMode(DisplayServer.MouseMode.Confined);
 		GetTree().Paused = true;
 	}
 
