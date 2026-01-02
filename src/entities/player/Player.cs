@@ -19,7 +19,7 @@ public partial class Player : CharacterBody3D
     }
 	public override void _Ready()
 	{
-		Input.MouseMode = Input.MouseModeEnum.ConfinedHidden;
+		
 		this.character = (MeshInstance3D)GetNode("Character");
 		this.characterCollider = (CollisionShape3D)GetNode("CharacterCollider");
 		this.camera = (Camera)GetNode("Camera3D");
@@ -47,10 +47,6 @@ public partial class Player : CharacterBody3D
 				
 			
 			
-		}
-		if (inputEvent.IsActionPressed("exit"))
-		{
-			Input.MouseMode = Input.MouseModeEnum.Visible;
 		}
 	}
 

@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://b1oygfamiwlw7"]
 
-[ext_resource type="Script" uid="uid://c7282tealow5t" path="res://GameScenes/settings/Settings.cs" id="1_d0ysk"]
+[ext_resource type="Script" uid="uid://c7282tealow5t" path="res://AppScenes/settings/Settings.cs" id="1_d0ysk"]
 
 [node name="Settings" type="Control"]
 layout_mode = 3

@@ -1,0 +1,41 @@
+[gd_scene load_steps=4 format=3 uid="uid://gn43e3ofmpb8"]
+
+[ext_resource type="Script" uid="uid://du8b50htejcr6" path="res://AppScenes/game/GamePause/GamePause.cs" id="1_3kr33"]
+[ext_resource type="Shader" uid="uid://dv50fboro6ayb" path="res://AppScenes/game/GamePause/shader/game_pause.gdshader" id="1_5rum1"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3kr33"]
+shader = ExtResource("1_5rum1")
+shader_parameter/lod = 0.0
+
+[node name="GamePause" type="Control"]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_3kr33")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_3kr33")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button" type="Button" parent="CenterContainer"]
+layout_mode = 2
+text = "Resume"
+
+[connection signal="pressed" from="CenterContainer/Button" to="." method="resume"]

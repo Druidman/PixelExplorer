@@ -1,9 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://b7agqiud0h5d7"]
+[gd_scene load_steps=5 format=3 uid="uid://b7agqiud0h5d7"]
 
-[ext_resource type="Script" uid="uid://cvtbrs4io30xe" path="res://GameScenes/mainMenu/MainMenu.cs" id="1_8ysov"]
+[ext_resource type="Script" uid="uid://cvtbrs4io30xe" path="res://AppScenes/mainMenu/MainMenu.cs" id="1_8ysov"]
 [ext_resource type="PackedScene" uid="uid://dbuo1pe6qxy7o" path="res://src/buttons/SceneSwitcher/SceneSwitcher.tscn" id="1_lcwuh"]
-[ext_resource type="PackedScene" uid="uid://cwyc3bi48q0dq" path="res://GameScenes/game/GameScene.tscn" id="2_8ysov"]
-[ext_resource type="PackedScene" uid="uid://b1oygfamiwlw7" path="res://GameScenes/settings/settings.tscn" id="3_edgpi"]
+[ext_resource type="PackedScene" uid="uid://b1oygfamiwlw7" path="res://AppScenes/settings/settings.tscn" id="3_edgpi"]
 [ext_resource type="PackedScene" uid="uid://bnvy4w4842ce" path="res://src/buttons/Quit/QuitButton.tscn" id="4_v5tkv"]
 
 [node name="MainMenu" type="Control"]
@@ -33,7 +32,7 @@ layout_mode = 2
 [node name="Play" parent="CenterContainer/VBoxContainer/CenterContainer" instance=ExtResource("1_lcwuh")]
 layout_mode = 2
 text = "Play"
-scene = ExtResource("2_8ysov")
+scene = 2
 
 [node name="CenterContainer2" type="CenterContainer" parent="CenterContainer/VBoxContainer"]
 layout_mode = 2
