@@ -27,7 +27,7 @@ public partial class EnemyManager
 		
 		enemy.Position = position;
 
-		this.world.CallDeferred(Node3D.MethodName.AddChild, enemy);
+		// this.world.CallDeferred(Node3D.MethodName.AddChild, enemy);
 
 		enemies.Add(enemy);
 	}

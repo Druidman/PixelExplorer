@@ -1,13 +1,19 @@
-[gd_scene load_steps=4 format=3 uid="uid://clbu5yls05nll"]
+[gd_scene load_steps=5 format=3 uid="uid://clbu5yls05nll"]
 
 [ext_resource type="PackedScene" uid="uid://bkb347g86res2" path="res://src/world/world.tscn" id="1_e2o6t"]
 [ext_resource type="Script" uid="uid://dyplm4iftprwb" path="res://AppScenes/game/Game/Game.cs" id="1_feb5d"]
 [ext_resource type="PackedScene" uid="uid://s2uye1o3mxru" path="res://src/entities/player/player.tscn" id="2_feb5d"]
+[ext_resource type="PackedScene" uid="uid://oygs71j4weck" path="res://src/chunkRenderer/chunk_renderer.tscn" id="3_uwqyn"]
 
-[node name="Game" type="Node3D"]
+[node name="Game" type="Node3D" node_paths=PackedStringArray("world", "player")]
 script = ExtResource("1_feb5d")
+world = NodePath("World")
+player = NodePath("Player")
 
 [node name="World" parent="." instance=ExtResource("1_e2o6t")]
+
+[node name="ChunkRenderer" parent="." node_paths=PackedStringArray("player") instance=ExtResource("3_uwqyn")]
+player = NodePath("../Player")
 
 [node name="Player" parent="." instance=ExtResource("2_feb5d")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 200, 0)

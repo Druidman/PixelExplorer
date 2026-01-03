@@ -22,11 +22,11 @@ public class CoinManager
         coin.Position = pos;
 
         this.coins[pos] = coin;
-        this.world.AddChild(coin);
+        // this.world.AddChild(coin);
     }
     public void RemoveCoin(Godot.Vector3 pos)
     {
-        this.world.RemoveChild(this.coins[pos]);
+        // this.world.RemoveChild(this.coins[pos]);
         this.coins[pos].QueueFree();
     }
 
@@ -40,7 +40,7 @@ public class CoinManager
 
         for (int i = 0; i<GameGlobals.WorldCoinsLimit - this.coins.Count; i++)
         {
-            Godot.Vector3 pos = new Godot.Vector3(this.world.WorldPos.X,this.world.WorldPos.Y,this.world.WorldPos.Z);
+            Godot.Vector3 pos = this.world.getWorldPos();
 
         }
     }

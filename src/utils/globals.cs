@@ -35,13 +35,20 @@ class GameGlobals
     ];
 
     public static ImageTexture texture = new ImageTexture();
+    public static World world = null;
+    public static Game game = null;
 
 
-    public static void Initialize()
+
+
+    public static void Initialize(Game gameInstance)
     {
         Image img = new Image();
 		img.Load("res://images/customTexture.png");
 		
 		texture.SetImage(img);
+        game = gameInstance;
+        world = game.world;
+ 
     }
 }

@@ -22,7 +22,7 @@ public class Chunk
 
 	public Godot.Vector3 chunkPos;
 	public Godot.Vector3 chunkTopLeft; // -z, -x
-	WorldNoise noise;
+	World world;
 
 	public MeshInstance3D mesh;
 	
@@ -37,15 +37,11 @@ public class Chunk
 	public bool meshReady = false;
 	public bool addedToTree = false;
 	public ChunkCollisionState chunkCollisionState = ChunkCollisionState.NONE;
-	public Chunk(Godot.Vector3 chunkPosition, WorldNoise worldNoise)
+	public Chunk(Godot.Vector3 chunkPosition)
 	{
 		this.chunkPos = chunkPosition;
 		this.chunkTopLeft = chunkPos - new Godot.Vector3((Width/2), 0, (Width/2));
-		this.noise = worldNoise;
-		
-		
-
-		
+		this.world = GameGlobals.world;
 
 	}
 	public void GenerateChunkMesh()
@@ -177,7 +173,7 @@ public class Chunk
 		{
 			for (float z = this.chunkTopLeft.Z + (GameGlobals.TileWidth / 2.0f); z <= this.chunkTopLeft.Z + Width - (GameGlobals.TileWidth / 2.0f); z += GameGlobals.TileWidth)
 			{
-				int y = generateTileHeight(x,z);
+				int y = this.world.getBlockHeightAtPos(x,z);
 				if (y < minY)
 				{
 					minY = y;
@@ -300,15 +296,6 @@ public class Chunk
 		if (col < 0 || col > Width / GameGlobals.TileWidth) return false;
 
 		return true;
-	}
-	private int generateTileHeight(float x, float z)
-	{
-		float y = noise.GetValue(x,z) * 15f;
-		
-		
-
-		// now y is a float which we don't like for our world so we put it in 0-1-2-3..-50range for tiling
-		return (int)y;
 	}
 	
 }
