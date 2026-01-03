@@ -12,7 +12,7 @@ public class ChunkCoinManager : CoinManager
 
 	public override bool ValidatePos(Godot.Vector3 pos)
 	{
-		return this.chunk.CheckIfPosFits(pos);
+		return this.chunk.CheckIfLocalPosFits(pos);
 	}
 
 	public override void UpdateCoins()
@@ -28,27 +28,26 @@ public class ChunkCoinManager : CoinManager
 
 			do
 			{
-				int x = this.random.Next(
-						-GameGlobals.ChunkWidth/2,
-						GameGlobals.ChunkWidth/2
-					);
-				int z = this.random.Next(
-						-GameGlobals.ChunkWidth/2,
-						GameGlobals.ChunkWidth/2
-					);
+				float x = this.random.Next(
+						(-GameGlobals.ChunkWidth/2),
+						(GameGlobals.ChunkWidth/2) - 1
+					)  + (int)this.chunk.chunkPos.X ;
+				float z = this.random.Next(
+						(-GameGlobals.ChunkWidth/2),
+						(GameGlobals.ChunkWidth/2) - 1 
+					) + this.chunk.chunkPos.Z ;
+
 				
+				float y = GameGlobals.world.getBlockHeightAtPos(x,z) + 1;
 				
-				pos = this.chunk.chunkPos + 
-				new Godot.Vector3(
-					x,
-					GameGlobals.world.getBlockHeightAtPos(x,z),
-					z
-				);
+				int platform = this.chunk.getPlatformGlobalY(y);
+				int row = this.chunk.getRowGlobalZ(z);
+				int col = this.chunk.getColGlobalX(x);
 				
+				pos = this.chunk.getLocalPositionOfTile(platform,row,col);
 
 			} while (this.coins.ContainsKey(pos));
-			
-			GD.Print("Tile Pos: ", pos);
+		
 			SpawnCoin(pos);
 		}
 		

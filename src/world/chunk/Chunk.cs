@@ -51,10 +51,10 @@ public partial class Chunk : Node3D
 		
 
 	}
-	// public override void _EnterTree()
-	// {
-	// 	this.GlobalPosition = this.chunkPos;
-	// }
+	public override void _EnterTree()
+	{
+		this.GlobalPosition = this.chunkPos;
+	}
 	
 
 	public void GenerateChunkMesh()
@@ -143,36 +143,49 @@ public partial class Chunk : Node3D
 
 	public int getPlatformGlobalY(float y)
 	{	
-		if (y < 0 || (int)y >= Height) return -1;
 
-		return (int)(y / (float)GameGlobals.TileWidth);
+		if (y < 0 || y >= Height) return -1;
+
+		float topLeftBasedPos = y - this.chunkTopLeft.Y;
+		
+
+		return (int)MathF.Floor(topLeftBasedPos / (float)GameGlobals.TileWidth);
 	}
 
 	public int getRowGlobalZ(float z)
 	{	
 
-		float localPos = this.ConvertToLocalChunkPos(new Godot.Vector3(0.0f, 0.0f,z)).Z;
+		float topLeftBasedPos = z - this.chunkTopLeft.Z;
 
-		return (int)(localPos / (float)GameGlobals.TileWidth);
+		return (int)MathF.Floor(topLeftBasedPos / (float)GameGlobals.TileWidth);
 	}
 	public int getColGlobalX(float x)
 	{	
 
-		float localPos = this.ConvertToLocalChunkPos(new Godot.Vector3(x, 0.0f,0.0f)).X;
+		float topLeftBasedPos = x - this.chunkTopLeft.X;
 
-		return (int)(localPos / (float)GameGlobals.TileWidth);
+		return (int)MathF.Floor(topLeftBasedPos / (float)GameGlobals.TileWidth);
 	}
 	public Godot.Vector3 getGlobalPositionOfTile(int platform, int row, int col)
 	{
-		return ConvertToGlobalPosition(new Godot.Vector3((col * GameGlobals.TileWidth)  + (GameGlobals.TileWidth / 2), (platform * GameGlobals.TileWidth) + (GameGlobals.TileWidth / 2), (row * GameGlobals.TileWidth) + (GameGlobals.TileWidth / 2) ));
+		return ConvertToGlobalPosition( getLocalPositionOfTile(platform, row, col) );
+	}
+
+	public Godot.Vector3 getLocalPositionOfTile(int platform, int row, int col)
+	{
+		return new Godot.Vector3(
+			col + ((float)GameGlobals.TileWidth / 2f), 
+			platform + ((float)GameGlobals.TileWidth / 2f), 
+			row + ((float)GameGlobals.TileWidth / 2f)
+		) - new Godot.Vector3(GameGlobals.ChunkWidth / 2, GameGlobals.ChunkWidth / 2, GameGlobals.ChunkWidth / 2);
 	}
 	public Godot.Vector3 ConvertToLocalChunkPos(Godot.Vector3 globalPos)
 	{
-		return new Godot.Vector3(globalPos.X - this.chunkTopLeft.X, globalPos.Y, globalPos.Z - this.chunkTopLeft.Z);
+		return globalPos - this.chunkPos;
 	}
 	public Godot.Vector3 ConvertToGlobalPosition(Godot.Vector3 localPos)
 	{
-		return new Godot.Vector3(localPos.X + this.chunkTopLeft.X, localPos.Y, localPos.Z + this.chunkTopLeft.Z);
+		return localPos + this.chunkPos;
 	}
 
 	private void generateTiles()
@@ -193,10 +206,11 @@ public partial class Chunk : Node3D
 					maxY = y;
 				}
 
-
+				
 				int platform = getPlatformGlobalY(y);
 				int row = getRowGlobalZ(z);
 				int col = getColGlobalX(x);
+
 				
 				if (!CheckIfValidTileIndicies(platform, 0, 0))
 				{
@@ -205,17 +219,15 @@ public partial class Chunk : Node3D
 	
 				BlockType blockType = BlockType.Grass;
 				
-				UpdateTile(platform, row, col, new WorldTile(getGlobalPositionOfTile(platform, row, col), blockType));
 				
-
-
-			
+				UpdateTile(platform, row, col, new WorldTile(getLocalPositionOfTile(platform, row, col), blockType));
+				
 			}	
 		}
 
 	}
 
-	public bool CheckIfPosFits(Godot.Vector3 GlobalPos)
+	public bool CheckIfGlobalPosFits(Godot.Vector3 GlobalPos)
 	{
 		return CheckIfValidTileIndicies(
 			getPlatformGlobalY(GlobalPos.Y),
@@ -224,6 +236,11 @@ public partial class Chunk : Node3D
 			
 		);
 		
+	}
+	public bool CheckIfLocalPosFits(Godot.Vector3 localPos)
+	{
+		return CheckIfGlobalPosFits(ConvertToGlobalPosition(localPos));
+	
 	}
 	private bool UpdateTile(int platform, int row, int col, WorldTile tile)
 	{	
