@@ -5,6 +5,7 @@ using Godot;
 class GameGlobals
 {
 
+    public static int WorldCoinsLimit = 100;
     public static bool DebugMode = false;
     public static int ChunkWidth = 8;
     public static Godot.Vector3 StartWorldMiddle = new Godot.Vector3(0,0,0);
@@ -32,4 +33,15 @@ class GameGlobals
         new Godot.Vector2(XAxisMove,YAxisMove),
         new Godot.Vector2(0,YAxisMove)
     ];
+
+    public static ImageTexture texture = new ImageTexture();
+
+
+    public static void Initialize()
+    {
+        Image img = new Image();
+		img.Load("res://images/customTexture.png");
+		
+		texture.SetImage(img);
+    }
 }
