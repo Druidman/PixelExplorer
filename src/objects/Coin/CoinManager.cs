@@ -37,7 +37,7 @@ public class CoinManager
 		{
 			return;
 		}
-		// GD.Print("Hello from: ", this);
+		
 		
 		Random r = new Random();
 		int c = this.coins.Count;
