@@ -7,10 +7,7 @@ public partial class World : Node3D
 {
 	private WorldNoise noise = new WorldNoise();
 	private Godot.Vector3 WorldPos = GameGlobals.StartWorldMiddle;
-	// EnemyManager enemyManager;
-	CoinManager coinManager = new CoinManager();
 
-	
 	private Godot.Vector3 GetChunkPositionFromGlobalPos(Godot.Vector3 pos)
 	{
 		return (Godot.Vector3I)(new Godot.Vector3(pos.X, 0, pos.Z) / (int)GameGlobals.ChunkWidth) * GameGlobals.ChunkWidth;
@@ -21,7 +18,7 @@ public partial class World : Node3D
 		if (
 			pos.X < GameGlobals.MaxWorldTopLeft.X ||
 			pos.X > GameGlobals.MaxWorldBottomRight.X ||
-			
+
 			pos.Z < GameGlobals.MaxWorldTopLeft.Z ||
 			pos.Z > GameGlobals.MaxWorldBottomRight.Z
 		)
@@ -50,7 +47,7 @@ public partial class World : Node3D
 
     public override void _Process(double delta)
     {
-        this.coinManager.UpdateCoins();
+      
     }
 
 

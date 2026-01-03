@@ -56,6 +56,7 @@ public partial class Player : CharacterBody3D
 		movement.HandleProcess(delta);
 	
 		MoveAndSlide();
+		
 	}
 
 

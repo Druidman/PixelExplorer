@@ -1,60 +1,48 @@
+
 using System;
 using System.Collections.Generic;
 using Godot;
 
-public class CoinManager
+public abstract class CoinManager
 {
 
-	Dictionary<Godot.Vector3, Coin> coins = new Dictionary<Godot.Vector3, Coin>();
-	PackedScene coinScene;
-	public CoinManager()
+	protected Dictionary<Godot.Vector3, Coin> coins = new Dictionary<Godot.Vector3, Coin>();
+	protected Random random = new Random();
+	protected Node3D parentNode;
+
+	protected CoinManager(Node3D parentNode)
 	{
-		this.coinScene = GD.Load<PackedScene>("res://src/objects/Coin/Coin.tscn");
-
-		
+		this.parentNode = parentNode;
 	}
-
-
 	public void SpawnCoin(Godot.Vector3 pos)
 	{
-		Coin coin = coinScene.Instantiate<Coin>();
+		if (!ValidatePos(pos))
+		{
+			GD.Print("Does not fit!");
+			return;
+		}
+		GD.Print("Passed");
+		
+		Coin coin = GameGlobals.coinScene.Instantiate<Coin>();
 		coin.Position = pos;
 		coin.removeCallback = ()=>this.RemoveCoin(pos);
-
+		GD.Print("Adding coin");
 		this.coins[pos] = coin;
-		GameGlobals.game.world.CallDeferred(Node3D.MethodName.AddChild, coin);
+		this.parentNode.CallDeferred(Node3D.MethodName.AddChild, coin);
 	}
 	public void RemoveCoin(Godot.Vector3 pos)
 	{
-		GameGlobals.game.world.CallDeferred(Node3D.MethodName.RemoveChild, this.coins[pos]);
-		this.coins[pos].QueueFree();
-		this.coins.Remove(pos);
-	}
-
-	public void UpdateCoins()
-	{
-		if (this.coins.Count >= GameGlobals.WorldCoinsLimit)
+		if (!ValidatePos(pos))
 		{
 			return;
 		}
-		
-		
-		Random r = new Random();
-		int c = this.coins.Count;
-		for (int i = 0; i<GameGlobals.WorldCoinsLimit - c; i++)
-		{   
-			float x = GameGlobals.game.player.GlobalPosition.X + r.Next(-50,50);
-			float z = GameGlobals.game.player.GlobalPosition.Z + r.Next(-50,50);
-			Godot.Vector3 pos = new Godot.Vector3(x, GameGlobals.game.world.getBlockHeightAtPos((int)x,(int)z) + 2, z);
-
-			if (!this.coins.ContainsKey(pos))
-			{
-				SpawnCoin(pos);    
-			}
-			
-
-		}
+		this.parentNode.CallDeferred(Node3D.MethodName.RemoveChild, this.coins[pos]);
+		this.coins[pos].QueueFree();
+		this.coins.Remove(pos);
+		UpdateCoins();
 	}
-	
 
+	public virtual bool ValidatePos(Godot.Vector3 pos){return true;}
+
+	public abstract void UpdateCoins();
 }

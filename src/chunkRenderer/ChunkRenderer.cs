@@ -31,7 +31,7 @@ public partial class ChunkRenderer : Node3D
 	
 	public override void _Ready()
 	{
-		this.origin = player.Position;
+		this.origin = new Godot.Vector3(player.Position.X, 0, player.Position.Z);
 	}
 
 	public Godot.Vector3 GetOrigin(){ return this.origin; }
@@ -60,7 +60,7 @@ public partial class ChunkRenderer : Node3D
 		
 
 		data.chunk.addedToTree = true;
-		CallDeferred(Node3D.MethodName.AddChild, data.chunk.mesh);
+		CallDeferred(Node3D.MethodName.AddChild, data.chunk);
 		this.chunks[data.chunk.chunkPos] = data.chunk;
 
 		return true;
@@ -106,14 +106,14 @@ public partial class ChunkRenderer : Node3D
 		}
 
 
-		if (chunk.addedToTree && chunk.mesh.GetParent() != null)
+		if (chunk.addedToTree && chunk.GetParent() != null)
 		{
 
-			CallDeferred(Node3D.MethodName.RemoveChild, chunk.mesh);
+			CallDeferred(Node3D.MethodName.RemoveChild, chunk);
 		}
 
-		if (chunk.mesh != null) chunk.mesh.CallDeferred(MeshInstance3D.MethodName.QueueFree);
-		chunk.mesh = null;
+		if (chunk != null) chunk.CallDeferred(MeshInstance3D.MethodName.QueueFree);
+		chunk = null;
 	}
 	private void UpdateChunks()
 	{
@@ -158,11 +158,13 @@ public partial class ChunkRenderer : Node3D
 				{
 					continue;
 				}
+				GD.Print(pos);
 				if (this.chunks.GetValueOrDefault(pos) == null)
 				{
 					
 					RequestChunkGenAt(pos);
-					this.chunks[pos] = new Chunk(pos); // as placeholder
+					this.chunks[pos] = GameGlobals.chunkScene.Instantiate<Chunk>(); // as placeholder
+					// this.chunks[pos].Initialize(pos);
 
 				}
 
@@ -265,7 +267,9 @@ public partial class ChunkRenderer : Node3D
 	private void GenChunk(ThreadWorkingData data, Godot.Vector3 position)
 	{
 		
-		Chunk chunk = new Chunk(position);
+		Chunk chunk = GameGlobals.chunkScene.Instantiate<Chunk>();
+		chunk.Initialize(position);
+		
 		chunk.GenerateChunkMesh();
 		
 		lock (this._dataLock)

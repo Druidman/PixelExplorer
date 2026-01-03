@@ -15,8 +15,10 @@ public enum ChunkCollisionState
 	GENERATED
 }
 // chunk Position is declared as bottom center pos !!!
-public class Chunk
+public partial class Chunk : Node3D
 {
+
+
 	static int Width = GameGlobals.ChunkWidth;
 	static int Height = 100;
 
@@ -24,9 +26,10 @@ public class Chunk
 	public Godot.Vector3 chunkTopLeft; // -z, -x
 	World world;
 
+	private ChunkCoinManager chunkCoinManager;
+
+	[Export]
 	public MeshInstance3D mesh;
-	
-	
 
 	List< List< List< WorldTile > > > tiles = new List<List<List<WorldTile>>>();
 	private List<Godot.Vector3> Vertices = new List<Godot.Vector3>();
@@ -37,13 +40,23 @@ public class Chunk
 	public bool meshReady = false;
 	public bool addedToTree = false;
 	public ChunkCollisionState chunkCollisionState = ChunkCollisionState.NONE;
-	public Chunk(Godot.Vector3 chunkPosition)
+	public void Initialize(Godot.Vector3 chunkPosition)
 	{
+		
 		this.chunkPos = chunkPosition;
 		this.chunkTopLeft = chunkPos - new Godot.Vector3((Width/2), 0, (Width/2));
 		this.world = GameGlobals.world;
+		this.chunkCoinManager = new ChunkCoinManager(this);
+		this.chunkCoinManager.UpdateCoins(); // gen base ones
+		
 
 	}
+	// public override void _EnterTree()
+	// {
+	// 	this.GlobalPosition = this.chunkPos;
+	// }
+	
+
 	public void GenerateChunkMesh()
 	{
 
@@ -80,7 +93,6 @@ public class Chunk
 		if (Thread.CurrentThread.ManagedThreadId != ThreadGuard.MainThreadId)
 			throw new InvalidOperationException("Method must be called from main thread");
 
-		mesh = new MeshInstance3D();
 		var newMesh = new Godot.ArrayMesh();
 		
 		
@@ -128,8 +140,6 @@ public class Chunk
 		
 		
 	}
-
-
 
 	public int getPlatformGlobalY(float y)
 	{	
@@ -205,6 +215,16 @@ public class Chunk
 
 	}
 
+	public bool CheckIfPosFits(Godot.Vector3 GlobalPos)
+	{
+		return CheckIfValidTileIndicies(
+			getPlatformGlobalY(GlobalPos.Y),
+			getRowGlobalZ(GlobalPos.Z),
+			getColGlobalX(GlobalPos.X)
+			
+		);
+		
+	}
 	private bool UpdateTile(int platform, int row, int col, WorldTile tile)
 	{	
 		if (!CheckIfTileFits(platform, row, col))

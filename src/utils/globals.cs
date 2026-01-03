@@ -5,11 +5,11 @@ using Godot;
 class GameGlobals
 {
 
-    public static int WorldCoinsLimit = 100;
+    public static int ChunkCoinLimit = 2;
     public static bool DebugMode = false;
     public static int ChunkWidth = 8;
     public static Godot.Vector3 StartWorldMiddle = new Godot.Vector3(0,0,0);
-    public static int chunkRadius = 20;
+    public static int chunkRadius = 2;
 
 
     public static int WorldWidth = 500;
@@ -43,7 +43,8 @@ class GameGlobals
     public static World world = null;
     public static Game game = null;
 
-
+    public static PackedScene coinScene = null;
+    public static PackedScene chunkScene = null;
 
 
     public static void Initialize(Game gameInstance)
@@ -54,6 +55,9 @@ class GameGlobals
 		texture.SetImage(img);
         game = gameInstance;
         world = game.world;
+
+        coinScene = GD.Load<PackedScene>("res://src/objects/Coin/Coin.tscn");
+        chunkScene = GD.Load<PackedScene>("res://src/world/chunk/chunk.tscn");
  
     }
 }
