@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://cwyc3bi48q0dq"]
+[gd_scene load_steps=7 format=3 uid="uid://cwyc3bi48q0dq"]
 
 [ext_resource type="PackedScene" uid="uid://clbu5yls05nll" path="res://AppScenes/game/Game/game.tscn" id="2_i4801"]
 [ext_resource type="PackedScene" uid="uid://gn43e3ofmpb8" path="res://AppScenes/game/GamePause/game_pause.tscn" id="2_nfs5e"]
+[ext_resource type="PackedScene" uid="uid://bxbdurtrp6it3" path="res://src/utils/FpsCounter/fpsCounter.tscn" id="3_inqja"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_hr5et"]
 sky_horizon_color = Color(1.0723789, 1.150212, 1.2487786, 1)
@@ -31,3 +32,5 @@ transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0)
 
 [node name="GamePause" parent="." instance=ExtResource("2_nfs5e")]
 visible = false
+
+[node name="FpsCounter" parent="." instance=ExtResource("3_inqja")]

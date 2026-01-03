@@ -5,11 +5,16 @@ using Godot;
 class GameGlobals
 {
 
-    public static int WorldCoinsLimit = 10;
+    public static int WorldCoinsLimit = 100;
     public static bool DebugMode = false;
     public static int ChunkWidth = 8;
     public static Godot.Vector3 StartWorldMiddle = new Godot.Vector3(0,0,0);
-    public static int chunkRadius = 15;
+    public static int chunkRadius = 20;
+
+
+    public static int WorldWidth = 500;
+    public static Godot.Vector3 MaxWorldTopLeft = new Godot.Vector3(-WorldWidth / 2,0,-WorldWidth / 2);
+    public static Godot.Vector3 MaxWorldBottomRight = new Godot.Vector3(WorldWidth / 2,0,WorldWidth / 2);
 
     public static Godot.Vector3 PlayerStartPos = new Godot.Vector3(0,200,0);
     public static float GravitySpeed = 20.0f;
@@ -44,7 +49,7 @@ class GameGlobals
     public static void Initialize(Game gameInstance)
     {
         Image img = new Image();
-		img.Load("res://images/customTexture.png");
+		img.Load("res://images/TextureWithoutEdges.png");
 		
 		texture.SetImage(img);
         game = gameInstance;

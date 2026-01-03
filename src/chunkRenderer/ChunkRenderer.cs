@@ -25,7 +25,7 @@ public partial class ChunkRenderer : Node3D
 	int worldChunkRadius = GameGlobals.chunkRadius;
 	float maxChunkDist = (GameGlobals.chunkRadius) * GameGlobals.ChunkWidth;
 
-	
+	bool AllowThreadBlockInChunkGen = false;
 
 	private readonly object _dataLock = new();
 	
@@ -82,7 +82,11 @@ public partial class ChunkRenderer : Node3D
 				lock (_dataLock)
 				{
 					this.threadsWorkingData.Remove(node);
-					// break;
+					if (!this.AllowThreadBlockInChunkGen)
+					{
+						break;    
+					}
+					
 				}				
 
 			}
@@ -150,6 +154,10 @@ public partial class ChunkRenderer : Node3D
 				
 				
 				Godot.Vector3 pos = new Godot.Vector3(x,this.origin.Y,z);
+				if (!GameGlobals.game.world.CheckIfPosFitsInWorld(pos))
+				{
+					continue;
+				}
 				if (this.chunks.GetValueOrDefault(pos) == null)
 				{
 					
@@ -177,7 +185,7 @@ public partial class ChunkRenderer : Node3D
 			}
 
 
-			if (!CheckIfPosFitsInWorld(chunk.chunkPos))
+			if (!CheckIfPosFitsInRenderDistance(chunk.chunkPos))
 			{
 				CleanUpChunk(chunk);
 				this.chunks.Remove(key);
@@ -221,7 +229,7 @@ public partial class ChunkRenderer : Node3D
 		return (Godot.Vector3I)(pos - this.origin).Abs() / (int)GameGlobals.ChunkWidth;
 	}
 
-	private bool CheckIfPosFitsInWorld(Godot.Vector3 pos)
+	private bool CheckIfPosFitsInRenderDistance(Godot.Vector3 pos)
 	{
 		Godot.Vector3 distance = getDistanceFromOriginInChunksCount(pos);
 		if (

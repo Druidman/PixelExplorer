@@ -16,6 +16,21 @@ public partial class World : Node3D
 		return (Godot.Vector3I)(new Godot.Vector3(pos.X, 0, pos.Z) / (int)GameGlobals.ChunkWidth) * GameGlobals.ChunkWidth;
 	}
 
+	public bool CheckIfPosFitsInWorld(Godot.Vector3 pos)
+	{
+		if (
+			pos.X < GameGlobals.MaxWorldTopLeft.X ||
+			pos.X > GameGlobals.MaxWorldBottomRight.X ||
+			
+			pos.Z < GameGlobals.MaxWorldTopLeft.Z ||
+			pos.Z > GameGlobals.MaxWorldBottomRight.Z
+		)
+		{
+			return false;
+		}		
+		return true;
+	}
+
 	public Godot.Vector3 getWorldPos()
 	{
 		return this.WorldPos;

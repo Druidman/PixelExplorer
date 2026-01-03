@@ -43,14 +43,14 @@ public class CoinManager
 		int c = this.coins.Count;
 		for (int i = 0; i<GameGlobals.WorldCoinsLimit - c; i++)
 		{   
-			float x = GameGlobals.game.player.GlobalPosition.X + r.Next(-5,5);
-			float z = GameGlobals.game.player.GlobalPosition.Z + r.Next(-5,5);
+			float x = GameGlobals.game.player.GlobalPosition.X + r.Next(-50,50);
+			float z = GameGlobals.game.player.GlobalPosition.Z + r.Next(-50,50);
 			Godot.Vector3 pos = new Godot.Vector3(x, GameGlobals.game.world.getBlockHeightAtPos((int)x,(int)z) + 2, z);
 
-            if (!this.coins.ContainsKey(pos))
-            {
-                SpawnCoin(pos);    
-            }
+			if (!this.coins.ContainsKey(pos))
+			{
+				SpawnCoin(pos);    
+			}
 			
 
 		}
