@@ -38,7 +38,7 @@ public partial class Player : CharacterBody3D
 	public void AddCoins(int coinsToAdd)
 	{
 		this.coins += coinsToAdd;
-		GD.Print("Got coin!");
+
 	}
 
 	public override void _Input(InputEvent inputEvent)

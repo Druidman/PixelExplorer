@@ -18,15 +18,15 @@ public abstract class CoinManager
 	{
 		if (!ValidatePos(pos))
 		{
-			GD.Print("Does not fit!");
+
 			return;
 		}
-		GD.Print("Passed");
+	
 		
 		Coin coin = GameGlobals.coinScene.Instantiate<Coin>();
 		coin.Position = pos;
 		coin.removeCallback = ()=>this.RemoveCoin(pos);
-		GD.Print("Adding coin");
+		
 		this.coins[pos] = coin;
 		this.parentNode.CallDeferred(Node3D.MethodName.AddChild, coin);
 	}

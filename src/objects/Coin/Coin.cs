@@ -7,13 +7,6 @@ public partial class Coin : Area3D
 
 
 
-	public override void _EnterTree()
-	{
-		GD.Print(this.Position);
-		GD.Print(this.GlobalPosition);
-		GD.Print(this.GetParent());
-	}
-
 	public void collected(Player player)
 	{
 		player.AddCoins(1);

@@ -158,7 +158,7 @@ public partial class ChunkRenderer : Node3D
 				{
 					continue;
 				}
-				GD.Print(pos);
+		
 				if (this.chunks.GetValueOrDefault(pos) == null)
 				{
 					
