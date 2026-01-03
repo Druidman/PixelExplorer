@@ -5,10 +5,11 @@
 [ext_resource type="PackedScene" uid="uid://s2uye1o3mxru" path="res://src/entities/player/player.tscn" id="2_feb5d"]
 [ext_resource type="PackedScene" uid="uid://oygs71j4weck" path="res://src/chunkRenderer/chunk_renderer.tscn" id="3_uwqyn"]
 
-[node name="Game" type="Node3D" node_paths=PackedStringArray("world", "player")]
+[node name="Game" type="Node3D" node_paths=PackedStringArray("world", "player", "chunkRenderer")]
 script = ExtResource("1_feb5d")
 world = NodePath("World")
 player = NodePath("Player")
+chunkRenderer = NodePath("ChunkRenderer")
 
 [node name="World" parent="." instance=ExtResource("1_e2o6t")]
 

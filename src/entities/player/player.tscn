@@ -5,9 +5,10 @@
 [ext_resource type="ArrayMesh" uid="uid://h404y3oo05vk" path="res://images/CharacterMesh.res" id="3_i3pqv"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_hqtel"]
-size = Vector3(0.5, 2.571289, 1.1568604)
+size = Vector3(1.2, 2.5, 0.6)
 
 [node name="Player" type="CharacterBody3D"]
+collision_layer = 2
 script = ExtResource("1_4flbx")
 
 [node name="Camera" type="Camera3D" parent="."]
@@ -16,7 +17,7 @@ current = true
 script = ExtResource("2_onrkg")
 
 [node name="CharacterCollider" type="CollisionShape3D" parent="."]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -0.010827638, 1.2856445, -3.897848e-09)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.011, 1.25, 0.1)
 shape = SubResource("BoxShape3D_hqtel")
 
 [node name="Character" type="MeshInstance3D" parent="."]

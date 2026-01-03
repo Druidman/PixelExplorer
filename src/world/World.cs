@@ -7,8 +7,9 @@ public partial class World : Node3D
 {
 	private WorldNoise noise = new WorldNoise();
 	private Godot.Vector3 WorldPos = GameGlobals.StartWorldMiddle;
-	EnemyManager enemyManager;
-	CoinManager coinManager;
+	// EnemyManager enemyManager;
+	CoinManager coinManager = new CoinManager();
+
 	
 	private Godot.Vector3 GetChunkPositionFromGlobalPos(Godot.Vector3 pos)
 	{
@@ -31,6 +32,11 @@ public partial class World : Node3D
 		// now y is a float which we don't like for our world so we put it in 0-1-2-3..-50range for tiling
 		return (int)y;
 	}
+
+    public override void _Process(double delta)
+    {
+        this.coinManager.UpdateCoins();
+    }
 
 
 	

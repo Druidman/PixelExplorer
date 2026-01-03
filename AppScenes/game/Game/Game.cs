@@ -10,6 +10,9 @@ public partial class Game : Node3D
 
 	[Export]
 	public Player player = null;
+
+	[Export]
+	public ChunkRenderer chunkRenderer = null;
 	public override void _Ready()
 	{
 		ThreadGuard.Initialize();

@@ -14,9 +14,9 @@ public class ThreadWorkingData {
 
 public partial class ChunkRenderer : Node3D
 {
-	Godot.Vector3 origin;
+	private Godot.Vector3 origin;
 
-    [Export]
+	[Export]
 	Player player;
 
 	Dictionary<Godot.Vector3, Chunk> chunks = new Dictionary<Godot.Vector3, Chunk>();
@@ -34,13 +34,15 @@ public partial class ChunkRenderer : Node3D
 		this.origin = player.Position;
 	}
 
-	private void StartThread(Action action)
-    {
-        Thread t = new Thread(() => action());
-        t.Start();
-    }
+	public Godot.Vector3 GetOrigin(){ return this.origin; }
 
-    
+	private void StartThread(Action action)
+	{
+		Thread t = new Thread(() => action());
+		t.Start();
+	}
+
+	
 	private bool UpdateChunkGenThread(ThreadWorkingData data)
 	{
 		
@@ -80,7 +82,7 @@ public partial class ChunkRenderer : Node3D
 				lock (_dataLock)
 				{
 					this.threadsWorkingData.Remove(node);
-					break;
+					// break;
 				}				
 
 			}
@@ -270,10 +272,10 @@ public partial class ChunkRenderer : Node3D
 	}
 
 
-    public override void _Process(double delta)
-    {
-        UpdateChunks();
-        UpdateChunkGenThreads();
-        GenChunkCollisions();
-    }
+	public override void _Process(double delta)
+	{
+		UpdateChunks();
+		UpdateChunkGenThreads();
+		GenChunkCollisions();
+	}
 }

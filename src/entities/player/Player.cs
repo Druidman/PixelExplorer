@@ -23,16 +23,19 @@ public partial class Player : CharacterBody3D
 		this.character = (MeshInstance3D)GetNode("Character");
 		this.characterCollider = (CollisionShape3D)GetNode("CharacterCollider");
 		this.camera = (Camera)GetNode("Camera");
+		
 	}
 
 	public int GetCoins()
 	{
+		
 		return coins;
 	}
 
 	public void AddCoins(int coinsToAdd)
 	{
 		this.coins += coinsToAdd;
+		GD.Print("Got coin!");
 	}
 
 	private void RotateCharacterFacingMousePointer(){

@@ -5,7 +5,7 @@ using Godot;
 class GameGlobals
 {
 
-    public static int WorldCoinsLimit = 100;
+    public static int WorldCoinsLimit = 10;
     public static bool DebugMode = false;
     public static int ChunkWidth = 8;
     public static Godot.Vector3 StartWorldMiddle = new Godot.Vector3(0,0,0);
