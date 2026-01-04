@@ -31,6 +31,9 @@ public partial class Chunk : Node3D
 	[Export]
 	public MeshInstance3D mesh;
 
+
+	public CollisionShape3D collisionShape;
+
 	List< List< List< WorldTile > > > tiles = new List<List<List<WorldTile>>>();
 	private List<Godot.Vector3> Vertices = new List<Godot.Vector3>();
 	private List<Godot.Vector3> Normals = new List<Godot.Vector3>();
@@ -39,7 +42,10 @@ public partial class Chunk : Node3D
 
 	public bool meshReady = false;
 	public bool addedToTree = false;
+	public bool disabled = false;
 	public ChunkCollisionState chunkCollisionState = ChunkCollisionState.NONE;
+
+	
 	public void Initialize(Godot.Vector3 chunkPosition)
 	{
 		
@@ -88,7 +94,19 @@ public partial class Chunk : Node3D
 
 		
 	}
-	public void BuildChunkMesh(ImageTexture BlockTexture)
+	
+	public void CreateCollisionShape()
+	{
+		ConcavePolygonShape3D shape = new ConcavePolygonShape3D();
+
+		shape.SetFaces(this.Vertices.ToArray()); // ?
+
+		this.collisionShape = new CollisionShape3D();
+
+		this.collisionShape.Shape = shape;
+
+	}
+	public void BuildChunkMesh()
 	{
 		if (Thread.CurrentThread.ManagedThreadId != ThreadGuard.MainThreadId)
 			throw new InvalidOperationException("Method must be called from main thread");
@@ -103,7 +121,7 @@ public partial class Chunk : Node3D
 		
 		mat.TextureFilter = BaseMaterial3D.TextureFilterEnum.Nearest;
 
-		mat.AlbedoTexture = BlockTexture;
+		mat.AlbedoTexture = GameGlobals.texture;
 
 		mesh.MaterialOverride = mat; // IMPORTANT
 
@@ -117,25 +135,33 @@ public partial class Chunk : Node3D
 		arrays[(int)Godot.Mesh.ArrayType.TexUV] = this.Uvs.ToArray();
 
 		newMesh.AddSurfaceFromArrays(Godot.Mesh.PrimitiveType.Triangles, arrays);
-	
-		
 		
 		mesh.Mesh = newMesh;
+		
 		
 		this.meshReady = true;
 
 		
 	}
-	public void GenerateChunkCollision()
+
+	public void ApplyChunkCollision()
 	{
 		if (Thread.CurrentThread.ManagedThreadId != ThreadGuard.MainThreadId)
 			throw new InvalidOperationException("Method must be called from main thread");
 
 		this.chunkCollisionState = ChunkCollisionState.NONE;
-		mesh.CreateTrimeshCollision();
+		
+		CreateCollisionShape();
+		StaticBody3D collisionBody = new StaticBody3D();
+
+		collisionBody.CallDeferred(StaticBody3D.MethodName.AddChild, this.collisionShape);
+		this.CallDeferred(StaticBody3D.MethodName.AddChild, collisionBody);
+
 		
 
 		this.chunkCollisionState = ChunkCollisionState.GENERATED;
+		
+
 		
 		
 		

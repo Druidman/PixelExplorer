@@ -21,7 +21,7 @@ class GameGlobals
     public static float PlayerJumpForce = 10f;
 
     
-    public static float PlayerSpeed = 10.0f;
+    public static float PlayerSpeed = 100.0f;
     public static float PlayerDecelerationSpeed = GameGlobals.PlayerSpeed * 0.1f;
 
     public static int TileWidth = 1;
@@ -45,6 +45,7 @@ class GameGlobals
 
     public static PackedScene coinScene = null;
     public static PackedScene chunkScene = null;
+    public static Chunk placeholderChunk = null;
 
 
     public static void Initialize(Game gameInstance)
@@ -58,6 +59,7 @@ class GameGlobals
 
         coinScene = GD.Load<PackedScene>("res://src/objects/Coin/Coin.tscn");
         chunkScene = GD.Load<PackedScene>("res://src/world/chunk/chunk.tscn");
+        placeholderChunk = GameGlobals.chunkScene.Instantiate<Chunk>();
  
     }
 }

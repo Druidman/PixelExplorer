@@ -21,7 +21,6 @@ window/size/viewport_width=1920
 window/size/viewport_height=1080
 window/size/mode=3
 window/stretch/mode="viewport"
-window/vsync/vsync_mode=0
 
 [dotnet]
 
@@ -81,3 +80,7 @@ exit={
 [physics]
 
 3d/physics_engine="GodotPhysics3D"
+
+[rendering]
+
+driver/threads/thread_model=2
