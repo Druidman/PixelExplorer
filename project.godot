@@ -76,6 +76,7 @@ exit={
 
 3d_physics/layer_1="World objects"
 3d_physics/layer_2="Player"
+3d_physics/layer_3="Soldiers"
 
 [physics]
 

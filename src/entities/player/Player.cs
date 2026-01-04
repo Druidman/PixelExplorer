@@ -14,6 +14,12 @@ public partial class Player : CharacterBody3D
 
 	Movement movement;
 
+	Godot.Vector3 soldierPos = new Godot.Vector3(0,0,0);
+	Godot.Vector3 soldierPosIncrement = new Godot.Vector3(3,0,0);
+	int SoldierPosRotationAngle = 0;
+	int SoldierLayerAmount = 0;
+
+
 	private int coins = 0;
 	public override void _EnterTree()
 	{
@@ -49,11 +55,30 @@ public partial class Player : CharacterBody3D
 		}
 	}
 
+	private void SpawnSoldier()
+	{
+		if ((float)SoldierPosRotationAngle / 360f == SoldierPosRotationAngle / 360)
+		{
+			soldierPos += soldierPosIncrement;
+			SoldierLayerAmount += 6;
+		}
+		Soldier soldier = GameGlobals.soldierScene.Instantiate<Soldier>();
+		soldier.Initialize(this, soldierPos.Rotated(Godot.Vector3.Up,Mathf.DegToRad(SoldierPosRotationAngle)));
+		AddSibling(soldier);
+		SoldierPosRotationAngle += 360 / SoldierLayerAmount;
+
+	}
+
 	public override void _PhysicsProcess(double delta)
 	{
 
 		
 		movement.HandleProcess(delta);
+
+		if (Input.IsActionJustPressed("move_up"))
+		{
+			SpawnSoldier();
+		}
 	
 		MoveAndSlide();
 		

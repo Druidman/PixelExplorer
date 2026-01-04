@@ -7,6 +7,7 @@
 size = Vector3(0.6, 1, 1)
 
 [node name="Soldier" type="CharacterBody3D"]
+collision_layer = 4
 script = ExtResource("1_r672h")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
