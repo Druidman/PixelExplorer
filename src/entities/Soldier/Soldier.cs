@@ -50,9 +50,6 @@ public partial class Soldier : Node3D
 			velocity.Y -= GameGlobals.GravitySpeed * (float)delta;
 		}
 		
-
-		
-
 		Godot.Vector3 destination = this.player.GlobalPosition + this.relativeToPlayer;
 		Godot.Vector3 direction = (destination - this.GlobalPosition).Normalized();
 

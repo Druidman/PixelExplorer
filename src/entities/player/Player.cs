@@ -75,7 +75,7 @@ public partial class Player : CharacterBody3D
 		
 		movement.HandleProcess(delta);
 
-		if (Input.IsActionJustPressed("move_up"))
+		if (Input.IsActionJustPressed("spawn_soldier"))
 		{
 			SpawnSoldier();
 		}
