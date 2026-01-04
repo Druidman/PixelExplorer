@@ -45,6 +45,7 @@ class GameGlobals
 
     public static PackedScene coinScene = null;
     public static PackedScene chunkScene = null;
+    public static PackedScene soldierScene = null;
     public static Chunk placeholderChunk = null;
 
 
@@ -59,7 +60,8 @@ class GameGlobals
 
         coinScene = GD.Load<PackedScene>("res://src/objects/Coin/Coin.tscn");
         chunkScene = GD.Load<PackedScene>("res://src/world/chunk/chunk.tscn");
-        placeholderChunk = GameGlobals.chunkScene.Instantiate<Chunk>();
+        soldierScene = GD.Load<PackedScene>("res://src/entities/Soldier/soldier.tscn");
+        placeholderChunk = chunkScene.Instantiate<Chunk>();
  
     }
 }
