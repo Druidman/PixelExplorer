@@ -222,7 +222,7 @@ public partial class ChunkRenderer : Node3D
 			}
 			if (cChunk.chunkCollisionState != ChunkCollisionState.GENERATED)
 			{
-				cChunk.GenerateChunkCollision();
+				cChunk.ApplyChunkCollision();
 			}
 		}
 	}

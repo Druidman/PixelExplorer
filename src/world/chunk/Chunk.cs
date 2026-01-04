@@ -31,6 +31,9 @@ public partial class Chunk : Node3D
 	[Export]
 	public MeshInstance3D mesh;
 
+
+	public CollisionShape3D collisionShape;
+
 	List< List< List< WorldTile > > > tiles = new List<List<List<WorldTile>>>();
 	private List<Godot.Vector3> Vertices = new List<Godot.Vector3>();
 	private List<Godot.Vector3> Normals = new List<Godot.Vector3>();
@@ -88,6 +91,19 @@ public partial class Chunk : Node3D
 
 		
 	}
+	
+	public void CreateCollisionShape()
+	{
+		ConcavePolygonShape3D shape = new ConcavePolygonShape3D();
+
+		shape.SetFaces(this.Vertices.ToArray()); // ?
+
+		this.collisionShape = new CollisionShape3D();
+
+		this.collisionShape.Shape = shape;
+		
+
+	}
 	public void BuildChunkMesh(ImageTexture BlockTexture)
 	{
 		if (Thread.CurrentThread.ManagedThreadId != ThreadGuard.MainThreadId)
@@ -117,22 +133,28 @@ public partial class Chunk : Node3D
 		arrays[(int)Godot.Mesh.ArrayType.TexUV] = this.Uvs.ToArray();
 
 		newMesh.AddSurfaceFromArrays(Godot.Mesh.PrimitiveType.Triangles, arrays);
-	
-		
 		
 		mesh.Mesh = newMesh;
+
+		CreateCollisionShape();
+		
 		
 		this.meshReady = true;
 
 		
 	}
-	public void GenerateChunkCollision()
+
+	public void ApplyChunkCollision()
 	{
 		if (Thread.CurrentThread.ManagedThreadId != ThreadGuard.MainThreadId)
 			throw new InvalidOperationException("Method must be called from main thread");
 
 		this.chunkCollisionState = ChunkCollisionState.NONE;
-		mesh.CreateTrimeshCollision();
+		
+		StaticBody3D collisionBody = new StaticBody3D();
+
+		collisionBody.AddChild(this.collisionShape);
+		AddChild(collisionBody);
 		
 
 		this.chunkCollisionState = ChunkCollisionState.GENERATED;
