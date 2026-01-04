@@ -23,6 +23,8 @@ public partial class Soldier : Node3D
 	
 	private float stopDistance = 0.2f;
 
+	Godot.Vector3 startOffsetPos = new Godot.Vector3(0,10,0);
+
 	public void Initialize(Player player, Godot.Vector3 relativeToPlayer)
 	{
 		this.player = player;
@@ -31,7 +33,7 @@ public partial class Soldier : Node3D
 	}
 	public override void _Ready()
 	{
-		this.GlobalPosition = this.player.GlobalPosition + new Godot.Vector3(0,10,0);
+		this.GlobalPosition = this.player.GlobalPosition + startOffsetPos;
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -85,6 +87,12 @@ public partial class Soldier : Node3D
 		{
 			velocity.Y += GameGlobals.PlayerJumpForce * 5;
 			
+		}
+
+
+		if (this.GlobalPosition.Y < -20)
+		{
+			this.GlobalPosition = this.player.GlobalPosition + this.startOffsetPos;
 		}
 		
 
