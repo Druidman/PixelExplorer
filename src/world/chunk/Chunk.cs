@@ -153,11 +153,13 @@ public partial class Chunk : Node3D
 		
 		StaticBody3D collisionBody = new StaticBody3D();
 
-		collisionBody.AddChild(this.collisionShape);
-		AddChild(collisionBody);
+		collisionBody.CallDeferred(StaticBody3D.MethodName.AddChild, this.collisionShape);
+		this.CallDeferred(StaticBody3D.MethodName.AddChild, collisionBody);
 		
 
 		this.chunkCollisionState = ChunkCollisionState.GENERATED;
+		
+
 		
 		
 		

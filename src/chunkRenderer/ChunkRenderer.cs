@@ -191,6 +191,7 @@ public partial class ChunkRenderer : Node3D
 			{
 				CleanUpChunk(chunk);
 				this.chunks.Remove(key);
+				
 		
 			}
 		}
