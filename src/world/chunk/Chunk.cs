@@ -101,10 +101,9 @@ public partial class Chunk : Node3D
 		this.collisionShape = new CollisionShape3D();
 
 		this.collisionShape.Shape = shape;
-		
 
 	}
-	public void BuildChunkMesh(ImageTexture BlockTexture)
+	public void BuildChunkMesh()
 	{
 		if (Thread.CurrentThread.ManagedThreadId != ThreadGuard.MainThreadId)
 			throw new InvalidOperationException("Method must be called from main thread");
@@ -119,7 +118,7 @@ public partial class Chunk : Node3D
 		
 		mat.TextureFilter = BaseMaterial3D.TextureFilterEnum.Nearest;
 
-		mat.AlbedoTexture = BlockTexture;
+		mat.AlbedoTexture = GameGlobals.texture;
 
 		mesh.MaterialOverride = mat; // IMPORTANT
 
