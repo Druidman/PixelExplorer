@@ -6,7 +6,7 @@ class GameGlobals
 {
 
     public static int ChunkCoinLimit = 1;
-    public static bool DebugMode = true;
+    public static bool DebugMode = false;
     public static int ChunkWidth = 16;
     public static Godot.Vector3 StartWorldMiddle = new Godot.Vector3(0,0,0);
     public static int chunkRadius = 10;
