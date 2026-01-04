@@ -106,15 +106,19 @@ public partial class ChunkRenderer : Node3D
 		}
 
 
-		if (chunk.GetParent() != null)
-		{
-			RemoveChild(chunk);
-			// CallDeferred(Node3D.MethodName.RemoveChild, chunk);
-		}
+		chunk.Visible = false;
+		chunk.ProcessMode = ProcessModeEnum.Disabled;
+		chunk.disabled = true;
 
-		if (chunk != null) 
-			chunk.QueueFree();
-			// chunk.CallDeferred(MeshInstance3D.MethodName.QueueFree);
+		// if (chunk.GetParent() != null)
+		// {
+		// 	RemoveChild(chunk);
+		
+		// }
+
+		
+		// chunk.QueueFree();
+		
 
 	}
 	private void UpdateChunks()
@@ -172,6 +176,16 @@ public partial class ChunkRenderer : Node3D
 				{
 					RequestChunkGenAt(pos);
 					this.chunks[pos] = GameGlobals.placeholderChunk; // as placeholder, so we won't schedule another gen
+				}
+				else if (
+					this.chunks.GetValueOrDefault(pos) != GameGlobals.placeholderChunk && 
+					GameGlobals.game.world.CheckIfPosFitsInWorld(pos) &&
+					this.chunks.GetValueOrDefault(pos) != null 
+				)
+				{
+					this.chunks[pos].disabled = false;
+					this.chunks[pos].Visible = true;
+					this.chunks[pos].ProcessMode = ProcessModeEnum.Inherit;
 				}
 			
 			}
@@ -303,10 +317,10 @@ public partial class ChunkRenderer : Node3D
 				this.pendingRemove.Remove(node);
 				
 
-				if (this.chunks[chunk.chunkPos] == chunk)
-				{
-					this.chunks.Remove(chunk.chunkPos);
-				}
+				// if (this.chunks[chunk.chunkPos] == chunk)
+				// {
+				// 	this.chunks.Remove(chunk.chunkPos);
+				// }
 			
 				// break;
 			}

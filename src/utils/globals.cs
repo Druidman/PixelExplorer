@@ -21,7 +21,7 @@ class GameGlobals
     public static float PlayerJumpForce = 10f;
 
     
-    public static float PlayerSpeed = 10.0f;
+    public static float PlayerSpeed = 100.0f;
     public static float PlayerDecelerationSpeed = GameGlobals.PlayerSpeed * 0.1f;
 
     public static int TileWidth = 1;
