@@ -21,13 +21,9 @@ public partial class Soldier : Node3D
 
 	bool isMoving = false;
 	
-	private float stopDistance = 1.5f;
+	private float stopDistance = 2f;
 
 	Godot.Vector3 startOffsetPos = new Godot.Vector3(0,10,0);
-
-
-	Godot.Vector3 LeftRayCastTarget;
-	Godot.Vector3 RightRayCastTarget;
 	public void Initialize(Player player, Godot.Vector3 relativeToPlayer)
 	{
 		this.player = player;
@@ -37,9 +33,6 @@ public partial class Soldier : Node3D
 	public override void _Ready()
 	{
 		this.GlobalPosition = this.player.GlobalPosition + startOffsetPos;
-
-		this.LeftRayCastTarget = this.LeftRayCast.TargetPosition;
-		this.RightRayCastTarget = this.RightRayCast.TargetPosition;
 	}
 
 	public void MoveAndSlide()
@@ -55,10 +48,9 @@ public partial class Soldier : Node3D
 		bool isWallInFront = this.LeftRayCast.IsColliding() || this.RightRayCast.IsColliding();
 
 		if (isGroundUnder){
-			Vector3 point = BottomRayCast.GetCollisionPoint();
 			GlobalPosition = new Vector3(
 				GlobalPosition.X,
-				point.Y + GroundCheckOffset,
+				BottomRayCast.GetCollisionPoint().Y + GroundCheckOffset,
 				GlobalPosition.Z
 			);
 			velocity.Y = 0;
