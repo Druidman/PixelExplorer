@@ -86,7 +86,3 @@ spawn_soldier={
 [physics]
 
 3d/physics_engine="GodotPhysics3D"
-
-[rendering]
-
-driver/threads/thread_model=2

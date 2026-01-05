@@ -59,6 +59,7 @@ public partial class ChunkRenderer : Node3D
 
 		}
 		chunk.BuildChunkMesh();
+		chunk.ApplyChunkCollision();
 		
 
 		chunk.addedToTree = true;

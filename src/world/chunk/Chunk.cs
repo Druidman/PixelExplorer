@@ -151,12 +151,13 @@ public partial class Chunk : Node3D
 
 		this.chunkCollisionState = ChunkCollisionState.NONE;
 		
-		CreateCollisionShape();
-		StaticBody3D collisionBody = new StaticBody3D();
+		// CreateCollisionShape();
+		// StaticBody3D collisionBody = new StaticBody3D();
 
-		collisionBody.CallDeferred(StaticBody3D.MethodName.AddChild, this.collisionShape);
-		this.CallDeferred(StaticBody3D.MethodName.AddChild, collisionBody);
+		// collisionBody.CallDeferred(StaticBody3D.MethodName.AddChild, this.collisionShape);
+		// this.CallDeferred(StaticBody3D.MethodName.AddChild, collisionBody);
 
+		this.mesh.CreateTrimeshCollision();
 		
 
 		this.chunkCollisionState = ChunkCollisionState.GENERATED;
