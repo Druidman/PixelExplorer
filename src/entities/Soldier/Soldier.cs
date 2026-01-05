@@ -19,7 +19,7 @@ public partial class Soldier : Node3D
 	Godot.Vector3 velocity;
 	float GroundCheckOffset = 0.1f;
 
-	Godot.Vector3 rotationOffset = new Godot.Vector3(0,Mathf.DegToRad(90),0);
+	
 	
 	private float stopDistance = 0.2f;
 
@@ -38,12 +38,15 @@ public partial class Soldier : Node3D
 
 	public override void _PhysicsProcess(double delta)
 	{
-		this.Rotation = this.player.characterCollider.Rotation - rotationOffset;
+		this.Rotation = this.player.soldiersRotation;
 		
+		this.BottomRayCast.TargetPosition = this.BottomRayCast.TargetPosition + (
+			new Godot.Vector3(0,velocity.Y - (GameGlobals.GravitySpeed * (float)delta),0) * (float)delta
+		);
 		this.BottomRayCast.ForceRaycastUpdate();
-		bool isGroundUnder = this.BottomRayCast.IsColliding();
+		bool isGroundUnderNextFrame = this.BottomRayCast.IsColliding();
 
-		if (isGroundUnder)
+		if (isGroundUnderNextFrame)
 		{
 			velocity.Y = 0;
 		}
@@ -68,25 +71,26 @@ public partial class Soldier : Node3D
 		velocity.X = direction.X;
 		velocity.Z = direction.Z;
 
-		this.GlobalPosition += velocity * (float)delta;
-
-
-		if (isGroundUnder && velocity.Y == 0)
-		{
-			this.GlobalPosition = new Godot.Vector3(this.GlobalPosition.X,this.BottomRayCast.GetCollisionPoint().Y + 0.1f,this.GlobalPosition.Z);
-		}
 
 		this.LeftRayCast.ForceRaycastUpdate();
 		this.RightRayCast.ForceRaycastUpdate();
-
-		bool isWallInFront = this.LeftRayCast.IsColliding() || this.RightRayCast.IsColliding();
-
 		
+		this.LeftRayCast.TargetPosition = this.LeftRayCast.TargetPosition + (new Godot.Vector3(velocity.X, 0, velocity.Z) * (float)delta);
+		this.RightRayCast.TargetPosition = this.RightRayCast.TargetPosition + (new Godot.Vector3(velocity.X, 0, velocity.Z) * (float)delta);
 
-		if (isWallInFront && (velocity.X != 0 || velocity.Z != 0))
+		bool isWallInFrontNextFrame = this.LeftRayCast.IsColliding() || this.RightRayCast.IsColliding();
+
+		if (isWallInFrontNextFrame && (velocity.X != 0 || velocity.Z != 0))
 		{
-			velocity.Y += GameGlobals.PlayerJumpForce * 5;
-			
+			velocity.Y += GameGlobals.PlayerJumpForce ;
+		}
+
+		this.GlobalPosition += velocity * (float)delta;
+
+
+		if (isGroundUnderNextFrame)
+		{
+			this.GlobalPosition = new Godot.Vector3(this.GlobalPosition.X,this.BottomRayCast.GetCollisionPoint().Y + 0.1f,this.GlobalPosition.Z);
 		}
 
 

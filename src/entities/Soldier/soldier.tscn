@@ -14,7 +14,6 @@ transform = Transform3D(0.2, 0, 0, 0, -8.742278e-09, 0.2, 0, -0.2, -8.742278e-09
 mesh = ExtResource("2_d8nwj")
 
 [node name="Bottom" type="RayCast3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.099999994, 0)
 target_position = Vector3(0, -2, 0)
 hit_back_faces = false
 
