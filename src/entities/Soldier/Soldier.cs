@@ -19,7 +19,7 @@ public partial class Soldier : Node3D
 	Godot.Vector3 velocity;
 	float GroundCheckOffset = 0.1f;
 
-	
+	bool isMoving = false;
 	
 	private float stopDistance = 1.5f;
 
@@ -46,8 +46,6 @@ public partial class Soldier : Node3D
 	{
 
 		this.BottomRayCast.TargetPosition = new Godot.Vector3(0,velocity.Y,0);
-		// this.LeftRayCast.TargetPosition = this.LeftRayCastTarget + new Godot.Vector3(velocity.X,0,velocity.Z);
-		// this.RightRayCast.TargetPosition = this.RightRayCastTarget + new Godot.Vector3(velocity.X,0,velocity.Z);; 
 
 		this.BottomRayCast.ForceRaycastUpdate();
 		this.LeftRayCast.ForceRaycastUpdate();
@@ -56,7 +54,6 @@ public partial class Soldier : Node3D
 		bool isGroundUnder = this.BottomRayCast.IsColliding();
 		bool isWallInFront = this.LeftRayCast.IsColliding() || this.RightRayCast.IsColliding();
 
-		// Godot.Vector3 pos = this.GlobalPosition;
 		if (isGroundUnder){
 			Vector3 point = BottomRayCast.GetCollisionPoint();
 			GlobalPosition = new Vector3(
@@ -65,15 +62,18 @@ public partial class Soldier : Node3D
 				GlobalPosition.Z
 			);
 			velocity.Y = 0;
-			// velocity.Y = this.BottomRayCast.GetCollisionPoint().Y - this.GlobalPosition.Y + 0.1f;
 		}
 
-		if (isWallInFront && (this.velocity.X != 0 || this.velocity.Z != 0))
+		if (isWallInFront && isMoving)
 		{
-			velocity.Y = GameGlobals.PlayerJumpForce * 0.2f;
+			velocity.Y = GameGlobals.PlayerJumpForce * 0.1f;
 		}
 
 		this.GlobalPosition += velocity;
+
+		if (this.GlobalPosition.Y < -20){
+			this.GlobalPosition = this.player.GlobalPosition + startOffsetPos; 
+		}
 
 	}
 
@@ -83,14 +83,16 @@ public partial class Soldier : Node3D
 		this.Rotation = this.player.soldiersRotation;
 		
 		Godot.Vector3 destination = this.player.GlobalPosition + this.relativeToPlayer;
-		Godot.Vector3 direction = (destination - this.GlobalPosition).Normalized();
+		Godot.Vector3 direction = (destination - this.GlobalPosition) * 0.5f;
 
 		if (this.GlobalPosition.DistanceSquaredTo(destination) < this.stopDistance * this.stopDistance)
 		{
 			direction *= 0;
+			isMoving = false;
 		}
 		else
 		{
+			isMoving = true;
 			direction *= GameGlobals.PlayerSpeed;
 		}
 		
@@ -98,6 +100,9 @@ public partial class Soldier : Node3D
 		velocity.X = direction.X * (float)delta;
 		velocity.Z = direction.Z * (float)delta;
 		velocity.Y -= GameGlobals.GravitySpeed * (float)delta;
+
+
+		
 
 		MoveAndSlide();
 
