@@ -1,26 +1,26 @@
-[gd_scene load_steps=4 format=3 uid="uid://cl4vodydfv3b3"]
+[gd_scene load_steps=3 format=3 uid="uid://cl4vodydfv3b3"]
 
 [ext_resource type="Script" uid="uid://bifs7anyqjm7" path="res://src/entities/Soldier/Soldier.cs" id="1_r672h"]
 [ext_resource type="ArrayMesh" uid="uid://oj10peiig47c" path="res://images/SoldierMesh.res" id="2_d8nwj"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_r672h"]
-size = Vector3(0.6, 1, 1)
-
-[node name="Soldier" type="Area3D" node_paths=PackedStringArray("BottomRayCast", "LeftRayCast", "RightRayCast")]
-collision_layer = 0
-gravity_space_override = 1
+[node name="Soldier" type="Node3D" node_paths=PackedStringArray("BottomRayCast", "LeftRayCast", "RightRayCast")]
 script = ExtResource("1_r672h")
-BottomRayCast = NodePath("")
-LeftRayCast = NodePath("")
-RightRayCast = NodePath("")
+BottomRayCast = NodePath("Bottom")
+LeftRayCast = NodePath("Left")
+RightRayCast = NodePath("Right")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.2, 0, 0, 0, -8.742278e-09, 0.2, 0, -0.2, -8.742278e-09, -0.1, 0, -0.3)
 mesh = ExtResource("2_d8nwj")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
-shape = SubResource("BoxShape3D_r672h")
+[node name="Bottom" type="RayCast3D" parent="."]
+target_position = Vector3(0, -2, 0)
+hit_back_faces = false
 
-[connection signal="body_entered" from="." to="." method="OnBodyEntered"]
-[connection signal="body_exited" from="." to="." method="OnBodyExited"]
+[node name="Right" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, 0.5, 0.5)
+target_position = Vector3(2, 0, 0)
+
+[node name="Left" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, 0.5, -0.5)
+target_position = Vector3(2, 0, 0)

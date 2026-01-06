@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using Godot;
 
-public partial class Soldier : Area3D
+public partial class Soldier : Node3D
 {
 
 	[Export]
@@ -12,7 +12,7 @@ public partial class Soldier : Area3D
 	RayCast3D RightRayCast;
 	private Player player;
 
-	private Godot.Vector2 relativeToPlayer;
+	private Godot.Vector3 relativeToPlayer;
 	Godot.Vector3 destination;
 	Godot.Vector3 move;
 
@@ -23,19 +23,16 @@ public partial class Soldier : Area3D
 	
 	private float stopDistance = 2f;
 
-	Godot.Vector3 startOffsetPos = new Godot.Vector3(0,2,0);
-
-	bool ground = false;
+	Godot.Vector3 startOffsetPos = new Godot.Vector3(0,10,0);
 	public void Initialize(Player player, Godot.Vector3 relativeToPlayer)
 	{
 		this.player = player;
-		this.relativeToPlayer = new Godot.Vector2(relativeToPlayer.X,relativeToPlayer.Z);
+		this.relativeToPlayer = relativeToPlayer;
 
 	}
 	public override void _Ready()
 	{
-		this.GlobalPosition = this.player.GlobalPosition + this.startOffsetPos;
-		this.velocity.Y = -GameGlobals.GravitySpeed;
+		this.GlobalPosition = this.player.GlobalPosition + startOffsetPos;
 	}
 
 	public void MoveAndSlide()
@@ -77,12 +74,10 @@ public partial class Soldier : Area3D
 	{
 		this.Rotation = this.player.soldiersRotation;
 		
-		Godot.Vector2 destination = new Godot.Vector2(this.player.GlobalPosition.X,this.player.GlobalPosition.Z) + this.relativeToPlayer;
+		Godot.Vector3 destination = this.player.GlobalPosition + this.relativeToPlayer;
+		Godot.Vector3 direction = (destination - this.GlobalPosition) * 0.5f;
 
-		Godot.Vector2 global = new Godot.Vector2(this.GlobalPosition.X,this.GlobalPosition.Z);
-		Godot.Vector2 direction = (destination - global) * 0.5f;
-
-		if (global.DistanceSquaredTo(destination) < this.stopDistance * this.stopDistance)
+		if (this.GlobalPosition.DistanceSquaredTo(destination) < this.stopDistance * this.stopDistance)
 		{
 			direction *= 0;
 			isMoving = false;
@@ -93,34 +88,15 @@ public partial class Soldier : Area3D
 			direction *= GameGlobals.PlayerSpeed;
 		}
 		
-		velocity.X = direction.X;
-		velocity.Z = direction.Y;
-		// velocity.X = direction.X * (float)delta;
-		// velocity.Z = direction.Z * (float)delta;
-		// velocity.Y -= GameGlobals.GravitySpeed * (float)delta;
+		velocity.X = direction.X * (float)delta;
+		velocity.Z = direction.Z * (float)delta;
+		velocity.Y -= GameGlobals.GravitySpeed * (float)delta;
 
-		this.GlobalPosition += velocity * (float)delta;
 
 		
-		
 
-		// MoveAndSlide();
+		MoveAndSlide();
 
-	}
-
-	public void OnBodyEntered(Node3D body)
-	{
-		if (this.ground)
-		{
-			this.GlobalPosition = new Godot.Vector3(this.GlobalPosition.X,(int)this.GlobalPosition.Y + 1.0f,this.GlobalPosition.Z);
-			this.velocity.Y = 0;
-		}
-		
-	}
-	public void OnBodyExited(Node3D body)
-	{
-		
-		this.velocity.Y = -GameGlobals.GravitySpeed;
 	}
 
 }
