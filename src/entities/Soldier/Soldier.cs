@@ -37,12 +37,6 @@ public partial class Soldier : Node3D
 
 	public void MoveAndSlide()
 	{
-
-		this.BottomRayCast.TargetPosition = new Godot.Vector3(0,velocity.Y,0);
-
-		this.BottomRayCast.ForceRaycastUpdate();
-		this.LeftRayCast.ForceRaycastUpdate();
-		this.RightRayCast.ForceRaycastUpdate();
 		
 		bool isGroundUnder = this.BottomRayCast.IsColliding();
 		bool isWallInFront = this.LeftRayCast.IsColliding() || this.RightRayCast.IsColliding();
@@ -58,6 +52,8 @@ public partial class Soldier : Node3D
 
 		if (isWallInFront && isMoving)
 		{
+			GD.Print("UP VELO!");
+			GD.Print(velocity);
 			velocity.Y = GameGlobals.PlayerJumpForce * 0.1f;
 		}
 
@@ -65,17 +61,19 @@ public partial class Soldier : Node3D
 
 		if (this.GlobalPosition.Y < -20){
 			this.GlobalPosition = this.player.GlobalPosition + startOffsetPos; 
+			velocity *= 0;
 		}
 
 	}
 
-
-	public override void _PhysicsProcess(double delta)
+	public void Tick(float delta)
 	{
+		MoveAndSlide();
 		this.Rotation = this.player.soldiersRotation;
 		
 		Godot.Vector3 destination = this.player.GlobalPosition + this.relativeToPlayer;
 		Godot.Vector3 direction = (destination - this.GlobalPosition) * 0.5f;
+		destination.Y = this.GlobalPosition.Y;
 
 		if (this.GlobalPosition.DistanceSquaredTo(destination) < this.stopDistance * this.stopDistance)
 		{
@@ -88,14 +86,14 @@ public partial class Soldier : Node3D
 			direction *= GameGlobals.PlayerSpeed;
 		}
 		
-		velocity.X = direction.X * (float)delta;
-		velocity.Z = direction.Z * (float)delta;
-		velocity.Y -= GameGlobals.GravitySpeed * (float)delta;
+		velocity.X = direction.X * delta;
+		velocity.Z = direction.Z * delta;
+		velocity.Y -= GameGlobals.GravitySpeed * delta;
 
 
 		
-
-		MoveAndSlide();
+		this.BottomRayCast.TargetPosition = new Godot.Vector3(0,velocity.Y,0);
+		
 
 	}
 

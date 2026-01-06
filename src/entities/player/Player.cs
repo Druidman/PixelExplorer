@@ -13,7 +13,7 @@ public partial class Player : CharacterBody3D
 	public World world = null;
 
 	Movement movement;
-
+	SoldierManager soldierManager = new SoldierManager();
 	Godot.Vector3 soldierPos = new Godot.Vector3(0,0,0);
 	Godot.Vector3 soldierPosIncrement = new Godot.Vector3(3,0,0);
 	int SoldierPosRotationAngle = 0;
@@ -70,6 +70,7 @@ public partial class Player : CharacterBody3D
 		soldier.Initialize(this, soldierPos.Rotated(Godot.Vector3.Up,Mathf.DegToRad(SoldierPosRotationAngle)));
 		AddSibling(soldier);
 		SoldierPosRotationAngle += 360 / SoldierLayerAmount;
+		soldierManager.soldiers.Add(soldier);
 
 	}
 
@@ -87,6 +88,7 @@ public partial class Player : CharacterBody3D
 		this.soldiersRotation = this.characterCollider.Rotation + rotationOffset;
 	
 		MoveAndSlide();
+		soldierManager.Update((float)delta);
 		
 	}
 
