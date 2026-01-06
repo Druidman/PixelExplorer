@@ -7,8 +7,9 @@ public partial class Soldier : Node3D
 	[Export]
 	RayCast3D BottomRayCast;
 	[Export]
-	ShapeCast3D ShapeCast;
-	
+	RayCast3D LeftRayCast;
+	[Export]
+	RayCast3D RightRayCast;
 	private Player player;
 
 	private Godot.Vector3 relativeToPlayer;
@@ -34,115 +35,68 @@ public partial class Soldier : Node3D
 		this.GlobalPosition = this.player.GlobalPosition + startOffsetPos;
 	}
 
-	public void MoveAndSlide(double delta)
+	public void MoveAndSlide()
 	{
-		Vector3 motion = velocity * (float)delta;
-		if (motion == Vector3.Zero)
-			return;
 
-		Vector3 localMotion =
-			GlobalTransform.Basis.Inverse() * motion;
+		this.BottomRayCast.TargetPosition = new Godot.Vector3(0,velocity.Y,0);
 
-		ShapeCast.TargetPosition = localMotion;
+		this.BottomRayCast.ForceRaycastUpdate();
+		this.LeftRayCast.ForceRaycastUpdate();
+		this.RightRayCast.ForceRaycastUpdate();
+		
+		bool isGroundUnder = this.BottomRayCast.IsColliding();
+		bool isWallInFront = this.LeftRayCast.IsColliding() || this.RightRayCast.IsColliding();
 
-		if (ShapeCast.IsColliding())
-		{
-			Vector3 normal = ShapeCast.GetCollisionNormal(0);
-			motion = motion.Slide(normal);
+		if (isGroundUnder){
+			GlobalPosition = new Vector3(
+				GlobalPosition.X,
+				BottomRayCast.GetCollisionPoint().Y + GroundCheckOffset,
+				GlobalPosition.Z
+			);
+			velocity.Y = 0;
 		}
 
-		GlobalPosition += motion;
+		if (isWallInFront && isMoving)
+		{
+			velocity.Y = GameGlobals.PlayerJumpForce * 0.1f;
+		}
+
+		this.GlobalPosition += velocity;
+
+		if (this.GlobalPosition.Y < -20){
+			this.GlobalPosition = this.player.GlobalPosition + startOffsetPos; 
+		}
+
 	}
 
-	// public void MoveAndSlide()
-	// {
-	// 	Godot.Vector3 motion = this.velocity;
-
-		
-		
-	// 	this.ShapeCast.TargetPosition = velocity;
-	// 	this.ShapeCast.ForceShapecastUpdate();
-
-	// 	if (this.ShapeCast.IsColliding())
-	// 	{
-	// 		Godot.Vector3 normal= this.ShapeCast.GetCollisionNormal(0);
-	// 		motion = motion.Slide(normal);
-	// 	}
-
-	// 	this.GlobalPosition += motion;
-
-
-
-
-
-	// 	// this.BottomRayCast.TargetPosition = new Godot.Vector3(0,velocity.Y,0);
-
-	// 	// this.BottomRayCast.ForceRaycastUpdate();
-	// 	// if (this.BottomRayCast.IsColliding()){
-	// 	// 	GlobalPosition = new Vector3(
-	// 	// 		GlobalPosition.X,
-	// 	// 		BottomRayCast.GetCollisionPoint().Y + GroundCheckOffset,
-	// 	// 		GlobalPosition.Z
-	// 	// 	);
-	// 	// }
-
-	// 	// if (this.GlobalPosition.Y < -20){
-	// 	// 	this.GlobalPosition = this.player.GlobalPosition + startOffsetPos; 
-	// 	// }
-
-	// }
 
 	public override void _PhysicsProcess(double delta)
 	{
-		Rotation = player.soldiersRotation;
+		this.Rotation = this.player.soldiersRotation;
+		
+		Godot.Vector3 destination = this.player.GlobalPosition + this.relativeToPlayer;
+		Godot.Vector3 direction = (destination - this.GlobalPosition) * 0.5f;
 
-		Vector3 destination = player.GlobalPosition + relativeToPlayer;
-		Vector3 toTarget = destination - GlobalPosition;
-
-		float sqrDist = toTarget.LengthSquared();
-
-		if (sqrDist < stopDistance * stopDistance)
+		if (this.GlobalPosition.DistanceSquaredTo(destination) < this.stopDistance * this.stopDistance)
 		{
-			velocity = Vector3.Zero;
+			direction *= 0;
 			isMoving = false;
 		}
 		else
 		{
 			isMoving = true;
-			Vector3 dir = toTarget.Normalized();
-			velocity = dir * GameGlobals.PlayerSpeed;
+			direction *= GameGlobals.PlayerSpeed;
 		}
+		
+		velocity.X = direction.X * (float)delta;
+		velocity.Z = direction.Z * (float)delta;
+		velocity.Y -= GameGlobals.GravitySpeed * (float)delta;
 
-		MoveAndSlide(delta);
+
+		
+
+		MoveAndSlide();
+
 	}
-
-
-	// public override void _PhysicsProcess(double delta)
-	// {
-	// 	this.Rotation = this.player.soldiersRotation;
-		
-	// 	Godot.Vector3 destination = this.player.GlobalPosition + this.relativeToPlayer;
-	// 	Godot.Vector3 direction = (destination - this.GlobalPosition) * 0.5f;
-
-	// 	if (this.GlobalPosition.DistanceSquaredTo(destination) < this.stopDistance * this.stopDistance)
-	// 	{
-	// 		direction *= 0;
-	// 		isMoving = false;
-	// 	}
-	// 	else
-	// 	{
-	// 		isMoving = true;
-	// 		direction *= GameGlobals.PlayerSpeed;
-	// 	}
-
-	// 	velocity = direction;
-		
-
-
-		
-
-	// 	MoveAndSlide();
-
-	// }
 
 }
