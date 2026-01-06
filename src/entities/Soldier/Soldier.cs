@@ -88,7 +88,6 @@ public partial class Soldier : Node3D
 			direction *= GameGlobals.PlayerSpeed;
 		}
 		
-
 		velocity.X = direction.X * (float)delta;
 		velocity.Z = direction.Z * (float)delta;
 		velocity.Y -= GameGlobals.GravitySpeed * (float)delta;
