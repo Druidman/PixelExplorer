@@ -62,9 +62,10 @@ public partial class Player : CharacterBody3D
 		
 		movement.HandleProcess(delta);
 
-		if (Input.IsActionPressed("spawn_soldier"))
+		if (Input.IsActionPressed("spawn_soldier") && this.coins >= GameGlobals.SoldierCost)
 		{
 			this.soldierManager.SpawnSoldier();
+			this.coins -= GameGlobals.SoldierCost;
 		}
 
 	

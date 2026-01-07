@@ -48,6 +48,8 @@ class GameGlobals
     public static PackedScene soldierScene = null;
     public static Chunk placeholderChunk = null;
 
+    public static int SoldierCost = 5;
+
 
     public static void Initialize(Game gameInstance)
     {
