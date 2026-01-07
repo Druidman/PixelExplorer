@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://d2k8q1wgb36lt"]
+
+[ext_resource type="Script" uid="uid://crsj2nb01bjls" path="res://src/entities/Soldier/SoldierManager.cs" id="1_0k3vf"]
+
+[node name="SoldierManager" type="Node3D"]
+script = ExtResource("1_0k3vf")

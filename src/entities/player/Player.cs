@@ -13,21 +13,16 @@ public partial class Player : CharacterBody3D
 	public World world = null;
 
 	Movement movement;
-	SoldierManager soldierManager = new SoldierManager();
-	Godot.Vector3 soldierPos = new Godot.Vector3(0,0,0);
-	Godot.Vector3 soldierPosIncrement = new Godot.Vector3(3,0,0);
-	int SoldierPosRotationAngle = 0;
 
-	public Godot.Vector3 soldiersRotation = new Godot.Vector3(0,0,0);
-	Godot.Vector3 rotationOffset = new Godot.Vector3(0,Mathf.DegToRad(90),0);
-
-	int SoldierLayerAmount = 0;
+	[Export]
+	SoldierManager soldierManager;
 
 
 	private int coins = 0;
 	public override void _EnterTree()
 	{
 		GlobalPosition = GameGlobals.PlayerStartPos;
+		soldierManager.Initialize(this);
 	}
 	public override void _Ready()
 	{
@@ -59,20 +54,7 @@ public partial class Player : CharacterBody3D
 		}
 	}
 
-	private void SpawnSoldier()
-	{
-		if ((float)SoldierPosRotationAngle / 360f == SoldierPosRotationAngle / 360)
-		{
-			soldierPos += soldierPosIncrement;
-			SoldierLayerAmount += 6;
-		}
-		Soldier soldier = GameGlobals.soldierScene.Instantiate<Soldier>();
-		soldier.Initialize(this, soldierPos.Rotated(Godot.Vector3.Up,Mathf.DegToRad(SoldierPosRotationAngle)));
-		AddSibling(soldier);
-		SoldierPosRotationAngle += 360 / SoldierLayerAmount;
-		soldierManager.soldiers.Add(soldier);
-
-	}
+	
 
 	public override void _PhysicsProcess(double delta)
 	{
@@ -82,13 +64,12 @@ public partial class Player : CharacterBody3D
 
 		if (Input.IsActionPressed("spawn_soldier"))
 		{
-			SpawnSoldier();
+			this.soldierManager.SpawnSoldier();
 		}
 
-		this.soldiersRotation = this.characterCollider.Rotation + rotationOffset;
 	
 		MoveAndSlide();
-		soldierManager.Update((float)delta);
+		soldierManager.Update((float)delta, this.characterCollider.Rotation);
 		
 	}
 
