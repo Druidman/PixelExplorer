@@ -204,7 +204,7 @@ public partial class Chunk : Node3D
 			col + ((float)GameGlobals.TileWidth / 2f), 
 			platform + ((float)GameGlobals.TileWidth / 2f), 
 			row + ((float)GameGlobals.TileWidth / 2f)
-		) - new Godot.Vector3(GameGlobals.ChunkWidth / 2, GameGlobals.ChunkWidth / 2, GameGlobals.ChunkWidth / 2);
+		) - new Godot.Vector3(GameGlobals.ChunkWidth / 2, 0, GameGlobals.ChunkWidth / 2);
 	}
 	public Godot.Vector3 ConvertToLocalChunkPos(Godot.Vector3 globalPos)
 	{

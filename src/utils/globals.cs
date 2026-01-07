@@ -6,7 +6,7 @@ class GameGlobals
 {
 
     public static int ChunkCoinLimit = 1;
-    public static bool DebugMode = false;
+    public static bool DebugMode = true;
     public static int ChunkWidth = 16;
     public static Godot.Vector3 StartWorldMiddle = new Godot.Vector3(0,0,0);
     public static int chunkRadius = 10;
@@ -16,7 +16,7 @@ class GameGlobals
     public static Godot.Vector3 MaxWorldTopLeft = new Godot.Vector3(-WorldWidth / 2,0,-WorldWidth / 2);
     public static Godot.Vector3 MaxWorldBottomRight = new Godot.Vector3(WorldWidth / 2,0,WorldWidth / 2);
 
-    public static Godot.Vector3 PlayerStartPos = new Godot.Vector3(0,200,0);
+    public static Godot.Vector3 PlayerStartPos = new Godot.Vector3(0,0,0);
     public static float GravitySpeed = 20.0f;
     public static float PlayerJumpForce = 10f;
 
@@ -44,6 +44,7 @@ class GameGlobals
     public static Game game = null;
 
     public static PackedScene coinScene = null;
+    public static PackedScene GoldOreScene = null;
     public static PackedScene chunkScene = null;
     public static PackedScene soldierScene = null;
     public static Chunk placeholderChunk = null;
@@ -63,6 +64,7 @@ class GameGlobals
         coinScene = GD.Load<PackedScene>("res://src/objects/Coin/Coin.tscn");
         chunkScene = GD.Load<PackedScene>("res://src/world/chunk/chunk.tscn");
         soldierScene = GD.Load<PackedScene>("res://src/entities/Soldier/soldier.tscn");
+        GoldOreScene = GD.Load<PackedScene>("res://src/objects/Ores/Gold/GoldOre.tscn");
         placeholderChunk = chunkScene.Instantiate<Chunk>();
  
     }
