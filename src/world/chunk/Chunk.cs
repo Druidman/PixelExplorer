@@ -45,15 +45,17 @@ public partial class Chunk : Node3D
 	public bool disabled = false;
 	public ChunkCollisionState chunkCollisionState = ChunkCollisionState.NONE;
 
-	
+		  
 	public void Initialize(Godot.Vector3 chunkPosition)
 	{
 		
 		this.chunkPos = chunkPosition;
-		this.chunkTopLeft = chunkPos - new Godot.Vector3((Width/2), 0, (Width/2));
+		this.chunkTopLeft = chunkPos - new Godot.Vector3((Width/2f), 0, (Width/2f));
 		this.world = GameGlobals.world;
 		this.chunkCoinManager = new ChunkCoinManager(this);
 		this.chunkCoinManager.UpdateCoins(); // gen base ones
+
+		GD.Print(this.chunkTopLeft);
 		
 
 	}
@@ -201,10 +203,10 @@ public partial class Chunk : Node3D
 	public Godot.Vector3 getLocalPositionOfTile(int platform, int row, int col)
 	{
 		return new Godot.Vector3(
-			col + ((float)GameGlobals.TileWidth / 2f), 
-			platform + ((float)GameGlobals.TileWidth / 2f), 
-			row + ((float)GameGlobals.TileWidth / 2f)
-		) - new Godot.Vector3(GameGlobals.ChunkWidth / 2, 0, GameGlobals.ChunkWidth / 2);
+			col + 0.5f, 
+			platform, 
+			row + 0.5f
+		) + this.chunkTopLeft - this.chunkPos;
 	}
 	public Godot.Vector3 ConvertToLocalChunkPos(Godot.Vector3 globalPos)
 	{
@@ -219,9 +221,9 @@ public partial class Chunk : Node3D
 	{
 		int minY = 0;
 		int maxY = 0;
-		for (float x = this.chunkTopLeft.X + (GameGlobals.TileWidth / 2.0f); x <= this.chunkTopLeft.X + Width - (GameGlobals.TileWidth / 2.0f); x += GameGlobals.TileWidth)
+		for (float x = this.chunkTopLeft.X + (GameGlobals.TileWidth / 2f); x <= this.chunkTopLeft.X + Width; x += GameGlobals.TileWidth)
 		{
-			for (float z = this.chunkTopLeft.Z + (GameGlobals.TileWidth / 2.0f); z <= this.chunkTopLeft.Z + Width - (GameGlobals.TileWidth / 2.0f); z += GameGlobals.TileWidth)
+			for (float z = this.chunkTopLeft.Z + (GameGlobals.TileWidth / 2f); z <= this.chunkTopLeft.Z + Width; z += GameGlobals.TileWidth)
 			{
 				int y = this.world.getBlockHeightAtPos(x,z);
 				if (y < minY)
