@@ -110,6 +110,11 @@ public partial class World : Node3D
 		return new Godot.Vector3(x,this.getBlockHeightAtPos(x,z),z);
 	}
 
+	public void PlaceMine(GoldMine mine, Chunk chunk)
+	{
+		chunk.AddChild(mine);
+	}
+
 
 	
 }

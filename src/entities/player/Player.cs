@@ -108,12 +108,15 @@ public partial class Player : CharacterBody3D
 			}
 		}
 
+
 		Chunk chunk = this.world.GetChunkAtPos(this.GlobalPosition);
 
 		GoldMine mine = GameGlobals.GoldMineScene.Instantiate<GoldMine>();
-		mine.AssignOwner(this);
-		chunk.AddChild(mine);
-		mine.GlobalPosition = selectedOre.GlobalPosition;	
+		mine.Initialize(this, selectedOre.GlobalPosition);
+
+		this.world.PlaceMine(mine,chunk);
+		
+		
 	}
 
 
