@@ -21,7 +21,7 @@ public partial class Chunk : Node3D
 
 	public Godot.Vector3 chunkPos;
 	public Godot.Vector3 chunkTopLeft; // -z, -x
-	World world;
+	public World world;
 
 	private ChunkCoinManager chunkCoinManager;
 	
@@ -42,12 +42,12 @@ public partial class Chunk : Node3D
 	public ChunkCollisionState chunkCollisionState = ChunkCollisionState.NONE;
 
 		  
-	public void Initialize(Godot.Vector3 chunkPosition)
+	public void Initialize(Godot.Vector3 chunkPosition, World world)
 	{
 		
 		this.chunkPos = chunkPosition;
 		this.chunkTopLeft = chunkPos - new Godot.Vector3((Width/2f), 0, (Width/2f));
-		this.world = GameGlobals.world;
+		this.world = world;
 		this.chunkCoinManager = new ChunkCoinManager(this);
 		this.chunkCoinManager.UpdateCoins(); // gen base one
 	}

@@ -19,8 +19,9 @@ chunkRenderer = NodePath("ChunkRenderer")
 player = NodePath("../Player")
 world = NodePath("../World")
 
-[node name="Player" parent="." node_paths=PackedStringArray("soldierManager") instance=ExtResource("2_feb5d")]
+[node name="Player" parent="." node_paths=PackedStringArray("world", "soldierManager") instance=ExtResource("2_feb5d")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 200, 0)
+world = NodePath("../World")
 soldierManager = NodePath("../SoldierManager")
 
 [node name="PlayerUi" parent="." node_paths=PackedStringArray("player") instance=ExtResource("5_xwdwh")]

@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 
 public partial class Player : CharacterBody3D
@@ -10,6 +11,9 @@ public partial class Player : CharacterBody3D
 	public CollisionShape3D characterCollider;
 	public Camera camera;
 	public bool DebugMode = false;
+
+
+	[Export]
 	public World world = null;
 
 	Movement movement;
@@ -66,6 +70,37 @@ public partial class Player : CharacterBody3D
 		{
 			this.soldierManager.SpawnSoldier();
 			this.coins -= GameGlobals.SoldierCost;
+		}
+		if (Input.IsActionJustPressed("SetGoldMine"))
+		{
+			
+			List<Ore> ores = this.world.GetChunkOres(this.GlobalPosition);
+			if (ores != null)
+			{
+				if (ores.Count > 0)
+				{
+					GD.Print((ores != null) ? ores : "No mines nearby");
+
+					Ore selectedOre = ores[0];
+					float CurMinDist = 100000f;
+					foreach (Ore ore in ores)
+					{
+						float dist = ore.GlobalPosition.DistanceSquaredTo(this.GlobalPosition);
+						if (dist < CurMinDist)
+						{
+							CurMinDist = dist;
+							selectedOre = ore;
+						}
+					}
+	
+	
+					Node3D mine = GameGlobals.GoldMineScene.Instantiate<Node3D>();
+					this.world.AddChild(mine);
+					mine.GlobalPosition = selectedOre.GlobalPosition;	
+				}
+				
+			}
+			
 		}
 
 	

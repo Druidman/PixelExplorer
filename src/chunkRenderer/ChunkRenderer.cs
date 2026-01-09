@@ -167,7 +167,7 @@ public partial class ChunkRenderer : Node3D
 			{
 				Godot.Vector3 pos = new Godot.Vector3(x,this.origin.Y,z);
 				if (
-					GameGlobals.game.world.CheckIfPosFitsInWorld(pos) &&
+					this.world.CheckIfPosFitsInWorld(pos) &&
 					this.world.GetChunkAtExactPos(pos) == null 
 					// if is null then chunk in given pos is not scheduled and non existent
 				)
@@ -178,7 +178,7 @@ public partial class ChunkRenderer : Node3D
 				}
 				else if (
 					this.world.GetChunkAtExactPos(pos) != GameGlobals.placeholderChunk && 
-					GameGlobals.game.world.CheckIfPosFitsInWorld(pos) &&
+					this.world.CheckIfPosFitsInWorld(pos) &&
 					this.world.GetChunkAtExactPos(pos) != null 
 				)
 				{
@@ -271,7 +271,7 @@ public partial class ChunkRenderer : Node3D
 	private void GenChunk(Chunk chunk, Godot.Vector3 position)
 	{
 
-		chunk.Initialize(position);
+		chunk.Initialize(position, this.world);
 		
 		chunk.GenerateChunk();
 		

@@ -13,19 +13,18 @@ public partial class World : Node3D
 	private Random r = new Random();
 
 	private Dictionary<Godot.Vector3, Chunk> chunks = new Dictionary<Godot.Vector3, Chunk>();
-	private OreManager oreManager = null;
+	public OreManager oreManager = null;
 
 
 	public List<Ore> GetChunkOres(Godot.Vector3 position)
 	{
 		return this.oreManager.GetOresAtChunkPos(this.GetChunkPos(position));
 	}
-
-    public void Initialize()
-    {
-        this.oreManager = new OreManager(this);
+	public void Initialize()
+	{
+		this.oreManager = new OreManager(this);
 		this.oreManager.GenerateOres();
-    }
+	}
 
 	private Godot.Vector3 GetChunkPositionFromGlobalPos(Godot.Vector3 pos)
 	{
@@ -69,9 +68,10 @@ public partial class World : Node3D
 		return this.chunks.GetValueOrDefault(position);
 	}
 
+
 	public bool UpdateChunkAtPos(Godot.Vector3 position, Chunk chunk)
 	{
-		if (this.CheckIfPosFitsInWorld(position) && this.GetChunkPos(position) == position)
+		if (this.CheckIfPosFitsInWorld(position))
 		{
 			this.chunks[position] = chunk;
 			return true;
@@ -102,7 +102,7 @@ public partial class World : Node3D
 		return (int)y;
 	}
 
-    public Godot.Vector3 GetRandomPosInWorld()
+	public Godot.Vector3 GetRandomPosInWorld()
 	{
 		int x = r.Next((int)GameGlobals.MaxWorldTopLeft.X + 1, (int)GameGlobals.MaxWorldBottomRight.X - 1);
 		int z = r.Next((int)GameGlobals.MaxWorldTopLeft.Z + 1, (int)GameGlobals.MaxWorldBottomRight.Z - 1);
@@ -113,4 +113,3 @@ public partial class World : Node3D
 
 	
 }
-

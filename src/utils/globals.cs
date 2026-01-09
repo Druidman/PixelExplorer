@@ -40,8 +40,6 @@ class GameGlobals
     ];
 
     public static ImageTexture texture = new ImageTexture();
-    public static World world = null;
-    public static Game game = null;
 
     public static PackedScene coinScene = null;
     public static PackedScene GoldOreScene = null;
@@ -53,14 +51,12 @@ class GameGlobals
     public static int SoldierCost = 5;
 
 
-    public static void Initialize(Game gameInstance)
+    public static void Initialize()
     {
         Image img = new Image();
 		img.Load("res://images/TextureWithoutEdges.png");
 		
 		texture.SetImage(img);
-        game = gameInstance;
-        world = game.world;
 
         coinScene = GD.Load<PackedScene>("res://src/objects/Coin/Coin.tscn");
         chunkScene = GD.Load<PackedScene>("res://src/world/chunk/chunk.tscn");

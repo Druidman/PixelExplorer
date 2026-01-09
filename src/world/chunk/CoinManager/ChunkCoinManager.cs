@@ -38,7 +38,7 @@ public class ChunkCoinManager : CoinManager
 					) + this.chunk.chunkPos.Z ;
 
 				
-				float y = GameGlobals.world.getBlockHeightAtPos(x,z) + 1;
+				float y = this.chunk.world.getBlockHeightAtPos(x,z) + 1;
 				
 				int platform = this.chunk.getPlatformGlobalY(y);
 				int row = this.chunk.getRowGlobalZ(z);
