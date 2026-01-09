@@ -24,6 +24,7 @@ public partial class Chunk : Node3D
 	World world;
 
 	private ChunkCoinManager chunkCoinManager;
+	
 
 	[Export]
 	public MeshInstance3D mesh;
@@ -48,25 +49,46 @@ public partial class Chunk : Node3D
 		this.chunkTopLeft = chunkPos - new Godot.Vector3((Width/2f), 0, (Width/2f));
 		this.world = GameGlobals.world;
 		this.chunkCoinManager = new ChunkCoinManager(this);
-		this.chunkCoinManager.UpdateCoins(); // gen base ones
-
-		GD.Print(this.chunkTopLeft);
-		
-
+		this.chunkCoinManager.UpdateCoins(); // gen base one
 	}
 	public override void _EnterTree()
 	{
 		this.GlobalPosition = this.chunkPos;
 	}
 	
-
-	public void GenerateChunkMesh()
+	public void GenerateChunk()
 	{
+		this.generateTiles();
+		this.GenerateChunkTileMesh();
+	}
 
-		generateTiles();
-
+	public void ApplyChunkObjects()
+	{
+		List<Ore> ores = this.world.GetChunkOres(this.chunkPos);
+		if (ores != null)
+		{
+			foreach (Ore ore in ores)
+			{
+				AddChild(ore);
+			}
+		}
 		
-		 
+	}
+	public void CreateChunkCollision()
+	{
+		if (Thread.CurrentThread.ManagedThreadId != ThreadGuard.MainThreadId)
+			throw new InvalidOperationException("Method must be called from main thread");
+
+		this.chunkCollisionState = ChunkCollisionState.NONE;
+
+		this.mesh.CreateTrimeshCollision();
+		
+
+		this.chunkCollisionState = ChunkCollisionState.GENERATED;
+	}
+
+	private void GenerateChunkTileMesh()
+	{
 		for (int i =0; i< this.tiles.Count(); i++)
 		{
 			for (int j =0; j< this.tiles[i].Count(); j++)
@@ -91,19 +113,7 @@ public partial class Chunk : Node3D
 
 		
 	}
-	
-	public void CreateCollisionShape()
-	{
-		ConcavePolygonShape3D shape = new ConcavePolygonShape3D();
-
-		shape.SetFaces(this.Vertices.ToArray()); // ?
-
-		this.collisionShape = new CollisionShape3D();
-
-		this.collisionShape.Shape = shape;
-
-	}
-	public void BuildChunkMesh()
+	public void ApplyChunkTileMesh()
 	{
 		if (Thread.CurrentThread.ManagedThreadId != ThreadGuard.MainThreadId)
 			throw new InvalidOperationException("Method must be called from main thread");
@@ -138,30 +148,6 @@ public partial class Chunk : Node3D
 		
 		this.meshReady = true;
 
-		
-	}
-
-	public void ApplyChunkCollision()
-	{
-		if (Thread.CurrentThread.ManagedThreadId != ThreadGuard.MainThreadId)
-			throw new InvalidOperationException("Method must be called from main thread");
-
-		this.chunkCollisionState = ChunkCollisionState.NONE;
-		
-		// CreateCollisionShape();
-		// StaticBody3D collisionBody = new StaticBody3D();
-
-		// collisionBody.CallDeferred(StaticBody3D.MethodName.AddChild, this.collisionShape);
-		// this.CallDeferred(StaticBody3D.MethodName.AddChild, collisionBody);
-
-		this.mesh.CreateTrimeshCollision();
-		
-
-		this.chunkCollisionState = ChunkCollisionState.GENERATED;
-		
-
-		
-		
 		
 	}
 

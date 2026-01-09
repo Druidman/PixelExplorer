@@ -59,8 +59,9 @@ public partial class ChunkRenderer : Node3D
 			CleanUpChunk(this.world.GetChunkAtExactPos(chunk.chunkPos));	
 
 		}
-		chunk.BuildChunkMesh();
-		chunk.ApplyChunkCollision();
+		chunk.ApplyChunkTileMesh();
+		chunk.ApplyChunkObjects();
+		chunk.CreateChunkCollision();
 		
 
 		chunk.addedToTree = true;
@@ -229,7 +230,7 @@ public partial class ChunkRenderer : Node3D
 			}
 			if (cChunk.chunkCollisionState != ChunkCollisionState.GENERATED)
 			{
-				cChunk.ApplyChunkCollision();
+				cChunk.CreateChunkCollision();
 			}
 		}
 	}
@@ -272,7 +273,7 @@ public partial class ChunkRenderer : Node3D
 
 		chunk.Initialize(position);
 		
-		chunk.GenerateChunkMesh();
+		chunk.GenerateChunk();
 		
 		lock (_dataLock)
 		{
