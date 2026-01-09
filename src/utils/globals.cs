@@ -16,7 +16,7 @@ class GameGlobals
     public static Godot.Vector3 MaxWorldTopLeft = new Godot.Vector3(-WorldWidth / 2,0,-WorldWidth / 2);
     public static Godot.Vector3 MaxWorldBottomRight = new Godot.Vector3(WorldWidth / 2,0,WorldWidth / 2);
 
-    public static Godot.Vector3 PlayerStartPos = new Godot.Vector3(0,200,0);
+    public static Godot.Vector3 PlayerStartPos = new Godot.Vector3(0,100,0);
     public static float GravitySpeed = 20.0f;
     public static float PlayerJumpForce = 10f;
 
