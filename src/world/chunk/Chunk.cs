@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 using Godot;
 
 
@@ -17,8 +16,6 @@ public enum ChunkCollisionState
 // chunk Position is declared as bottom center pos !!!
 public partial class Chunk : Node3D
 {
-
-
 	static int Width = GameGlobals.ChunkWidth;
 	static int Height = 100;
 
@@ -34,12 +31,10 @@ public partial class Chunk : Node3D
 
 	public CollisionShape3D collisionShape;
 
-	List< List< List< WorldTile > > > tiles = new List<List<List<WorldTile>>>();
+	
 	private List<Godot.Vector3> Vertices = new List<Godot.Vector3>();
 	private List<Godot.Vector3> Normals = new List<Godot.Vector3>();
 	private List<Godot.Vector2> Uvs = new List<Godot.Vector2>();
-	
-
 	public bool meshReady = false;
 	public bool addedToTree = false;
 	public bool disabled = false;
@@ -170,53 +165,6 @@ public partial class Chunk : Node3D
 		
 	}
 
-	public int getPlatformGlobalY(float y)
-	{	
-
-		if (y < 0 || y >= Height) return -1;
-
-		float topLeftBasedPos = y - this.chunkTopLeft.Y;
-		
-
-		return (int)MathF.Floor(topLeftBasedPos / (float)GameGlobals.TileWidth);
-	}
-
-	public int getRowGlobalZ(float z)
-	{	
-
-		float topLeftBasedPos = z - this.chunkTopLeft.Z;
-
-		return (int)MathF.Floor(topLeftBasedPos / (float)GameGlobals.TileWidth);
-	}
-	public int getColGlobalX(float x)
-	{	
-
-		float topLeftBasedPos = x - this.chunkTopLeft.X;
-
-		return (int)MathF.Floor(topLeftBasedPos / (float)GameGlobals.TileWidth);
-	}
-	public Godot.Vector3 getGlobalPositionOfTile(int platform, int row, int col)
-	{
-		return ConvertToGlobalPosition( getLocalPositionOfTile(platform, row, col) );
-	}
-
-	public Godot.Vector3 getLocalPositionOfTile(int platform, int row, int col)
-	{
-		return new Godot.Vector3(
-			col + 0.5f, 
-			platform, 
-			row + 0.5f
-		) + this.chunkTopLeft - this.chunkPos;
-	}
-	public Godot.Vector3 ConvertToLocalChunkPos(Godot.Vector3 globalPos)
-	{
-		return globalPos - this.chunkPos;
-	}
-	public Godot.Vector3 ConvertToGlobalPosition(Godot.Vector3 localPos)
-	{
-		return localPos + this.chunkPos;
-	}
-
 	private void generateTiles()
 	{
 		int minY = 0;
@@ -256,112 +204,8 @@ public partial class Chunk : Node3D
 
 	}
 
-	public bool CheckIfGlobalPosFits(Godot.Vector3 GlobalPos)
-	{
-		return CheckIfValidTileIndicies(
-			getPlatformGlobalY(GlobalPos.Y),
-			getRowGlobalZ(GlobalPos.Z),
-			getColGlobalX(GlobalPos.X)
-			
-		);
-		
-	}
-	public bool CheckIfLocalPosFits(Godot.Vector3 localPos)
-	{
-		return CheckIfGlobalPosFits(ConvertToGlobalPosition(localPos));
 	
-	}
-	private bool UpdateTile(int platform, int row, int col, WorldTile tile)
-	{	
-		if (!CheckIfTileFits(platform, row, col))
-		{
-			if (!ResizeTilesToPlatform(platform)) return false;
-			if (!ResizeTilesToRow(platform,row)) return false;
-			if (!ResizeTilesToCol(platform,row,col)) return false;
-		}
-
-
-		this.tiles[platform][row][col] = tile;
-		return true;
-	}
-
-	private bool ResizeTilesToPlatform(int platform)
-	{
-		if (!CheckIfValidTileIndicies(platform, 0, 0)) return false;
-		
-
-		
-		
-		for (int i = this.tiles.Count(); i<platform + 1; i++)
-		{
-			this.tiles.Add(new List<List<WorldTile>>());
-		}
-		return true;
-	}
-	private bool ResizeTilesToRow(int platform, int row)
-	{
-		
-		if (!CheckIfValidTileIndicies(platform, row, 0)) return false;
-
-		if (!CheckIfTilePlatformFits(platform)) return false;
-
-		
-		
-		for (int i = this.tiles[platform].Count(); i<row + 1; i++)
-		{
-			
-			this.tiles[platform].Add(new List<WorldTile>());
-		}
-		return true;
-	}
-	private bool ResizeTilesToCol(int platform, int row, int col)
-	{
-
-		if (!CheckIfValidTileIndicies(platform, row, col)) return false;
-
-		if (!CheckIfTileRowFits(platform, row)) return false;
-
-		
-		for (int i = this.tiles[platform][row].Count(); i<col + 1; i++)
-		{
-			this.tiles[platform][row].Add(new WorldTile(getGlobalPositionOfTile(platform, row, i),BlockType.NONE));
-		}
-		return true;
-	}
-
-	private bool CheckIfTileFits(int platform, int row, int col)
-	{
-		if (!CheckIfTileColFits(platform, row, col)) return false;
-
-		return true;
-	}
-
-	private bool CheckIfTilePlatformFits(int platform)
-	{
-		if (platform < 0 || platform >= this.tiles.Count()) return false;
-		return true;
-	}
-	private bool CheckIfTileRowFits(int platform, int row)
-	{
-		if (!CheckIfTilePlatformFits(platform)) return false;
-		if (row < 0 || row >= this.tiles[platform].Count()) return false;
-		return true;
-	}
-	private bool CheckIfTileColFits(int platform, int row, int col)
-	{
-		if (!CheckIfTileRowFits(platform, row)) return false;
-		if (col < 0 || col >= this.tiles[platform][row].Count()) return false;
-		return true;
-	}
-
-	private bool CheckIfValidTileIndicies(int platform, int row, int col)
-	{
-
-		if (platform < 0 || platform > Height / GameGlobals.TileWidth) return false;
-		if (row < 0 || row > Width / GameGlobals.TileWidth) return false;
-		if (col < 0 || col > Width / GameGlobals.TileWidth) return false;
-
-		return true;
-	}
 	
 }
+	
+	
