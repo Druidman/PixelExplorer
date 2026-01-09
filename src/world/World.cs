@@ -50,6 +50,17 @@ public partial class World : Node3D
 
 	public Chunk GetChunkAtPos(Godot.Vector3 position)
 	{
+		Godot.Vector3 exactLookUpPos = position / GameGlobals.ChunkWidth;
+		exactLookUpPos.X = MathF.Round(exactLookUpPos.X);
+		exactLookUpPos.Y = MathF.Round(exactLookUpPos.Y);
+		exactLookUpPos.Z = MathF.Round(exactLookUpPos.Z);
+
+		exactLookUpPos *= GameGlobals.ChunkWidth;
+
+		return this.GetChunkAtExactPos(exactLookUpPos);
+	}
+	public Chunk GetChunkAtExactPos(Godot.Vector3 position)
+	{
 		
 		return this.chunks.GetValueOrDefault(position);
 	}

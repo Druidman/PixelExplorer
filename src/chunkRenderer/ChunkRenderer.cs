@@ -54,9 +54,9 @@ public partial class ChunkRenderer : Node3D
 			return false;
 		}
 		
-		if (this.world.GetChunkAtPos(chunk.chunkPos) != null)
+		if (this.world.GetChunkAtExactPos(chunk.chunkPos) != null)
 		{
-			CleanUpChunk(this.world.GetChunkAtPos(chunk.chunkPos));	
+			CleanUpChunk(this.world.GetChunkAtExactPos(chunk.chunkPos));	
 
 		}
 		chunk.BuildChunkMesh();
@@ -126,12 +126,12 @@ public partial class ChunkRenderer : Node3D
 		).Floor() * GameGlobals.ChunkWidth; 
 		
 
-		if (this.world.GetChunkAtPos(new Godot.Vector3(newWorldPos.X, this.origin.Y, newWorldPos.Y)) != null)
+		if (this.world.GetChunkAtExactPos(new Godot.Vector3(newWorldPos.X, this.origin.Y, newWorldPos.Y)) != null)
 		{
 			if (
-				this.world.GetChunkAtPos(new Godot.Vector3(newWorldPos.X, this.origin.Y, newWorldPos.Y)) 
+				this.world.GetChunkAtExactPos(new Godot.Vector3(newWorldPos.X, this.origin.Y, newWorldPos.Y)) 
 				== 
-				this.world.GetChunkAtPos(this.origin)
+				this.world.GetChunkAtExactPos(this.origin)
 			)
 			{
 				return;
@@ -167,7 +167,7 @@ public partial class ChunkRenderer : Node3D
 				Godot.Vector3 pos = new Godot.Vector3(x,this.origin.Y,z);
 				if (
 					GameGlobals.game.world.CheckIfPosFitsInWorld(pos) &&
-					this.world.GetChunkAtPos(pos) == null 
+					this.world.GetChunkAtExactPos(pos) == null 
 					// if is null then chunk in given pos is not scheduled and non existent
 				)
 				{
@@ -176,12 +176,12 @@ public partial class ChunkRenderer : Node3D
 					
 				}
 				else if (
-					this.world.GetChunkAtPos(pos) != GameGlobals.placeholderChunk && 
+					this.world.GetChunkAtExactPos(pos) != GameGlobals.placeholderChunk && 
 					GameGlobals.game.world.CheckIfPosFitsInWorld(pos) &&
-					this.world.GetChunkAtPos(pos) != null 
+					this.world.GetChunkAtExactPos(pos) != null 
 				)
 				{
-					Chunk chunk = world.GetChunkAtPos(pos);
+					Chunk chunk = world.GetChunkAtExactPos(pos);
 					chunk.disabled = false;
 					chunk.Visible = true;
 					chunk.ProcessMode = ProcessModeEnum.Inherit;
@@ -195,7 +195,7 @@ public partial class ChunkRenderer : Node3D
 	{
 		foreach (Godot.Vector3 key in this.world.GetAvailableChunkPositions())
 		{
-			Chunk chunk = this.world.GetChunkAtPos(key);
+			Chunk chunk = this.world.GetChunkAtExactPos(key);
 
 			if (chunk.addedToTree && !CheckIfPosFitsInRenderDistance(chunk.chunkPos))
 			{
@@ -218,7 +218,7 @@ public partial class ChunkRenderer : Node3D
 		];
 		foreach (Godot.Vector3 pos in requiredCollisions)
 		{
-			Chunk cChunk = this.world.GetChunkAtPos(pos);
+			Chunk cChunk = this.world.GetChunkAtExactPos(pos);
 			if (cChunk == null)
 			{
 				return;
