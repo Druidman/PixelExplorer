@@ -75,9 +75,7 @@ public partial class Player : CharacterBody3D
 		{
 
 			this.PlaceGoldMine();
-			
-			
-			
+	
 		}
 
 	
@@ -88,6 +86,12 @@ public partial class Player : CharacterBody3D
 
 	private void PlaceGoldMine()
 	{
+
+		if (this.coins < GameGlobals.GoldMineCost)
+		{
+			return;
+		}
+		
 		List<Ore> ores = this.world.GetChunkOres(this.GlobalPosition);
 		if (ores == null) return;
 		if (ores.Count < 0) return;
@@ -109,12 +113,14 @@ public partial class Player : CharacterBody3D
 		}
 
 
-		Chunk chunk = this.world.GetChunkAtPos(this.GlobalPosition);
+	
 
 		GoldMine mine = GameGlobals.GoldMineScene.Instantiate<GoldMine>();
 		mine.Initialize(this, selectedOre.GlobalPosition);
 
-		this.world.PlaceMine(mine,chunk);
+		selectedOre.AddChild(mine);
+
+		this.coins -= GameGlobals.GoldMineCost;
 		
 		
 	}

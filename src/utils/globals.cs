@@ -23,6 +23,7 @@ class GameGlobals
     
     public static float PlayerSpeed = 15.0f;
     public static float PlayerDecelerationSpeed = GameGlobals.PlayerSpeed * 0.1f;
+    public static int GoldMineCost = 10;
 
     public static int TileWidth = 1;
     public static Godot.Vector2 TextureAtlasSize = new Godot.Vector2(48,64);
