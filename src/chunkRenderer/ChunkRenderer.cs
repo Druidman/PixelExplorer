@@ -53,6 +53,10 @@ public partial class ChunkRenderer : Node3D
 		{
 			return false;
 		}
+		if (!this.CheckIfPosFitsInRenderDistance(chunk.chunkPos))
+		{
+			return false;
+		}
 		
 		if (this.world.GetChunkAtExactPos(chunk.chunkPos) != null)
 		{
@@ -98,6 +102,34 @@ public partial class ChunkRenderer : Node3D
 	}
 	private void CleanUpChunk(Chunk chunk)
 	{
+		if (chunk == null)
+		{
+			return;
+		}
+		if (chunk == GameGlobals.placeholderChunk){
+			return;
+		}
+		if (!chunk.addedToTree)
+		{
+			return;
+		}
+
+		if (chunk.GetParent() != null) RemoveChild(chunk);
+
+		foreach (Node3D child in chunk.GetChildren())
+		{
+			if (child is Ore)
+			{
+				chunk.RemoveChild(child);
+			}
+		}
+		
+		chunk.QueueFree();
+		chunk.addedToTree = false;
+	}
+
+	private void HideChunk(Chunk chunk)
+	{
 		if (chunk is null)
 		{
 			return;
@@ -110,14 +142,9 @@ public partial class ChunkRenderer : Node3D
 			return;
 		}
 
-
 		chunk.Visible = false;
 		chunk.ProcessMode = ProcessModeEnum.Disabled;
 		chunk.disabled = true;
-
-		
-		
-
 	}
 	private void UpdateChunks()
 	{
@@ -176,17 +203,15 @@ public partial class ChunkRenderer : Node3D
 					this.world.UpdateChunkAtPos(pos, GameGlobals.placeholderChunk); // as placeholder to avoid double chunk schedule
 					
 				}
-				else if (
-					this.world.GetChunkAtExactPos(pos) != GameGlobals.placeholderChunk && 
-					this.world.CheckIfPosFitsInWorld(pos) &&
-					this.world.GetChunkAtExactPos(pos) != null 
-				)
-				{
-					Chunk chunk = world.GetChunkAtExactPos(pos);
-					chunk.disabled = false;
-					chunk.Visible = true;
-					chunk.ProcessMode = ProcessModeEnum.Inherit;
-				}
+				// else if (
+				// 	this.world.GetChunkAtExactPos(pos) != GameGlobals.placeholderChunk && 
+				// 	this.world.CheckIfPosFitsInWorld(pos) &&
+				// 	this.world.GetChunkAtExactPos(pos) != null 
+				// )
+				// {
+				// 	Chunk chunk = world.GetChunkAtExactPos(pos);
+				// 	HideChunk(chunk);
+				// }
 			
 			}
 			
@@ -315,14 +340,12 @@ public partial class ChunkRenderer : Node3D
 			{
 				CleanUpChunk(chunk);
 				this.pendingRemove.Remove(node);
+				this.world.RemoveChunk(chunk.chunkPos);
 				
 
-				// if (this.chunks[chunk.chunkPos] == chunk)
-				// {
-				// 	this.chunks.Remove(chunk.chunkPos);
-				// }
+				
 			
-				// break;
+
 			}
 
 			node = next;

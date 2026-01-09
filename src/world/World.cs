@@ -56,6 +56,12 @@ public partial class World : Node3D
 		exactLookUpPos *= GameGlobals.ChunkWidth;
 		return exactLookUpPos;
 	}
+	public void RemoveChunk(Godot.Vector3 chunkPosition)
+	{
+		
+
+		this.chunks.Remove(chunkPosition);
+	}
 	public Chunk GetChunkAtPos(Godot.Vector3 position)
 	{
 		

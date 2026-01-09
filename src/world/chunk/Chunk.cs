@@ -29,9 +29,6 @@ public partial class Chunk : Node3D
 	[Export]
 	public MeshInstance3D mesh;
 
-
-	public CollisionShape3D collisionShape;
-
 	
 	private List<Godot.Vector3> Vertices = new List<Godot.Vector3>();
 	private List<Godot.Vector3> Normals = new List<Godot.Vector3>();
