@@ -116,8 +116,6 @@ public partial class ChunkRenderer : Node3D
 		chunk.disabled = true;
 
 		
-		
-
 	}
 	private void UpdateChunks()
 	{
