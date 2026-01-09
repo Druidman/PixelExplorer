@@ -73,33 +73,10 @@ public partial class Player : CharacterBody3D
 		}
 		if (Input.IsActionJustPressed("SetGoldMine"))
 		{
-			
-			List<Ore> ores = this.world.GetChunkOres(this.GlobalPosition);
-			if (ores != null)
-			{
-				if (ores.Count > 0)
-				{
-					GD.Print((ores != null) ? ores : "No mines nearby");
 
-					Ore selectedOre = ores[0];
-					float CurMinDist = 100000f;
-					foreach (Ore ore in ores)
-					{
-						float dist = ore.GlobalPosition.DistanceSquaredTo(this.GlobalPosition);
-						if (dist < CurMinDist)
-						{
-							CurMinDist = dist;
-							selectedOre = ore;
-						}
-					}
-	
-	
-					Node3D mine = GameGlobals.GoldMineScene.Instantiate<Node3D>();
-					this.world.AddChild(mine);
-					mine.GlobalPosition = selectedOre.GlobalPosition;	
-				}
-				
-			}
+			this.PlaceGoldMine();
+			
+			
 			
 		}
 
@@ -107,6 +84,35 @@ public partial class Player : CharacterBody3D
 		MoveAndSlide();
 		soldierManager.Update((float)delta, this.characterCollider.Rotation);
 		
+	}
+
+	private void PlaceGoldMine()
+	{
+		List<Ore> ores = this.world.GetChunkOres(this.GlobalPosition);
+		if (ores == null) return;
+		if (ores.Count < 0) return;
+
+
+
+		Ore selectedOre = ores[0];
+
+		// select closest ore
+		float CurMinDist = 100000f;
+		foreach (Ore ore in ores)
+		{
+			float dist = ore.GlobalPosition.DistanceSquaredTo(this.GlobalPosition);
+			if (dist < CurMinDist)
+			{
+				CurMinDist = dist;
+				selectedOre = ore;
+			}
+		}
+
+		Chunk chunk = this.world.GetChunkAtPos(this.GlobalPosition);
+
+		Node3D mine = GameGlobals.GoldMineScene.Instantiate<Node3D>();
+		chunk.AddChild(mine);
+		mine.GlobalPosition = selectedOre.GlobalPosition;	
 	}
 
 

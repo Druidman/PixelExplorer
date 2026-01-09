@@ -62,10 +62,10 @@ public partial class World : Node3D
 
 		return this.GetChunkAtExactPos(this.GetChunkPos(position));
 	}
-	public Chunk GetChunkAtExactPos(Godot.Vector3 position)
+	public Chunk GetChunkAtExactPos(Godot.Vector3 chunkPosition)
 	{
 		
-		return this.chunks.GetValueOrDefault(position);
+		return this.chunks.GetValueOrDefault(chunkPosition);
 	}
 
 
