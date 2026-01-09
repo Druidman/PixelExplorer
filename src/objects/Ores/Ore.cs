@@ -1,6 +1,6 @@
 using Godot;
 
-public partial class Ore : Area3D
+public partial class Ore : StaticBody3D
 {
 	Godot.Vector3 pos;
 	public void Initialize(Godot.Vector3 pos)

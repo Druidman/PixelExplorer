@@ -18,8 +18,9 @@ public partial class ChunkRenderer : Node3D
 	[Export]
 	Player player;
 
-	Dictionary<Godot.Vector3, Chunk> chunks = new Dictionary<Godot.Vector3, Chunk>();
 
+	[Export]
+	World world;
 	LinkedList<Chunk> pendingRemove = new LinkedList<Chunk>();
 	LinkedList<Chunk> pendingAdd = new LinkedList<Chunk>();
 	
@@ -53,9 +54,9 @@ public partial class ChunkRenderer : Node3D
 			return false;
 		}
 		
-		if (this.chunks.GetValueOrDefault(chunk.chunkPos) != null)
+		if (this.world.GetChunkAtPos(chunk.chunkPos) != null)
 		{
-			CleanUpChunk(this.chunks.GetValueOrDefault(chunk.chunkPos));	
+			CleanUpChunk(this.world.GetChunkAtPos(chunk.chunkPos));	
 
 		}
 		chunk.BuildChunkMesh();
@@ -66,7 +67,9 @@ public partial class ChunkRenderer : Node3D
 		
 		CallDeferred(Node3D.MethodName.AddChild, chunk);
 
-		this.chunks[chunk.chunkPos] = chunk;
+		this.world.UpdateChunkAtPos(chunk.chunkPos, chunk);
+
+		
 
 		return true;
 	}
@@ -111,14 +114,7 @@ public partial class ChunkRenderer : Node3D
 		chunk.ProcessMode = ProcessModeEnum.Disabled;
 		chunk.disabled = true;
 
-		// if (chunk.GetParent() != null)
-		// {
-		// 	RemoveChild(chunk);
 		
-		// }
-
-		
-		// chunk.QueueFree();
 		
 
 	}
@@ -130,12 +126,12 @@ public partial class ChunkRenderer : Node3D
 		).Floor() * GameGlobals.ChunkWidth; 
 		
 
-		if (this.chunks.GetValueOrDefault(new Godot.Vector3(newWorldPos.X, this.origin.Y, newWorldPos.Y)) != null)
+		if (this.world.GetChunkAtPos(new Godot.Vector3(newWorldPos.X, this.origin.Y, newWorldPos.Y)) != null)
 		{
 			if (
-				this.chunks.GetValueOrDefault(new Godot.Vector3(newWorldPos.X, this.origin.Y, newWorldPos.Y)) 
+				this.world.GetChunkAtPos(new Godot.Vector3(newWorldPos.X, this.origin.Y, newWorldPos.Y)) 
 				== 
-				this.chunks.GetValueOrDefault(this.origin)
+				this.world.GetChunkAtPos(this.origin)
 			)
 			{
 				return;
@@ -171,22 +167,24 @@ public partial class ChunkRenderer : Node3D
 				Godot.Vector3 pos = new Godot.Vector3(x,this.origin.Y,z);
 				if (
 					GameGlobals.game.world.CheckIfPosFitsInWorld(pos) &&
-					this.chunks.GetValueOrDefault(pos) == null 
+					this.world.GetChunkAtPos(pos) == null 
 					// if is null then chunk in given pos is not scheduled and non existent
 				)
 				{
 					RequestChunkGenAt(pos);
-					this.chunks[pos] = GameGlobals.placeholderChunk; // as placeholder, so we won't schedule another gen
+					this.world.UpdateChunkAtPos(pos, GameGlobals.placeholderChunk); // as placeholder to avoid double chunk schedule
+					
 				}
 				else if (
-					this.chunks.GetValueOrDefault(pos) != GameGlobals.placeholderChunk && 
+					this.world.GetChunkAtPos(pos) != GameGlobals.placeholderChunk && 
 					GameGlobals.game.world.CheckIfPosFitsInWorld(pos) &&
-					this.chunks.GetValueOrDefault(pos) != null 
+					this.world.GetChunkAtPos(pos) != null 
 				)
 				{
-					this.chunks[pos].disabled = false;
-					this.chunks[pos].Visible = true;
-					this.chunks[pos].ProcessMode = ProcessModeEnum.Inherit;
+					Chunk chunk = world.GetChunkAtPos(pos);
+					chunk.disabled = false;
+					chunk.Visible = true;
+					chunk.ProcessMode = ProcessModeEnum.Inherit;
 				}
 			
 			}
@@ -195,9 +193,9 @@ public partial class ChunkRenderer : Node3D
 	}
 	private void CleanUpOldChunks()
 	{
-		foreach (Godot.Vector3 key in this.chunks.Keys)
+		foreach (Godot.Vector3 key in this.world.GetAvailableChunkPositions())
 		{
-			Chunk chunk = this.chunks[key];
+			Chunk chunk = this.world.GetChunkAtPos(key);
 
 			if (chunk.addedToTree && !CheckIfPosFitsInRenderDistance(chunk.chunkPos))
 			{
@@ -220,7 +218,7 @@ public partial class ChunkRenderer : Node3D
 		];
 		foreach (Godot.Vector3 pos in requiredCollisions)
 		{
-			Chunk cChunk = this.chunks.GetValueOrDefault(pos);
+			Chunk cChunk = this.world.GetChunkAtPos(pos);
 			if (cChunk == null)
 			{
 				return;

@@ -1,5 +1,7 @@
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Godot;
 
 
@@ -10,6 +12,7 @@ public partial class World : Node3D
 	private Godot.Vector3 WorldPos = GameGlobals.StartWorldMiddle;
 	private Random r = new Random();
 
+	private Dictionary<Godot.Vector3, Chunk> chunks = new Dictionary<Godot.Vector3, Chunk>();
 	public OreManager oreManager = null;
 
     public void Initialize()
@@ -17,7 +20,7 @@ public partial class World : Node3D
         this.oreManager = new OreManager(this);
 		this.oreManager.GenerateOres();
 
-		// temporary
+		
 
 		foreach (Ore ore in this.oreManager.ores)
 		{
@@ -44,6 +47,28 @@ public partial class World : Node3D
 		}		
 		return true;
 	}
+
+	public Chunk GetChunkAtPos(Godot.Vector3 position)
+	{
+		
+		return this.chunks.GetValueOrDefault(position);
+	}
+
+	public bool UpdateChunkAtPos(Godot.Vector3 position, Chunk chunk)
+	{
+		if (this.CheckIfPosFitsInWorld(position))
+		{
+			this.chunks[position] = chunk;
+			return true;
+		}
+		return false;
+	}
+
+	public List<Godot.Vector3> GetAvailableChunkPositions()
+	{
+		return this.chunks.Keys.ToList();
+	}
+	
 
 	public Godot.Vector3 getWorldPos()
 	{
