@@ -57,12 +57,12 @@ public partial class ChunkRenderer : Node3D
 		{
 			return false;
 		}
-		
-		if (this.world.GetChunkAtExactPos(chunk.chunkPos) != null)
-		{
-			CleanUpChunk(this.world.GetChunkAtExactPos(chunk.chunkPos));	
 
-		}
+		
+		CleanUpChunk(this.world.GetChunkAtExactPos(chunk.chunkPos));
+		
+		
+		
 		chunk.ApplyChunkTileMesh();
 		chunk.ApplyChunkObjects();
 		chunk.CreateChunkCollision();
@@ -225,7 +225,10 @@ public partial class ChunkRenderer : Node3D
 
 			if (chunk.addedToTree && !CheckIfPosFitsInRenderDistance(chunk.chunkPos))
 			{
-				pendingRemove.AddLast(chunk);
+				CleanUpChunk(chunk);
+				
+				// pendingRemove.AddLast(chunk);
+				this.world.RemoveChunk(key);
 			}
 		}
 	}
@@ -340,7 +343,7 @@ public partial class ChunkRenderer : Node3D
 			{
 				CleanUpChunk(chunk);
 				this.pendingRemove.Remove(node);
-				this.world.RemoveChunk(chunk.chunkPos);
+				// this.world.RemoveChunk(chunk.chunkPos);
 				
 
 				
