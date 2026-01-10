@@ -23,6 +23,8 @@ public partial class Player : CharacterBody3D
 
 
 	private int coins = 0;
+
+	public int SoldierSlots = 10;
 	public override void _EnterTree()
 	{
 		GlobalPosition = GameGlobals.PlayerStartPos;
@@ -58,7 +60,11 @@ public partial class Player : CharacterBody3D
 		}
 	}
 
-	
+	public void removeCoins(int coinsToRemove)
+	{
+		this.coins -= coinsToRemove;
+	}
+
 
 	public override void _PhysicsProcess(double delta)
 	{
@@ -69,7 +75,7 @@ public partial class Player : CharacterBody3D
 		if (Input.IsActionPressed("spawn_soldier") && this.coins >= GameGlobals.SoldierCost)
 		{
 			this.soldierManager.SpawnSoldier();
-			this.coins -= GameGlobals.SoldierCost;
+			
 		}
 		if (Input.IsActionJustPressed("SetGoldMine"))
 		{

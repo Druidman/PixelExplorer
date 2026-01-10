@@ -21,8 +21,12 @@ public partial class SoldierManager : Godot.Node3D
 		this.player = player;
 	}
 	
-	public void SpawnSoldier()
+	public bool SpawnSoldier()
 	{
+		if (this.soldiers.Count > this.player.SoldierSlots)
+		{
+			return false;
+		}
 		if ((float)SoldierPosRotationAngle / 360f == SoldierPosRotationAngle / 360)
 		{
 			soldierPos += soldierPosIncrement;
@@ -33,6 +37,10 @@ public partial class SoldierManager : Godot.Node3D
 		AddChild(soldier);
 		SoldierPosRotationAngle += 360 / SoldierLayerAmount;
 		this.soldiers.Add(soldier);
+
+		this.player.removeCoins(5);
+
+		return true;
 
 	}
 	public void Update(float delta, Godot.Vector3 rotation)
