@@ -114,7 +114,7 @@ public partial class Player : CharacterBody3D
 		int col = chunk.getColGlobalX(hitPos.X);
 		int platform = chunk.getPlatformGlobalY(hitPos.Y);
 
-		if (!chunk.CheckIfTileFits(platform, row, col))
+		if (chunk.CheckIfTileExists(platform, row, col) == null)
 		{
 			return;
 		}
