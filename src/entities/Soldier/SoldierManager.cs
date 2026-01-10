@@ -23,7 +23,7 @@ public partial class SoldierManager : Godot.Node3D
 	
 	public bool SpawnSoldier()
 	{
-		if (this.soldiers.Count > this.player.SoldierSlots)
+		if (this.soldiers.Count >= this.player.SoldierSlots)
 		{
 			return false;
 		}

@@ -24,7 +24,7 @@ public partial class Player : CharacterBody3D
 
 	private int coins = 0;
 
-	public int SoldierSlots = 10;
+	public int SoldierSlots = 2;
 	public override void _EnterTree()
 	{
 		GlobalPosition = GameGlobals.PlayerStartPos;
@@ -128,13 +128,19 @@ public partial class Player : CharacterBody3D
 		Godot.Vector3 homePos = blockPosition;
 		homePos.Y += 0.5f;
 
-		Node3D home = GameGlobals.SoldierHomeScene.Instantiate<Node3D>();
+		SoldierHome home = GameGlobals.SoldierHomeScene.Instantiate<SoldierHome>();
+		home.Initialize(this, homePos);
 		chunk.AddChild(home);
-		home.GlobalPosition = homePos;
 
+	}
 
-
-
+	public void ExpandSoldierSlots(int slotsDelta)
+	{
+		this.SoldierSlots += slotsDelta;
+		if (this.SoldierSlots < 0)
+		{
+			this.SoldierSlots = 0;
+		}
 	}
 
 	private void PlaceGoldMine()
