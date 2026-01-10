@@ -75,6 +75,14 @@ public partial class Chunk
 		}
 		return tile;
 	}
+	public WorldTile CheckIfTileExistsPos(Godot.Vector3 globalPos)
+	{
+		int row = this.getRowGlobalZ(globalPos.Z);
+		int col = this.getColGlobalX(globalPos.X);
+		int platform = this.getPlatformGlobalY(globalPos.Y);
+
+		return this.CheckIfTileExists(platform, row, col);
+	}
 
 	public bool CheckIfTileFits(int platform, int row, int col)
 	{

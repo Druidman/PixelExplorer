@@ -7,6 +7,8 @@ public partial class SoldierHome : StaticBody3D
 	Godot.Vector3 pos;
 	Player player = null;
 
+	bool canRemoveSlots = false;
+
 	public void Initialize(Player player, Godot.Vector3 pos)
 	{
 		this.player = player;
@@ -15,11 +17,14 @@ public partial class SoldierHome : StaticBody3D
 	public override void _Ready()
 	{
 		this.GlobalPosition = pos;
-		this.player.ExpandSoldierSlots(10);
+		if (this.player != null) this.player.ExpandSoldierSlots(10);
+		this.canRemoveSlots = true;
+
+		
 	}
 	public override void _ExitTree()
 	{
-		this.player.ExpandSoldierSlots(-10);
+		if (this.player != null && canRemoveSlots) this.player.ExpandSoldierSlots(-10);
 	}
 
 
