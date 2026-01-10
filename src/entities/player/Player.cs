@@ -105,22 +105,33 @@ public partial class Player : CharacterBody3D
 
 		var result = spaceState.IntersectRay(query);
 		Godot.Vector3 hitPos = (Godot.Vector3)result.GetValueOrDefault("position");
-		hitPos.Y = MathF.Round(hitPos.Y,1) - (GameGlobals.TileWidth / 2f);
+		hitPos.Y = MathF.Round(hitPos.Y,1) - 0.01f;
 
 		Chunk chunk = this.world.GetChunkAtPos(hitPos);
-		GD.Print(chunk);
-		Godot.Vector3 blockPosition = chunk.getGlobalPositionOfTileAt(hitPos);
 
+		GD.Print(chunk);
+		int row = chunk.getRowGlobalZ(hitPos.Z);
+		int col = chunk.getColGlobalX(hitPos.X);
+		int platform = chunk.getPlatformGlobalY(hitPos.Y);
+
+		if (!chunk.CheckIfTileFits(platform, row, col))
+		{
+			return;
+		}
+		
+		Godot.Vector3 blockPosition = chunk.getGlobalPositionOfTile(platform, row, col);
+
+		
 		GD.Print(hitPos);
 		GD.Print(blockPosition);
 
 		Godot.Vector3 homePos = blockPosition;
-		homePos.Y += 0.5f;;
+		homePos.Y += 0.5f;
 
 		Node3D home = GameGlobals.SoldierHomeScene.Instantiate<Node3D>();
 		chunk.AddChild(home);
 		home.GlobalPosition = homePos;
-		
+
 
 
 

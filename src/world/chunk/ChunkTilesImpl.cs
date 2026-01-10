@@ -61,7 +61,7 @@ public partial class Chunk
 		return true;
 	}
 
-	private bool CheckIfTileFits(int platform, int row, int col)
+	public bool CheckIfTileFits(int platform, int row, int col)
 	{
 		if (!CheckIfTileColFits(platform, row, col)) return false;
 
