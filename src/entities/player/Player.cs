@@ -24,7 +24,7 @@ public partial class Player : CharacterBody3D
 
 	private int coins = 0;
 
-	public int SoldierSlots = 10;
+	public int SoldierSlots = 2;
 	public override void _EnterTree()
 	{
 		GlobalPosition = GameGlobals.PlayerStartPos;
@@ -79,15 +79,68 @@ public partial class Player : CharacterBody3D
 		}
 		if (Input.IsActionJustPressed("SetGoldMine"))
 		{
-
 			this.PlaceGoldMine();
-	
+		}
+		if (Input.IsActionJustPressed("SetSoldierHome"))
+		{
+			this.StartSoldierHomePlacing();
 		}
 
 	
 		MoveAndSlide();
 		soldierManager.Update((float)delta, this.characterCollider.Rotation);
 		
+	}
+
+	private void StartSoldierHomePlacing()
+	{
+		var spaceState = GetWorld3D().DirectSpaceState;
+		var cam = this.camera;
+		var mousePos = GetViewport().GetMousePosition();
+
+		var origin = cam.ProjectRayOrigin(mousePos);
+		var end = origin + cam.ProjectRayNormal(mousePos) * 1000; // TODO add normal length
+		var query = PhysicsRayQueryParameters3D.Create(origin, end);
+		query.CollideWithAreas = true;
+
+		var result = spaceState.IntersectRay(query);
+		Godot.Vector3 hitPos = (Godot.Vector3)result.GetValueOrDefault("position");
+		hitPos.Y = MathF.Round(hitPos.Y,1) - 0.01f;
+
+		Chunk chunk = this.world.GetChunkAtPos(hitPos);
+
+		GD.Print(chunk);
+		int row = chunk.getRowGlobalZ(hitPos.Z);
+		int col = chunk.getColGlobalX(hitPos.X);
+		int platform = chunk.getPlatformGlobalY(hitPos.Y);
+
+		if (chunk.CheckIfTileExists(platform, row, col) == null)
+		{
+			return;
+		}
+		
+		Godot.Vector3 blockPosition = chunk.getGlobalPositionOfTile(platform, row, col);
+
+		
+		GD.Print(hitPos);
+		GD.Print(blockPosition);
+
+		Godot.Vector3 homePos = blockPosition;
+		homePos.Y += 0.5f;
+
+		SoldierHome home = GameGlobals.SoldierHomeScene.Instantiate<SoldierHome>();
+		home.Initialize(this, homePos);
+		chunk.AddChild(home);
+
+	}
+
+	public void ExpandSoldierSlots(int slotsDelta)
+	{
+		this.SoldierSlots += slotsDelta;
+		if (this.SoldierSlots < 0)
+		{
+			this.SoldierSlots = 0;
+		}
 	}
 
 	private void PlaceGoldMine()

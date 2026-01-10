@@ -61,7 +61,22 @@ public partial class Chunk
 		return true;
 	}
 
-	private bool CheckIfTileFits(int platform, int row, int col)
+
+	public WorldTile CheckIfTileExists(int platform, int row, int col)
+	{
+		if (!CheckIfTileFits(platform ,row, col))
+		{
+			return null;
+		}
+		WorldTile tile = this.tiles[platform][row][col];
+		if (tile.blockType == BlockType.NONE)
+		{
+			return null;
+		}
+		return tile;
+	}
+
+	public bool CheckIfTileFits(int platform, int row, int col)
 	{
 		if (!CheckIfTileColFits(platform, row, col)) return false;
 

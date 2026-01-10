@@ -16,7 +16,7 @@ class GameGlobals
     public static Godot.Vector3 MaxWorldTopLeft = new Godot.Vector3(-WorldWidth / 2,0,-WorldWidth / 2);
     public static Godot.Vector3 MaxWorldBottomRight = new Godot.Vector3(WorldWidth / 2,0,WorldWidth / 2);
 
-    public static Godot.Vector3 PlayerStartPos = new Godot.Vector3(0,100,0);
+    public static Godot.Vector3 PlayerStartPos = new Godot.Vector3(0,200,0);
     public static float GravitySpeed = 20.0f;
     public static float PlayerJumpForce = 10f;
 
@@ -45,6 +45,7 @@ class GameGlobals
     public static PackedScene coinScene = null;
     public static PackedScene GoldOreScene = null;
     public static PackedScene GoldMineScene = null;
+    public static PackedScene SoldierHomeScene = null;
     public static PackedScene chunkScene = null;
     public static PackedScene soldierScene = null;
     public static Chunk placeholderChunk = null;
@@ -64,6 +65,7 @@ class GameGlobals
         soldierScene = GD.Load<PackedScene>("res://src/entities/Soldier/soldier.tscn");
         GoldOreScene = GD.Load<PackedScene>("res://src/objects/Ores/Gold/GoldOre.tscn");
         GoldMineScene = GD.Load<PackedScene>("res://src/objects/GoldMine/gold_mine.tscn");
+        SoldierHomeScene = GD.Load<PackedScene>("res://src/objects/SoldierHome/soldier_home.tscn");
         placeholderChunk = chunkScene.Instantiate<Chunk>();
  
     }

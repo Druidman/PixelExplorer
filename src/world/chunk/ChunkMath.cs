@@ -43,6 +43,14 @@ public partial class Chunk
 
 		return (int)MathF.Floor(topLeftBasedPos / (float)GameGlobals.TileWidth);
 	}
+	public Godot.Vector3 getGlobalPositionOfTileAt(Godot.Vector3 globalPos)
+	{
+		int row = this.getRowGlobalZ(globalPos.Z);
+		int col = this.getColGlobalX(globalPos.X);
+		int platform = this.getPlatformGlobalY(globalPos.Y);
+
+		return getGlobalPositionOfTile(platform, row, col);
+	}
 	public Godot.Vector3 getGlobalPositionOfTile(int platform, int row, int col)
 	{
 		return ConvertToGlobalPosition( getLocalPositionOfTile(platform, row, col) );
