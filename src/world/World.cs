@@ -50,7 +50,7 @@ public partial class World : Node3D
 	{
 		Godot.Vector3 exactLookUpPos = position / GameGlobals.ChunkWidth;
 		exactLookUpPos.X = MathF.Round(exactLookUpPos.X);
-		exactLookUpPos.Y = MathF.Round(exactLookUpPos.Y);
+		exactLookUpPos.Y = this.WorldPos.Y;
 		exactLookUpPos.Z = MathF.Round(exactLookUpPos.Z);
 
 		exactLookUpPos *= GameGlobals.ChunkWidth;

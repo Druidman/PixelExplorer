@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://bq260ntypcifh"]
 
 [ext_resource type="Script" uid="uid://beqjs68fahra7" path="res://src/objects/SoldierHome/SoldierHome.cs" id="1_m541a"]
-[ext_resource type="ArrayMesh" uid="uid://bpip1u7cqieew" path="res://images/SoldierHome.res" id="1_ud5ya"]
+[ext_resource type="ArrayMesh" uid="uid://b8hlot7xk4xkc" path="res://images/SoldierHome.res" id="1_ud5ya"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_m541a"]
 size = Vector3(2.3, 2.6, 2.3)
