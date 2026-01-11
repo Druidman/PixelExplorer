@@ -3,28 +3,12 @@ using Godot;
 public class MovementKeyboardMouse : Movement
 {
 
-    private Godot.Vector3 characterBodyRotation = new Godot.Vector3();
+    
 
     public MovementKeyboardMouse(Player player) : base(player){}
 
 
-    private void RotateCharacterBody(float angle)
-	{
-		this.player.character.RotateY(angle);
-		this.player.characterCollider.RotateY(angle);
-
-		this.characterBodyRotation = this.player.character.Rotation;
-	}
-    private void RotateCharacterFacingMousePointer(){
-		Godot.Vector2 mousePos = this.player.GetViewport().GetMousePosition(); 
-
-		var Player2DPos = new Godot.Vector2(this.player.Position.X, this.player.Position.Z);
-		var mousePointPos = Player2DPos + (mousePos - (DisplayServer.WindowGetSize() / 2));
-
-		var angle = Player2DPos.AngleToPoint(mousePointPos);
-		RotateCharacterBody(-(angle + this.player.character.Rotation.Y));
-		
-	}
+    
     public override void HandleInputEvent(InputEvent ev)
     {
         if (ev is InputEventMouseMotion eventMouseMotion)
@@ -36,24 +20,9 @@ public class MovementKeyboardMouse : Movement
     }
     public override void HandleProcess(double delta)
     {
-        Vector3 velocity = this.player.Velocity;
+        this.velocity = this.player.Velocity;
 
-		
-		// Add the gravity.
-		if (!GameGlobals.DebugMode)
-		{	
-			// Area3D area = GetNode<Area3D>("Area");
-			// GD.Print(area.GetOverlappingBodies().Count);
-			if (this.player.IsOnFloor() )//|| area.GetOverlappingBodies().Count > 1)
-			{
-				velocity.Y = 0;
-			}
-			else
-			{
-				velocity.Y -= GameGlobals.GravitySpeed * (float)delta;
-			}
-		}
-		
+		this.ApplyGravity(delta);
 		Godot.Vector3 movement = new Godot.Vector3(0.0f,0.0f, 0.0f);
 		
 
@@ -84,7 +53,7 @@ public class MovementKeyboardMouse : Movement
 
 		movement = movement.Normalized();
 
-		movement = movement.Rotated(Godot.Vector3.Up, this.player.character.Rotation.Y);
+		movement = movement.Rotated(Godot.Vector3.Up, this.characterBodyRotation.Y);
 
 
 		if (movement.Z != 0.0f)
@@ -105,6 +74,8 @@ public class MovementKeyboardMouse : Movement
 			velocity.X = Mathf.MoveToward(velocity.X, 0, GameGlobals.PlayerDecelerationSpeed);
 		}
 
-		this.player.Velocity = velocity;
+		this.UpdateVelocity();
+
+		
     }
 }

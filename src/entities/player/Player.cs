@@ -12,6 +12,7 @@ public partial class Player : CharacterBody3D
 	public Camera camera;
 	public bool DebugMode = false;
 
+	public bool isPlacingHome = false;
 
 	[Export]
 	public World world = null;
@@ -40,7 +41,7 @@ public partial class Player : CharacterBody3D
 		this.character = (MeshInstance3D)GetNode("Character");
 		this.characterCollider = (CollisionShape3D)GetNode("CharacterCollider");
 		this.camera = (Camera)GetNode("Camera");
-		movement = new MovementKeyboardMouse(this);
+		movement = new MouseGuidedMovement(this);
 		
 	}
 
@@ -72,7 +73,7 @@ public partial class Player : CharacterBody3D
 		}
 		if (inputEvent is InputEventMouseButton inputEventMouse)
 		{
-			if (inputEventMouse.IsPressed() && homePlacer != null)
+			if (inputEventMouse.IsPressed() && isPlacingHome == true)
 			{
 				
 				PhysicsShapeQueryParameters3D parameters3D = new PhysicsShapeQueryParameters3D();
@@ -98,14 +99,18 @@ public partial class Player : CharacterBody3D
 
 	private void TurnOffHomePlacer()
 	{
+		if (!isPlacingHome) return;
 		this.homePlacer.Visible = false;
 		this.homePlacer.ProcessMode = ProcessModeEnum.Disabled;
+		this.isPlacingHome = false;
 	
 	}
 	private void TurnOnHomePlacer()
 	{
+		if (isPlacingHome) return;
 		this.homePlacer.Visible = true;
 		this.homePlacer.ProcessMode = ProcessModeEnum.Inherit;
+		this.isPlacingHome = true;
 
 	}
 
