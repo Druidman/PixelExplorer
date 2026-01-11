@@ -49,16 +49,18 @@ public class MovementKeyboardMouse : Movement
 		{
 			movement.Z += 1.0f;
 		}
-		movement *= GameGlobals.PlayerSpeed;
-
 		movement = movement.Normalized();
 
-		movement = movement.Rotated(Godot.Vector3.Up, this.characterBodyRotation.Y);
+		movement *= GameGlobals.PlayerSpeed;
+
+		
+
+		movement = movement.Rotated(Godot.Vector3.Up, characterBodyRotation.Y);
 
 
 		if (movement.Z != 0.0f)
 		{
-			velocity.Z = movement.Z* GameGlobals.PlayerSpeed;
+			velocity.Z = movement.Z;
 		}
 		else
 		{
@@ -67,7 +69,7 @@ public class MovementKeyboardMouse : Movement
 
 		if (movement.X != 0.0f)
 		{
-			velocity.X = movement.X * GameGlobals.PlayerSpeed;
+			velocity.X = movement.X;
 		}
 		else
 		{
