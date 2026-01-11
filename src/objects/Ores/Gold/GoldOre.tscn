@@ -4,6 +4,7 @@
 [ext_resource type="ArrayMesh" uid="uid://bw21vjoe76i55" path="res://images/GoldOre.res" id="1_upfh7"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_upfh7"]
+size = Vector3(1.5, 1, 1.5)
 
 [node name="GoldOre" type="StaticBody3D"]
 script = ExtResource("1_uml0t")

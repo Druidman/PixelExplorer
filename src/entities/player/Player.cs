@@ -21,6 +21,9 @@ public partial class Player : CharacterBody3D
 	[Export]
 	SoldierManager soldierManager;
 
+	[Export]
+	SoldierHomePlacer homePlacer;
+
 
 	private int coins = 0;
 
@@ -29,6 +32,7 @@ public partial class Player : CharacterBody3D
 	{
 		GlobalPosition = GameGlobals.PlayerStartPos;
 		soldierManager.Initialize(this);
+		this.TurnOffHomePlacer();
 	}
 	public override void _Ready()
 	{
@@ -52,12 +56,57 @@ public partial class Player : CharacterBody3D
 
 	}
 
+	private void AddHome(Godot.Vector3 pos)
+	{
+		SoldierHome home = GameGlobals.SoldierHomeScene.Instantiate<SoldierHome>();
+		home.Initialize(this,pos);
+		Chunk chunk = this.world.GetChunkAtPos(pos);
+		chunk.AddChild(home);
+	}
+
 	public override void _Input(InputEvent inputEvent)
 	{
 		if (inputEvent is InputEventMouseMotion eventMouseMotion)
 		{
 			movement.HandleInputEvent(inputEvent);
 		}
+		if (inputEvent is InputEventMouseButton inputEventMouse)
+		{
+			if (inputEventMouse.IsPressed() && homePlacer != null)
+			{
+				
+				PhysicsShapeQueryParameters3D parameters3D = new PhysicsShapeQueryParameters3D();
+				parameters3D.Shape = this.homePlacer.GetNode<CollisionShape3D>("CollisionShape3D").Shape;
+
+				Transform3D transform = this.homePlacer.GlobalTransform;
+				parameters3D.Transform = transform;
+				parameters3D.CollisionMask = 1;
+				
+
+				var spaceState = GetWorld3D().DirectSpaceState;
+				var results = spaceState.IntersectShape(parameters3D, 2);
+				if (results.Count <= 1)
+				{
+					AddHome( this.homePlacer.GlobalPosition);
+					TurnOffHomePlacer();
+				}
+				
+				
+			}
+		}
+	}
+
+	private void TurnOffHomePlacer()
+	{
+		this.homePlacer.Visible = false;
+		this.homePlacer.ProcessMode = ProcessModeEnum.Disabled;
+	
+	}
+	private void TurnOnHomePlacer()
+	{
+		this.homePlacer.Visible = true;
+		this.homePlacer.ProcessMode = ProcessModeEnum.Inherit;
+
 	}
 
 	public void removeCoins(int coinsToRemove)
@@ -83,7 +132,16 @@ public partial class Player : CharacterBody3D
 		}
 		if (Input.IsActionJustPressed("SetSoldierHome"))
 		{
-			this.StartSoldierHomePlacing();
+			TurnOnHomePlacer();
+			
+		}
+		if (Input.IsActionPressed("SetSoldierHome"))
+		{
+			this.HandleSoldierHomePlacing();
+		}
+		else
+		{
+			TurnOffHomePlacer();
 		}
 
 	
@@ -92,8 +150,9 @@ public partial class Player : CharacterBody3D
 		
 	}
 
-	private void StartSoldierHomePlacing()
+	private void HandleSoldierHomePlacing()
 	{
+		
 		var spaceState = GetWorld3D().DirectSpaceState;
 		var cam = this.camera;
 		var mousePos = GetViewport().GetMousePosition();
@@ -105,32 +164,27 @@ public partial class Player : CharacterBody3D
 
 		var result = spaceState.IntersectRay(query);
 		Godot.Vector3 hitPos = (Godot.Vector3)result.GetValueOrDefault("position");
-		hitPos.Y = MathF.Round(hitPos.Y,1) - 0.01f;
+		hitPos.Y -= 0.01f; // so that it would point to actual block later 
+	
 
 		Chunk chunk = this.world.GetChunkAtPos(hitPos);
 
-		GD.Print(chunk);
-		int row = chunk.getRowGlobalZ(hitPos.Z);
-		int col = chunk.getColGlobalX(hitPos.X);
-		int platform = chunk.getPlatformGlobalY(hitPos.Y);
-
-		if (chunk.CheckIfTileExists(platform, row, col) == null)
+		if (chunk.CheckIfTileExistsPos(hitPos) == null)
 		{
 			return;
 		}
 		
-		Godot.Vector3 blockPosition = chunk.getGlobalPositionOfTile(platform, row, col);
+		
+		
+		
+	
+		this.homePlacer.GlobalPosition = hitPos;	
+		
+
 
 		
-		GD.Print(hitPos);
-		GD.Print(blockPosition);
 
-		Godot.Vector3 homePos = blockPosition;
-		homePos.Y += 0.5f;
-
-		SoldierHome home = GameGlobals.SoldierHomeScene.Instantiate<SoldierHome>();
-		home.Initialize(this, homePos);
-		chunk.AddChild(home);
+		
 
 	}
 
