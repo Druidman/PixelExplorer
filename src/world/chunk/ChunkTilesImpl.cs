@@ -84,6 +84,11 @@ public partial class Chunk
 		return this.CheckIfTileExists(platform, row, col);
 	}
 
+	public WorldTile GetTileAtPos(Godot.Vector3 globalPos)
+	{
+		return this.CheckIfTileExistsPos(globalPos);
+	}
+
 	public bool CheckIfTileFits(int platform, int row, int col)
 	{
 		if (!CheckIfTileColFits(platform, row, col)) return false;

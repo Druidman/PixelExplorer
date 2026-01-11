@@ -64,8 +64,23 @@ public partial class World : Node3D
 	}
 	public Chunk GetChunkAtExactPos(Godot.Vector3 chunkPosition)
 	{
-		
+
 		return this.chunks.GetValueOrDefault(chunkPosition);
+	}
+
+	public WorldTile GetTileAtPosition(Godot.Vector3 position)
+	{
+		Chunk chunk = this.GetChunkAtPos(position);
+		if (chunk == null)
+		{
+			return null;
+		}
+		WorldTile tile = chunk.GetTileAtPos(position);
+		if (tile == null)
+		{
+			return null;
+		}
+		return tile;
 	}
 
 
