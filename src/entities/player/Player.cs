@@ -174,13 +174,10 @@ public partial class Player : CharacterBody3D
 
 		Chunk chunk = this.world.GetChunkAtPos(hitPos);
 
-		if (chunk.CheckIfTileExistsPos(hitPos) == null)
+		if (chunk.GetTileAtPos((Godot.Vector3I)hitPos) == null)
 		{
 			return;
 		}
-		
-		
-		
 		
 	
 		this.homePlacer.GlobalPosition = hitPos;	
@@ -210,7 +207,7 @@ public partial class Player : CharacterBody3D
 			return;
 		}
 		
-		List<Ore> ores = this.world.GetChunkOres(this.GlobalPosition);
+		List<Ore> ores = this.world.GetChunkOres((Godot.Vector3I)this.GlobalPosition);
 		if (ores == null) return;
 		if (ores.Count < 0) return;
 

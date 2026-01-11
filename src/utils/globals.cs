@@ -7,14 +7,14 @@ class GameGlobals
 
     public static int ChunkCoinLimit = 1;
     public static bool DebugMode = false;
-    public static int ChunkWidth = 16;
-    public static Godot.Vector3 StartWorldMiddle = new Godot.Vector3(0,0,0);
+    public static int ChunkWidth = 17;
+    public static Godot.Vector3I StartWorldMiddle = new Godot.Vector3I(0,0,0);
     public static int chunkRadius = 10;
 
 
     public static int WorldWidth = 500;
-    public static Godot.Vector3 MaxWorldTopLeft = new Godot.Vector3(-WorldWidth / 2,0,-WorldWidth / 2);
-    public static Godot.Vector3 MaxWorldBottomRight = new Godot.Vector3(WorldWidth / 2,0,WorldWidth / 2);
+    public static Godot.Vector3I MaxWorldTopLeft = new Godot.Vector3I(-WorldWidth / 2,0,-WorldWidth / 2);
+    public static Godot.Vector3I MaxWorldBottomRight = new Godot.Vector3I(WorldWidth / 2,0,WorldWidth / 2);
 
     public static Godot.Vector3 PlayerStartPos = new Godot.Vector3(0,200,0);
     public static float GravitySpeed = 20.0f;

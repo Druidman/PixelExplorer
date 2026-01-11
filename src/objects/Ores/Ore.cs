@@ -2,14 +2,14 @@ using Godot;
 
 public partial class Ore : StaticBody3D
 {
-	Godot.Vector3 pos;
-	public void Initialize(Godot.Vector3 pos)
+	Godot.Vector3 globalPos;
+	public void Initialize(Godot.Vector3 globalPos)
 	{
-		this.pos = pos;
+		this.globalPos = globalPos;
 	}
 
 	public override void _Ready()
 	{
-		this.GlobalPosition = pos;
+		this.GlobalPosition = globalPos;
 	}
 }

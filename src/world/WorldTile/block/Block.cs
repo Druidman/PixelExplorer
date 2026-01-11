@@ -1,24 +1,41 @@
 
 using System.Collections.Generic;
-using System.Text;
 using Godot;
 
-public class WorldTile
+public enum Face
 {
-    float Size = GameGlobals.TileWidth;
-    public Godot.Vector3 Position;
-   
+    Top,
+    Bottom,
+    Right,
+    Left,
+    Front,
+    Back
+}
+public enum BlockType
+{
+    Grass, Sand, Stone
+}
+public enum BlockSideUvInd
+{
+    Top,
+    Side,
+    Bottom
+}
+public class Block : WorldTile
+{
     private List<Godot.Vector3> Vertices = new List<Godot.Vector3>();
     private List<Godot.Vector3> Normals = new List<Godot.Vector3>();
     private List<Godot.Vector2> Uvs = new List<Godot.Vector2>();
 
     public BlockType blockType = BlockType.Sand;
 
-    public WorldTile(Godot.Vector3 pos, BlockType typeB)
+    public Block(Godot.Vector3I pos, BlockType blockType) : 
+    base(
+        WorldTileState.Occupied, 
+        pos
+    )
     {
-        this.Position = pos;
-        this.blockType = typeB;
-        
+        this.blockType = blockType;
         this.SetVertices();
     }
     public List<Godot.Vector3> GetVertices()
@@ -97,20 +114,20 @@ public class WorldTile
         {
             vertices = new List<Godot.Vector3>
             {
-                this.Position + (new Godot.Vector3(-0.5f,  0.5f, -0.5f) * this.Size),
-                this.Position + (new Godot.Vector3( 0.5f,  0.5f, -0.5f) * this.Size),
-                this.Position + (new Godot.Vector3( 0.5f,  0.5f,  0.5f) * this.Size),
-                this.Position + (new Godot.Vector3(-0.5f,  0.5f,  0.5f) * this.Size)
+                this.position + (new Godot.Vector3(-0.5f,  0.5f, -0.5f) * GameGlobals.TileWidth),
+                this.position + (new Godot.Vector3( 0.5f,  0.5f, -0.5f) * GameGlobals.TileWidth),
+                this.position + (new Godot.Vector3( 0.5f,  0.5f,  0.5f) * GameGlobals.TileWidth),
+                this.position + (new Godot.Vector3(-0.5f,  0.5f,  0.5f) * GameGlobals.TileWidth)
             };
         }
         else if (direction == Godot.Vector3.Down)
         {
             vertices = new List<Godot.Vector3>
             {
-                this.Position + (new Godot.Vector3(-0.5f, -0.5f,  0.5f) * this.Size),
-                this.Position + (new Godot.Vector3( 0.5f, -0.5f,  0.5f) * this.Size),
-                this.Position + (new Godot.Vector3( 0.5f, -0.5f, -0.5f) * this.Size),
-                this.Position + (new Godot.Vector3(-0.5f, -0.5f, -0.5f) * this.Size)
+                this.position + (new Godot.Vector3(-0.5f, -0.5f,  0.5f) * GameGlobals.TileWidth),
+                this.position + (new Godot.Vector3( 0.5f, -0.5f,  0.5f) * GameGlobals.TileWidth),
+                this.position + (new Godot.Vector3( 0.5f, -0.5f, -0.5f) * GameGlobals.TileWidth),
+                this.position + (new Godot.Vector3(-0.5f, -0.5f, -0.5f) * GameGlobals.TileWidth)
             };
         }
         else if (direction == Godot.Vector3.Left)
@@ -119,20 +136,20 @@ public class WorldTile
             {
                 
                 
-                this.Position + (new Godot.Vector3(-0.5f,  0.5f, -0.5f) * this.Size),
-                this.Position + (new Godot.Vector3(-0.5f,  0.5f,  0.5f) * this.Size),
-                this.Position + (new Godot.Vector3(-0.5f, -0.5f,  0.5f) * this.Size),
-                this.Position + (new Godot.Vector3(-0.5f, -0.5f, -0.5f) * this.Size),
+                this.position + (new Godot.Vector3(-0.5f,  0.5f, -0.5f) * GameGlobals.TileWidth),
+                this.position + (new Godot.Vector3(-0.5f,  0.5f,  0.5f) * GameGlobals.TileWidth),
+                this.position + (new Godot.Vector3(-0.5f, -0.5f,  0.5f) * GameGlobals.TileWidth),
+                this.position + (new Godot.Vector3(-0.5f, -0.5f, -0.5f) * GameGlobals.TileWidth),
             };
         }
         else if (direction == Godot.Vector3.Right)
         {
             vertices = new List<Godot.Vector3>
             {
-                this.Position + (new Godot.Vector3( 0.5f,  0.5f,  0.5f) * this.Size),
-                this.Position + (new Godot.Vector3( 0.5f,  0.5f, -0.5f) * this.Size),
-                this.Position + (new Godot.Vector3( 0.5f, -0.5f, -0.5f) * this.Size),
-                this.Position + (new Godot.Vector3( 0.5f, -0.5f,  0.5f) * this.Size),
+                this.position + (new Godot.Vector3( 0.5f,  0.5f,  0.5f) * GameGlobals.TileWidth),
+                this.position + (new Godot.Vector3( 0.5f,  0.5f, -0.5f) * GameGlobals.TileWidth),
+                this.position + (new Godot.Vector3( 0.5f, -0.5f, -0.5f) * GameGlobals.TileWidth),
+                this.position + (new Godot.Vector3( 0.5f, -0.5f,  0.5f) * GameGlobals.TileWidth),
                 
                 
             };
@@ -142,20 +159,20 @@ public class WorldTile
             vertices = new List<Godot.Vector3>
             {
                 
-                this.Position + (new Godot.Vector3( 0.5f,  0.5f, -0.5f) * this.Size),
-                this.Position + (new Godot.Vector3(-0.5f,  0.5f, -0.5f) * this.Size),
-                this.Position + (new Godot.Vector3(-0.5f, -0.5f, -0.5f) * this.Size),
-                this.Position + (new Godot.Vector3( 0.5f, -0.5f, -0.5f) * this.Size),
+                this.position + (new Godot.Vector3( 0.5f,  0.5f, -0.5f) * GameGlobals.TileWidth),
+                this.position + (new Godot.Vector3(-0.5f,  0.5f, -0.5f) * GameGlobals.TileWidth),
+                this.position + (new Godot.Vector3(-0.5f, -0.5f, -0.5f) * GameGlobals.TileWidth),
+                this.position + (new Godot.Vector3( 0.5f, -0.5f, -0.5f) * GameGlobals.TileWidth),
             };
         }
         else if (direction == Godot.Vector3.Back)
         {
             vertices = new List<Godot.Vector3>
             {
-                this.Position + (new Godot.Vector3(-0.5f,  0.5f,  0.5f) * this.Size),
-                this.Position + (new Godot.Vector3( 0.5f,  0.5f,  0.5f) * this.Size),
-                this.Position + (new Godot.Vector3( 0.5f, -0.5f,  0.5f) * this.Size),
-                this.Position + (new Godot.Vector3(-0.5f, -0.5f,  0.5f) * this.Size),
+                this.position + (new Godot.Vector3(-0.5f,  0.5f,  0.5f) * GameGlobals.TileWidth),
+                this.position + (new Godot.Vector3( 0.5f,  0.5f,  0.5f) * GameGlobals.TileWidth),
+                this.position + (new Godot.Vector3( 0.5f, -0.5f,  0.5f) * GameGlobals.TileWidth),
+                this.position + (new Godot.Vector3(-0.5f, -0.5f,  0.5f) * GameGlobals.TileWidth),
                 
             };
         }

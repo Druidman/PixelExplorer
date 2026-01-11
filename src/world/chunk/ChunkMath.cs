@@ -3,68 +3,42 @@ using System;
 public partial class Chunk
 {
 
-    public bool CheckIfGlobalPosFits(Godot.Vector3 GlobalPos)
+    public bool CheckIfValidGlobalPosition(Godot.Vector3 globalPosition)
 	{
-		return CheckIfValidTileIndicies(
-			getPlatformGlobalY(GlobalPos.Y),
-			getRowGlobalZ(GlobalPos.Z),
-			getColGlobalX(GlobalPos.X)
-			
+
+		if (
+			globalPosition.Y < this.chunkPos.Y ||
+
+			globalPosition.X < this.chunkTopLeft.X ||
+			globalPosition.X > this.chunkBottomRight.X ||
+
+			globalPosition.Z < this.chunkTopLeft.Z ||
+			globalPosition.Z > this.chunkBottomRight.Z
+		)
+		{
+			return false;
+		}
+
+		return true;
+	}
+
+	public bool CheckIfValidTileGlobalPosition(Godot.Vector3I globalTilePosition)
+	{
+		return this.CheckIfValidGlobalPosition(globalTilePosition);
+	}
+
+
+	public bool CheckIfValidLocalPosition(Godot.Vector3 localPosition)
+	{
+		return CheckIfValidGlobalPosition(
+			ConvertToGlobalPosition(localPosition)
 		);
-		
 	}
-	public bool CheckIfLocalPosFits(Godot.Vector3 localPos)
+	public bool CheckIfValidLocalTilePosition(Godot.Vector3I localTilePosition)
 	{
-		return CheckIfGlobalPosFits(ConvertToGlobalPosition(localPos));
-	
+		return CheckIfValidLocalPosition(localTilePosition);
 	}
-    public int getPlatformGlobalY(float y)
-	{	
-
-		if (y < 0 || y >= Height) return -1;
-
-		float topLeftBasedPos = y - this.chunkTopLeft.Y;
-		
-
-		return (int)MathF.Floor(topLeftBasedPos / (float)GameGlobals.TileWidth);
-	}
-
-	public int getRowGlobalZ(float z)
-	{	
-
-		float topLeftBasedPos = z - this.chunkTopLeft.Z;
-
-		return (int)MathF.Floor(topLeftBasedPos / (float)GameGlobals.TileWidth);
-	}
-	public int getColGlobalX(float x)
-	{	
-
-		float topLeftBasedPos = x - this.chunkTopLeft.X;
-
-		return (int)MathF.Floor(topLeftBasedPos / (float)GameGlobals.TileWidth);
-	}
-	public Godot.Vector3 getGlobalPositionOfTileAt(Godot.Vector3 globalPos)
-	{
-		int row = this.getRowGlobalZ(globalPos.Z);
-		int col = this.getColGlobalX(globalPos.X);
-		int platform = this.getPlatformGlobalY(globalPos.Y);
-
-		return getGlobalPositionOfTile(platform, row, col);
-	}
-	public Godot.Vector3 getGlobalPositionOfTile(int platform, int row, int col)
-	{
-		return ConvertToGlobalPosition( getLocalPositionOfTile(platform, row, col) );
-	}
-
-	public Godot.Vector3 getLocalPositionOfTile(int platform, int row, int col)
-	{
-		return new Godot.Vector3(
-			col + 0.5f, 
-			platform, 
-			row + 0.5f
-		) + this.chunkTopLeft - this.chunkPos;
-	}
-	public Godot.Vector3 ConvertToLocalChunkPos(Godot.Vector3 globalPos)
+	public Godot.Vector3 ConvertToLocalPosition(Godot.Vector3 globalPos)
 	{
 		return globalPos - this.chunkPos;
 	}
