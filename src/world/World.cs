@@ -42,13 +42,11 @@ public partial class World : Node3D
 		// Wierd I didn't use ai to explain this XDD
 
 		int x = (int)MathF.Round(globalPosition.X / (float)GameGlobals.ChunkWidth);
-		int y = (int)MathF.Round(globalPosition.Y / (float)GameGlobals.ChunkWidth);
 		int z = (int)MathF.Round(globalPosition.Z / (float)GameGlobals.ChunkWidth);
 
 
 
-		return (new Godot.Vector3I(x, y, z) )
-			* GameGlobals.ChunkWidth;
+		return new Godot.Vector3I(x* GameGlobals.ChunkWidth, this.WorldPos.Y, z* GameGlobals.ChunkWidth);
 	}
 
 	public bool CheckIfValidPosition(Godot.Vector3 globalPos)

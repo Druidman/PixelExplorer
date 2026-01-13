@@ -42,6 +42,10 @@ public partial class Chunk
 	{
 		return globalPos - this.chunkPos;
 	}
+	public Godot.Vector3I ConvertToLocalPosition(Godot.Vector3I globalPos)
+	{
+		return globalPos - this.chunkPos;
+	}
 	public Godot.Vector3 ConvertToGlobalPosition(Godot.Vector3 localPos)
 	{
 		return localPos + this.chunkPos;

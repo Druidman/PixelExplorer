@@ -17,7 +17,7 @@ public partial class Chunk
 	}
 	public WorldTile GetTileAtPos(Godot.Vector3I globalPos)
 	{
-		return this.tiles.GetValueOrDefault(globalPos);
+		return this.tiles.GetValueOrDefault(ConvertToLocalPosition(globalPos));
 	}
     
 	

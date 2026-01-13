@@ -173,6 +173,11 @@ public partial class Player : CharacterBody3D
 	
 
 		Chunk chunk = this.world.GetChunkAtPos(hitPos);
+		if (chunk == null)
+		{
+			GD.Print(hitPos);
+			return;
+		}
 
 		if (chunk.GetTileAtPos((Godot.Vector3I)hitPos) == null)
 		{
