@@ -62,11 +62,7 @@ public partial class Chunk : Node3D
 
 		this.chunkCoinManager = new ChunkCoinManager(this);
 		this.chunkCoinManager.UpdateCoins(); // gen base one
-		GD.Print(chunkPos);
-		GD.Print(chunkTopLeft);
-		GD.Print(chunkTopRight);
-		GD.Print(chunkBottomLeft);
-		GD.Print(chunkBottomRight);
+
 	}
 	public override void _EnterTree()
 	{
@@ -109,7 +105,7 @@ public partial class Chunk : Node3D
 		int i =1;
 		foreach (WorldTile tile in this.tiles.Values)
 		{
-			GD.Print(i + " " + tile + " " + (tile is Block));
+	
 			if (tile is Block block)
 			{
 				
@@ -179,14 +175,13 @@ public partial class Chunk : Node3D
 				if (!CheckIfValidTileGlobalPosition(globalTilePosition))
 				{
 					throw new Exception("Wrong position somehow " + globalTilePosition + ' ' + localTilePosition);
-					// continue; // smth went wrong, not acceptable position
 				}
 	
 				BlockType blockType = BlockType.Grass;
 				
 				
 				UpdateTile(localTilePosition, new Block(localTilePosition, blockType));
-				GD.Print(i + " " + localTilePosition);
+				
 				i++;
 				
 			}	

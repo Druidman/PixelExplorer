@@ -9,7 +9,7 @@ class GameGlobals
     public static bool DebugMode = false;
     public static int ChunkWidth = 17;
     public static Godot.Vector3I StartWorldMiddle = new Godot.Vector3I(0,0,0);
-    public static int chunkRadius = 2;
+    public static int chunkRadius = 10;
 
 
     public static int WorldWidth = 500;

@@ -40,7 +40,7 @@ public class ChunkCoinManager : CoinManager
 				
 				int y = this.chunk.world.getBlockHeightAtPos(x,z) + 1;
 
-				localPos = new Godot.Vector3I(x,y,z);
+				localPos = (Godot.Vector3I)this.chunk.ConvertToLocalPosition(new Godot.Vector3I(x,y,z));
 				
 
 			} while (this.coins.ContainsKey(localPos));
