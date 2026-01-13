@@ -52,8 +52,7 @@ public partial class Soldier : Node3D
 
 		if (isWallInFront && isMoving)
 		{
-			GD.Print("UP VELO!");
-			GD.Print(velocity);
+	
 			velocity.Y = GameGlobals.PlayerJumpForce * 0.1f;
 		}
 
