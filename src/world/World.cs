@@ -41,8 +41,13 @@ public partial class World : Node3D
 		//
 		// Wierd I didn't use ai to explain this XDD
 
+		int x = (int)MathF.Round(globalPosition.X / (float)GameGlobals.ChunkWidth);
+		int y = (int)MathF.Round(globalPosition.Y / (float)GameGlobals.ChunkWidth);
+		int z = (int)MathF.Round(globalPosition.Z / (float)GameGlobals.ChunkWidth);
 
-		return (new Godot.Vector3I((int)globalPosition.X, this.WorldPos.Y, (int)globalPosition.Z) / GameGlobals.ChunkWidth) 
+
+
+		return (new Godot.Vector3I(x, y, z) )
 			* GameGlobals.ChunkWidth;
 	}
 
