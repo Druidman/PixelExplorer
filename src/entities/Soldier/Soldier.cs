@@ -53,7 +53,7 @@ public partial class Soldier : Node3D
 		if (isWallInFront && isMoving)
 		{
 	
-			velocity.Y = GameGlobals.PlayerJumpForce * 0.1f;
+			velocity.Y = GameGlobals.PlayerJumpForce * 0.2f;
 		}
 
 		this.GlobalPosition += velocity;

@@ -157,6 +157,8 @@ public partial class Player : CharacterBody3D
 
 	private void HandleSoldierHomePlacing()
 	{
+
+		
 		
 		var spaceState = GetWorld3D().DirectSpaceState;
 		var cam = this.camera;
