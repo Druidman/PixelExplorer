@@ -73,7 +73,7 @@ public partial class Player : CharacterBody3D
 		}
 		if (inputEvent is InputEventMouseButton inputEventMouse)
 		{
-			if (inputEventMouse.IsPressed() && isPlacingHome == true)
+			if (inputEventMouse.IsPressed() && isPlacingHome == true && this.coins >= GameGlobals.housePrice)
 			{
 				
 				PhysicsShapeQueryParameters3D parameters3D = new PhysicsShapeQueryParameters3D();
@@ -89,6 +89,7 @@ public partial class Player : CharacterBody3D
 				if (results.Count <= 1)
 				{
 					AddHome( this.homePlacer.GlobalPosition);
+					this.coins -= GameGlobals.housePrice;
 					TurnOffHomePlacer();
 				}
 				
@@ -189,12 +190,6 @@ public partial class Player : CharacterBody3D
 	
 		this.homePlacer.GlobalPosition = hitPos;	
 		
-
-
-		
-
-		
-
 	}
 
 	public void ExpandSoldierSlots(int slotsDelta)
