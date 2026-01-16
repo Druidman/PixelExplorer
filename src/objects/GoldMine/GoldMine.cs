@@ -1,5 +1,7 @@
 using Godot;
 using System.Collections.Generic;
+
+
 public partial class GoldMine : StaticBody3D
 {
 	Player player = null;

@@ -60,7 +60,7 @@ public partial class Player : CharacterBody3D
 	private void AddHome(Godot.Vector3 pos)
 	{
 		SoldierHome home = GameGlobals.SoldierHomeScene.Instantiate<SoldierHome>();
-		home.Initialize(this,pos);
+		home.Initialize(this,pos,this.world);
 		Chunk chunk = this.world.GetChunkAtPos(pos);
 		chunk.AddChild(home);
 	}
@@ -75,22 +75,18 @@ public partial class Player : CharacterBody3D
 		{
 			if (inputEventMouse.IsPressed() && isPlacingHome == true && this.coins >= GameGlobals.housePrice)
 			{
-				GD.Print("homePlacer pos: ", this.homePlacer.GlobalPosition);
-				List<Godot.Vector3I> requiredTiles = this.world.GenShapeTilePositions(
-					this.world.GetTilePosition(this.homePlacer.GlobalPosition) + new Godot.Vector3I(0,1,0),
-					2,
-					1
-				);
-				foreach (Godot.Vector3 pos in requiredTiles)
-				{
-					GD.Print("Pos: ", pos);
-				}
 				
+				List<Godot.Vector3> tiles = new List<Godot.Vector3>(GameGlobals.SoldierHomeOccupiedTiles);
+
+				for (int i = 0; i< tiles.Count; i++)
+				{
+					tiles[i] += this.homePlacer.GlobalPosition;
+				}
 
 				
-				if (this.world.CheckIfFreeSpace(requiredTiles))
+				if (this.world.CheckIfFreeSpace(tiles))
 				{
-					AddHome( this.homePlacer.GlobalPosition);
+					AddHome( this.homePlacer.GlobalPosition );
 					this.coins -= GameGlobals.housePrice;
 					TurnOffHomePlacer();
 				}
@@ -199,7 +195,7 @@ public partial class Player : CharacterBody3D
 		}
 		
 	
-		this.homePlacer.GlobalPosition = this.world.GetTilePosition(hitPos) + new Godot.Vector3(0,0.5f,0);	
+		this.homePlacer.GlobalPosition = this.world.GetTilePosition(hitPos) + new Godot.Vector3(0,0.5f,0) +GameGlobals.soldierHomePositionOffset;	
 		
 	}
 
