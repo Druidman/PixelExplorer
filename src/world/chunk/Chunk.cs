@@ -83,6 +83,9 @@ public partial class Chunk : Node3D
 			foreach (Ore ore in ores)
 			{
 				AddChild(ore);
+				this.UpdateTile(
+					(Godot.Vector3I)this.ConvertToLocalPosition(ore.globalPos), 
+					new WorldTile(WorldTileState.Occupied, (Godot.Vector3I)this.ConvertToLocalPosition(ore.globalPos)));
 			}
 		}
 		

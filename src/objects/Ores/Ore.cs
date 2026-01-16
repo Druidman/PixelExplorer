@@ -2,7 +2,7 @@ using Godot;
 
 public partial class Ore : StaticBody3D
 {
-	Godot.Vector3 globalPos;
+	public Godot.Vector3 globalPos;
 	public void Initialize(Godot.Vector3 globalPos)
 	{
 		this.globalPos = globalPos;

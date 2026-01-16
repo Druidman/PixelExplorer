@@ -19,6 +19,22 @@ public partial class Chunk
 	{
 		return this.tiles.GetValueOrDefault(ConvertToLocalPosition(globalPos));
 	}
+	public bool CheckIfSpaceOccupied(Godot.Vector3I globalPos)
+	{
+		WorldTile tile = this.GetTileAtPos(globalPos);
+		if (tile == null)
+		{
+			return false;
+		}
+		if (tile.state == WorldTileState.Occupied)
+		{
+			return true;
+		}
+		else {
+			return false;
+		}
+
+	}
     
 	
 

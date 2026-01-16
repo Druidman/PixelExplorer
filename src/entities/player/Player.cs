@@ -26,7 +26,7 @@ public partial class Player : CharacterBody3D
 	SoldierHomePlacer homePlacer;
 
 
-	private int coins = 0;
+	private int coins = GameGlobals.PlayerStartCoins;
 
 	public int SoldierSlots = 2;
 	public override void _EnterTree()
@@ -75,25 +75,31 @@ public partial class Player : CharacterBody3D
 		{
 			if (inputEventMouse.IsPressed() && isPlacingHome == true && this.coins >= GameGlobals.housePrice)
 			{
+				GD.Print("homePlacer pos: ", this.homePlacer.GlobalPosition);
+				List<Godot.Vector3I> requiredTiles = this.world.GenShapeTilePositions(
+					this.world.GetTilePosition(this.homePlacer.GlobalPosition) + new Godot.Vector3I(0,1,0),
+					2,
+					1
+				);
+				foreach (Godot.Vector3 pos in requiredTiles)
+				{
+					GD.Print("Pos: ", pos);
+				}
 				
-				PhysicsShapeQueryParameters3D parameters3D = new PhysicsShapeQueryParameters3D();
-				parameters3D.Shape = this.homePlacer.GetNode<CollisionShape3D>("CollisionShape3D").Shape;
 
-				Transform3D transform = this.homePlacer.GlobalTransform;
-				parameters3D.Transform = transform;
-				parameters3D.CollisionMask = 1;
 				
-
-				var spaceState = GetWorld3D().DirectSpaceState;
-				var results = spaceState.IntersectShape(parameters3D, 2);
-				if (results.Count <= 1)
+				if (this.world.CheckIfFreeSpace(requiredTiles))
 				{
 					AddHome( this.homePlacer.GlobalPosition);
 					this.coins -= GameGlobals.housePrice;
 					TurnOffHomePlacer();
 				}
+				else
+				{
+					return;
+				}
 				
-				
+
 			}
 		}
 	}
@@ -188,7 +194,7 @@ public partial class Player : CharacterBody3D
 		}
 		
 	
-		this.homePlacer.GlobalPosition = hitPos;	
+		this.homePlacer.GlobalPosition = this.world.GetTilePosition(hitPos) + new Godot.Vector3(0,0.5f,0);	
 		
 	}
 

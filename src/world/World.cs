@@ -49,6 +49,52 @@ public partial class World : Node3D
 		return new Godot.Vector3I(x* GameGlobals.ChunkWidth, this.WorldPos.Y, z* GameGlobals.ChunkWidth);
 	}
 
+	public List<Godot.Vector3I> GenShapeTilePositions(Godot.Vector3I originPos, int tilesXZ = 1, int tilesY = 1)
+	{
+		List<Godot.Vector3I> tilePositions = new List<Vector3I>();	
+
+		Godot.Vector3I shapeTopLeft = originPos - new Godot.Vector3I(GameGlobals.TileWidth * (tilesXZ - 1), GameGlobals.TileWidth * (tilesY - 1), GameGlobals.TileWidth * (tilesXZ - 1));
+		Godot.Vector3I shapeBottomRight = originPos + new Godot.Vector3I(GameGlobals.TileWidth * (tilesXZ - 1), GameGlobals.TileWidth * (tilesY - 1), GameGlobals.TileWidth * (tilesXZ - 1));
+		
+		for (int x = shapeTopLeft.X; x <= shapeBottomRight.X; x += GameGlobals.TileWidth)
+		{
+			for (int y = shapeTopLeft.Y; y <= shapeBottomRight.Y; y += GameGlobals.TileWidth)
+			{
+				for (int z = shapeTopLeft.Z; z <= shapeBottomRight.Z; z += GameGlobals.TileWidth)
+				{
+					tilePositions.Add(new Godot.Vector3I(x,y,z));
+				}
+			}
+			
+		}
+		return tilePositions;
+	}
+
+	public bool CheckIfFreeSpace(List<Godot.Vector3I> tilePositions)
+	{
+		foreach (Godot.Vector3I tilePos in tilePositions)
+		{
+			Chunk chunk = this.GetChunkAtPos(tilePos);
+			if (chunk == null)
+			{
+				continue;
+			}
+			WorldTile tile = chunk.GetTileAtPos(tilePos);
+			if (tile != null)
+			{
+				
+				GD.Print("State: ", tile.state);
+				GD.Print("Position: ", tile.position);
+			}
+			if (chunk.CheckIfSpaceOccupied(tilePos))
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+	
+
 	public bool CheckIfValidPosition(Godot.Vector3 globalPos)
 	{
 		if (
@@ -89,10 +135,15 @@ public partial class World : Node3D
 		}
 		return tile;
 	}
+
+	public Godot.Vector3I GetTilePosition(Godot.Vector3 globalPos)
+	{
+		return (Godot.Vector3I)globalPos; // TODO this works just for tileSize = 1
+	}
 	public WorldTile GetTileAtGlobalPosition(Godot.Vector3 globalPosition)
 	{
 		
-		return this.GetTileAtExactGlobalPosition((Godot.Vector3I)globalPosition); // TODO this works just for tileSize = 1
+		return this.GetTileAtExactGlobalPosition(this.GetTilePosition(globalPosition)); 
 	}
 
 
@@ -127,6 +178,8 @@ public partial class World : Node3D
 		float y = getNoiseValue(x,z) * 15f;
 		// now y is a float which we don't like for our world so we put it in 0-1-2-3..-50range for tiling
 		return (int)y;
+
+		// return 5;
 	}
 
 	public Godot.Vector3I GetRandomPosInWorld()
