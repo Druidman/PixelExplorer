@@ -1,5 +1,5 @@
 using Godot;
-
+using System.Collections.Generic;
 public partial class GoldMine : StaticBody3D
 {
 	Player player = null;
@@ -8,6 +8,7 @@ public partial class GoldMine : StaticBody3D
 	public override void _Ready()
 	{
 		this.GlobalPosition = pos;
+		
 	}
 	public void Initialize(Player player, Godot.Vector3 position)
 	{

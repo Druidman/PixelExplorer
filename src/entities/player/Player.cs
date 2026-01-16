@@ -188,7 +188,12 @@ public partial class Player : CharacterBody3D
 			return;
 		}
 
-		if (chunk.GetTileAtPos((Godot.Vector3I)hitPos) == null)
+		WorldTile tile = chunk.GetTileAtPos((Godot.Vector3I)hitPos);
+		if (tile == null)
+		{
+			return;
+		}
+		if (tile is not Block)
 		{
 			return;
 		}

@@ -22,7 +22,7 @@ public class OreManager
 			pos.Y += 1;
 
 			Ore ore = GameGlobals.GoldOreScene.Instantiate<Ore>();
-			ore.Initialize(pos);
+			ore.Initialize(pos, this.world);
 
 			Godot.Vector3I chunkPos = this.world.GetChunkPositionFromGlobalPos(pos);
 			if (this.ores.GetValueOrDefault(chunkPos) == null)

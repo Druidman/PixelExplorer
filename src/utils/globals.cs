@@ -54,6 +54,8 @@ class GameGlobals
 
     public static int SoldierCost = 5;
 
+    public static List<Godot.Vector3> OreOccupiedTiles = [new Godot.Vector3(0,0,0)];
+
 
     public static void Initialize()
     {
