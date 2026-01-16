@@ -70,28 +70,32 @@ public partial class World : Node3D
 		return tilePositions;
 	}
 
+	public bool CheckIfFreeSpace(Godot.Vector3I tilePosition)
+	{
+		Chunk chunk = this.GetChunkAtPos(tilePosition);
+		if (chunk == null)
+		{
+			return true;
+		}
+		WorldTile tile = chunk.GetTileAtPos(tilePosition);
+		if (tile == null)
+		{
+			return true;
+		}
+		if (chunk.CheckIfSpaceOccupied(tilePosition))
+		{
+			return false;
+		}
+		return true;
+	}
 	public bool CheckIfFreeSpace(List<Godot.Vector3> tilePositions)
 	{
 		foreach (Godot.Vector3 tilePos in tilePositions)
 		{
-
-			
-			Chunk chunk = this.GetChunkAtPos(tilePos);
-			if (chunk == null)
-			{
-				continue;
-			}
-			WorldTile tile = chunk.GetTileAtPos((Godot.Vector3I)tilePos);
-			if (tile != null)
-			{
-				
-				GD.Print("State: ", tile.state);
-				GD.Print("Position: ", tile.position);
-			}
-			if (chunk.CheckIfSpaceOccupied((Godot.Vector3I)tilePos))
+			if (!CheckIfFreeSpace((Godot.Vector3I)tilePos))
 			{
 				return false;
-			}
+			}	
 		}
 		return true;
 	}

@@ -3,11 +3,9 @@
 [ext_resource type="Script" uid="uid://bifs7anyqjm7" path="res://src/entities/Soldier/Soldier.cs" id="1_r672h"]
 [ext_resource type="ArrayMesh" uid="uid://oj10peiig47c" path="res://images/SoldierMesh.res" id="2_d8nwj"]
 
-[node name="Soldier" type="Node3D" node_paths=PackedStringArray("BottomRayCast", "LeftRayCast", "RightRayCast")]
+[node name="Soldier" type="Node3D" node_paths=PackedStringArray("BottomRayCast")]
 script = ExtResource("1_r672h")
 BottomRayCast = NodePath("Bottom")
-LeftRayCast = NodePath("Left")
-RightRayCast = NodePath("Right")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.2, 0, 0, 0, -8.742278e-09, 0.2, 0, -0.2, -8.742278e-09, -0.1, 0, -0.3)
@@ -15,11 +13,3 @@ mesh = ExtResource("2_d8nwj")
 
 [node name="Bottom" type="RayCast3D" parent="."]
 target_position = Vector3(0, -2, 0)
-
-[node name="Right" type="RayCast3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, 0.5, 0.5)
-target_position = Vector3(1, 0, 0)
-
-[node name="Left" type="RayCast3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, 0.5, -0.5)
-target_position = Vector3(1, 0, 0)

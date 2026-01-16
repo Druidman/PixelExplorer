@@ -6,10 +6,7 @@ public partial class Soldier : Node3D
 
 	[Export]
 	RayCast3D BottomRayCast;
-	[Export]
-	RayCast3D LeftRayCast;
-	[Export]
-	RayCast3D RightRayCast;
+
 	private Player player;
 
 	private Godot.Vector3 relativeToPlayer;
@@ -39,7 +36,7 @@ public partial class Soldier : Node3D
 	{
 		
 		bool isGroundUnder = this.BottomRayCast.IsColliding();
-		bool isWallInFront = this.LeftRayCast.IsColliding() || this.RightRayCast.IsColliding();
+		bool isWallInFront = !this.player.world.CheckIfFreeSpace(this.player.world.GetTilePosition(this.GlobalPosition + new Godot.Vector3(0,0.5f,0)));
 
 		if (isGroundUnder){
 			GlobalPosition = new Vector3(
