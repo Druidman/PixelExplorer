@@ -240,7 +240,7 @@ public partial class Player : CharacterBody3D
 	
 
 		GoldMine mine = GameGlobals.GoldMineScene.Instantiate<GoldMine>();
-		mine.Initialize(this, selectedOre.GlobalPosition);
+		mine.Initialize(this, selectedOre.GlobalPosition, this.world);
 
 		selectedOre.AddChild(mine);
 

@@ -4,13 +4,13 @@
 [ext_resource type="ArrayMesh" uid="uid://cx2r8iibc5uyb" path="res://images/SoldierHomePlacer.res" id="2_00yub"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_00yub"]
-size = Vector3(3, 3, 3)
+size = Vector3(2, 2.5, 2)
 
 [node name="SoldierHomePlacer" type="Node3D"]
 script = ExtResource("1_00yub")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
 shape = SubResource("BoxShape3D_00yub")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
