@@ -47,10 +47,7 @@ public partial class WorldObjectPlacer : Node3D
 
 	private bool PlaceObject()
 	{
-		if (!this.world.CheckIfFreeSpace(this.currentObjectPlacerObject.GetOccupiedTiles()))
-		{
-			return false;
-		}
+		
 		return this.currentObjectPlacerObject.PlaceObject(this.world, this.player);
 	}
 
@@ -131,9 +128,9 @@ public partial class WorldObjectPlacer : Node3D
 		
 		
 	// }
-	private void HandleObjectPlacing()
-	{
 
+	private Godot.Vector3 GetMouseHitPos()
+	{
 		var spaceState = GetWorld3D().DirectSpaceState;
 		var cam = GetViewport().GetCamera3D();
 		var mousePos = GetViewport().GetMousePosition();
@@ -145,9 +142,13 @@ public partial class WorldObjectPlacer : Node3D
 
 		var result = spaceState.IntersectRay(query);
 		Godot.Vector3 hitPos = (Godot.Vector3)result.GetValueOrDefault("position");
-		hitPos.Y -= 0.1f; // so that it would point to actual block later 
-		
-	
+		hitPos.Y -= 0.1f; // so that it would point to actual block later '
+		return hitPos;
+	}
+	private void HandleObjectPlacing()
+	{
+
+		Godot.Vector3 hitPos = GetMouseHitPos();
 
 		Chunk chunk = this.world.GetChunkAtPos(hitPos);
 		if (chunk == null)
@@ -166,7 +167,7 @@ public partial class WorldObjectPlacer : Node3D
 			return;
 		}
 		
-		GD.Print("POS: ", hitPos );
+	
 		currentObjectPlacerObject.GlobalPosition = this.world.GetTilePosition(hitPos) + new Godot.Vector3(0,0.5f,0) + currentObjectPlacerObject.positionOffset;	
 		
 	}

@@ -4,6 +4,7 @@ using Godot;
 public class OreManager
 {
 	private Dictionary<Godot.Vector3I, List<Ore>> ores = new Dictionary<Godot.Vector3I, List<Ore>>();
+	private Dictionary<Godot.Vector3I, Ore> oresItself = new Dictionary<Godot.Vector3I, Ore>();
 	public World world = null;
 
 	public OreManager(World world) {
@@ -13,6 +14,10 @@ public class OreManager
 	public List<Ore> GetOresAtChunkPos(Godot.Vector3I chunkPosition)
 	{
 		return this.ores.GetValueOrDefault(chunkPosition);
+	}
+	public Ore GetOreAtPos(Godot.Vector3I oreGlobalPos)
+	{
+		return this.oresItself.GetValueOrDefault(oreGlobalPos);
 	}
 	public void GenerateOres()
 	{
@@ -39,6 +44,7 @@ public class OreManager
 			{
 				this.ores[chunkPos].Add(ore);	
 			}
+			this.oresItself[pos] = ore;
 			
 		}
 	}
