@@ -23,6 +23,14 @@ public class MovementKeyboardMouse : Movement
         this.velocity = this.player.Velocity;
 
 		this.ApplyGravity(delta);
+		if (!this.player.canMove)
+        {
+            velocity.X = 0;
+            velocity.Z = 0;
+            this.UpdateVelocity();
+            return;
+        }
+		
 		Godot.Vector3 movement = new Godot.Vector3(0.0f,0.0f, 0.0f);
 		
 

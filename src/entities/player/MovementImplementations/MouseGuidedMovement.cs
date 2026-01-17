@@ -23,7 +23,7 @@ public class MouseGuidedMovement : Movement
         this.ApplyGravity(delta);
 
 
-        if (this.player.isPlacingHome)
+        if (!this.player.canMove)
         {
             velocity.X = 0;
             velocity.Z = 0;
