@@ -2,23 +2,23 @@ using System.Collections.Generic;
 using Godot;
 public partial class WorldObjectPlacer : Node3D
 {
-    public bool isPlacingObject = false;
+	public bool isPlacingObject = false;
 
-    WorldObjectPlacerObject currentObjectPlacerObject;
+	WorldObjectPlacerObject currentObjectPlacerObject;
 
-    [Export]
-    public Godot.Collections.Dictionary<string, WorldObjectPlacerObject> worldObjects = new Godot.Collections.Dictionary<string, WorldObjectPlacerObject>
-    {
-    };
+	[Export]
+	public Godot.Collections.Dictionary<string, WorldObjectPlacerObject> worldObjects = new Godot.Collections.Dictionary<string, WorldObjectPlacerObject>
+	{
+	};
 
-    [Export]
-    World world;
+	[Export]
+	World world;
 
-    [Export]
-    Player player;
-    
+	[Export]
+	Player player;
+	
 
-    private void TurnOffObjectPlacerObject()
+	private void TurnOffObjectPlacerObject()
 	{
 		if (!isPlacingObject) return;
 
@@ -26,50 +26,72 @@ public partial class WorldObjectPlacer : Node3D
 		this.currentObjectPlacerObject.ProcessMode = ProcessModeEnum.Disabled;
 
 		this.isPlacingObject = false;
-        this.currentObjectPlacerObject = null;
-        
+		this.currentObjectPlacerObject = null;
+		this.player.canMove = true;
+		
 	
 	}
 	private void TurnOnObjectPlacerObject(WorldObjectPlacerObject currentObject)
-    {
+	{
 		if (isPlacingObject) return;
 
-        this.currentObjectPlacerObject = currentObject;
+		this.currentObjectPlacerObject = currentObject;
 		this.currentObjectPlacerObject.Visible = true;
-		this.currentObjectPlacerObject.ProcessMode = ProcessModeEnum.Inherit;
+		this.currentObjectPlacerObject.ProcessMode = ProcessModeEnum.Disabled; 
 
 		this.isPlacingObject = true;
-        
+		this.player.canMove = false;
+		
 
 	}
 
-    public void HandleInputEvent(InputEvent inputEvent)
-    {
-        if (isPlacingObject && inputEvent is InputEventMouseMotion inputEventMouseMotion)
-        {
-            HandleObjectPlacing();
-        }
-        if (inputEvent is InputEventKey inputEventKey)
-        {
-            if (inputEventKey.IsPressed() && !isPlacingObject)
-            {
-                foreach (string Key in this.worldObjects.Keys)
-                {
-                    if (inputEventKey.IsActionPressed(Key))
-                    {
-                        TurnOnObjectPlacerObject(this.worldObjects[Key]);
-                        break;
-                    }
-                }   
-            }
-            if (inputEventKey.IsReleased() && isPlacingObject)
-            {
-                TurnOffObjectPlacerObject();
-            }
-        }
-    }
+	private bool PlaceObject()
+	{
+		if (!this.world.CheckIfFreeSpace(this.currentObjectPlacerObject.GetOccupiedTiles()))
+		{
+			return false;
+		}
+		return this.currentObjectPlacerObject.PlaceObject(this.world, this.player);
+	}
 
-    // private void PlaceGoldMine()
+	public override void _Input(InputEvent inputEvent)
+	{
+		if (isPlacingObject && inputEvent is InputEventMouseMotion inputEventMouseMotion)
+		{
+			HandleObjectPlacing();
+		}
+		if (isPlacingObject && inputEvent is InputEventMouseButton eventMouseButton)
+		{
+			if (eventMouseButton.IsPressed())
+			{
+				if (PlaceObject())
+				{
+					TurnOffObjectPlacerObject();
+				}
+			}
+		}
+		if (inputEvent is InputEventKey inputEventKey)
+		{
+			if (inputEventKey.IsPressed() && !isPlacingObject)
+			{
+				foreach (string Key in this.worldObjects.Keys)
+				{
+					if (inputEventKey.IsActionPressed(Key))
+					{
+						TurnOnObjectPlacerObject(this.worldObjects[Key]);
+						break;
+					}
+				}   
+			}
+			if (inputEventKey.IsReleased() && isPlacingObject)
+			{
+				TurnOffObjectPlacerObject();
+			}
+		}
+	}
+
+
+	// private void PlaceGoldMine()
 	// {
 
 	// 	if (this.coins < GameGlobals.GoldMineCost)
@@ -109,7 +131,7 @@ public partial class WorldObjectPlacer : Node3D
 		
 		
 	// }
-    private void HandleObjectPlacing()
+	private void HandleObjectPlacing()
 	{
 
 		var spaceState = GetWorld3D().DirectSpaceState;
@@ -123,14 +145,14 @@ public partial class WorldObjectPlacer : Node3D
 
 		var result = spaceState.IntersectRay(query);
 		Godot.Vector3 hitPos = (Godot.Vector3)result.GetValueOrDefault("position");
-		hitPos.Y -= 0.01f; // so that it would point to actual block later 
+		hitPos.Y -= 0.1f; // so that it would point to actual block later 
 		
 	
 
 		Chunk chunk = this.world.GetChunkAtPos(hitPos);
 		if (chunk == null)
 		{
-			GD.Print(hitPos);
+			
 			return;
 		}
 
@@ -144,7 +166,7 @@ public partial class WorldObjectPlacer : Node3D
 			return;
 		}
 		
-	
+		GD.Print("POS: ", hitPos );
 		currentObjectPlacerObject.GlobalPosition = this.world.GetTilePosition(hitPos) + new Godot.Vector3(0,0.5f,0) + currentObjectPlacerObject.positionOffset;	
 		
 	}

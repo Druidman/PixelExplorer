@@ -22,6 +22,7 @@ public abstract partial class WorldObject : StaticBody3D
                 chunk.ConvertToLocalPosition(this.world.GetTilePosition(pos)), 
                 new WorldTile(WorldTileState.Occupied, this.world.GetTilePosition(pos))
             );
+            GD.Print("TIle occupied!");
 
             
         }
@@ -49,3 +50,31 @@ public abstract partial class WorldObject : StaticBody3D
 
     public abstract List<Godot.Vector3> GetTiles();
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
