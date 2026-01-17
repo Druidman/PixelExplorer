@@ -40,10 +40,10 @@ public partial class Soldier : Node3D
 		Godot.Vector3I currentTilePosition = this.world.GetTilePosition(this.GlobalPosition);
 
 		Godot.Vector3I bottomTilePosition = currentTilePosition;
-		bottomTilePosition.Y -= 1;
+		bottomTilePosition.Y -= GameGlobals.TileWidth;
 
 		Godot.Vector3I topTilePosition = currentTilePosition;
-		topTilePosition.Y += 1;
+		topTilePosition.Y += GameGlobals.TileWidth;
 		
 		// we have tiles positions
 
@@ -92,9 +92,9 @@ public partial class Soldier : Node3D
 		
 		velocity.X = direction.X * delta;
 		velocity.Z = direction.Z * delta;
-		if (velocity.Y <= -1)
+		if (velocity.Y <= -GameGlobals.TileWidth)
 		{
-			velocity.Y = -1;
+			velocity.Y = -GameGlobals.TileWidth;
 		}
 		else {
 			velocity.Y -= GameGlobals.GravitySpeed * delta;	
