@@ -18,8 +18,14 @@ public class OreManager
 	{
 		for (int i = 0; i < 100; i++)
 		{
+	
+			
+			
 			Godot.Vector3I pos = this.world.GetRandomPosInWorld();
 			pos.Y += 1;
+	
+			
+			
 
 			Ore ore = GameGlobals.GoldOreScene.Instantiate<Ore>();
 			ore.Initialize(pos, this.world);

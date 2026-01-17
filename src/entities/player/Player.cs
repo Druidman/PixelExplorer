@@ -138,6 +138,8 @@ public partial class Player : CharacterBody3D
 		{
 			this.PlaceGoldMine();
 		}
+
+		
 		if (Input.IsActionJustPressed("SetSoldierHome"))
 		{
 			TurnOnHomePlacer();
@@ -145,7 +147,7 @@ public partial class Player : CharacterBody3D
 		}
 		if (Input.IsActionPressed("SetSoldierHome"))
 		{
-			this.HandleSoldierHomePlacing();
+			this.HandleObjectPlacing(this.homePlacer, GameGlobals.soldierHomePositionOffset);
 		}
 		else
 		{
@@ -158,11 +160,9 @@ public partial class Player : CharacterBody3D
 		
 	}
 
-	private void HandleSoldierHomePlacing()
+	private void HandleObjectPlacing(WorldObjectPlacer objectPlaceholder, Godot.Vector3 positionOffset)
 	{
 
-		
-		
 		var spaceState = GetWorld3D().DirectSpaceState;
 		var cam = this.camera;
 		var mousePos = GetViewport().GetMousePosition();
@@ -175,6 +175,7 @@ public partial class Player : CharacterBody3D
 		var result = spaceState.IntersectRay(query);
 		Godot.Vector3 hitPos = (Godot.Vector3)result.GetValueOrDefault("position");
 		hitPos.Y -= 0.01f; // so that it would point to actual block later 
+		
 	
 
 		Chunk chunk = this.world.GetChunkAtPos(hitPos);
@@ -195,7 +196,7 @@ public partial class Player : CharacterBody3D
 		}
 		
 	
-		this.homePlacer.GlobalPosition = this.world.GetTilePosition(hitPos) + new Godot.Vector3(0,0.5f,0) +GameGlobals.soldierHomePositionOffset;	
+		objectPlaceholder.GlobalPosition = this.world.GetTilePosition(hitPos) + new Godot.Vector3(0,0.5f,0) + positionOffset;	
 		
 	}
 
