@@ -33,10 +33,10 @@ public partial class Soldier : Node3D
 	}
 
 	public void MoveAndSlide()
-	{
+	{	
 		
 		bool isGroundUnder = this.BottomRayCast.IsColliding();
-		bool isWallInFront = !this.player.world.CheckIfFreeSpace(this.player.world.GetTilePosition(this.GlobalPosition + new Godot.Vector3(0,0.5f,0)));
+		bool isWallInFront = !this.player.world.CheckIfFreeSpace(this.player.world.GetTilePosition(this.GlobalPosition + new Godot.Vector3(0,0.6f,0)));
 
 		if (isGroundUnder){
 			GlobalPosition = new Vector3(
@@ -55,10 +55,12 @@ public partial class Soldier : Node3D
 
 		this.GlobalPosition += velocity;
 
-		if (this.GlobalPosition.Y < -20){
-			this.GlobalPosition = this.player.GlobalPosition + startOffsetPos; 
-			velocity *= 0;
+		if (this.GlobalPosition.Y < GameGlobals.StartWorldMiddle.Y)
+		{
+			this.GlobalPosition = this.player.GlobalPosition + this.startOffsetPos;
 		}
+
+		
 
 	}
 
@@ -84,7 +86,16 @@ public partial class Soldier : Node3D
 		
 		velocity.X = direction.X * delta;
 		velocity.Z = direction.Z * delta;
-		velocity.Y -= GameGlobals.GravitySpeed * delta;
+		if (velocity.Y <= -1)
+		{
+			velocity.Y = -1;
+		}
+		else {
+			velocity.Y -= GameGlobals.GravitySpeed * delta;	
+		}
+
+
+		
 
 
 		

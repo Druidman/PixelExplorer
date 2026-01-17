@@ -144,7 +144,11 @@ public partial class World : Node3D
 
 	public Godot.Vector3I GetTilePosition(Godot.Vector3 globalPos)
 	{
-		return (Godot.Vector3I)globalPos; // TODO this works just for tileSize = 1
+		int x = (int)MathF.Round(globalPos.X / (float)GameGlobals.TileWidth);
+		int y = (int)MathF.Round(globalPos.Y / (float)GameGlobals.TileWidth);
+		int z = (int)MathF.Round(globalPos.Z / (float)GameGlobals.TileWidth);
+
+		return new Godot.Vector3I(x,y,z); // TODO this works just for tileSize = 1
 	}
 	public WorldTile GetTileAtGlobalPosition(Godot.Vector3 globalPosition)
 	{
