@@ -26,7 +26,7 @@ public partial class Player : CharacterBody3D
 	SoldierHomePlacer homePlacer;
 
 
-	private int coins = 0;
+	private int coins = GameGlobals.PlayerStartCoins;
 
 	public int SoldierSlots = 2;
 	public override void _EnterTree()
@@ -60,7 +60,7 @@ public partial class Player : CharacterBody3D
 	private void AddHome(Godot.Vector3 pos)
 	{
 		SoldierHome home = GameGlobals.SoldierHomeScene.Instantiate<SoldierHome>();
-		home.Initialize(this,pos);
+		home.Initialize(this,pos,this.world);
 		Chunk chunk = this.world.GetChunkAtPos(pos);
 		chunk.AddChild(home);
 	}
@@ -73,26 +73,29 @@ public partial class Player : CharacterBody3D
 		}
 		if (inputEvent is InputEventMouseButton inputEventMouse)
 		{
-			if (inputEventMouse.IsPressed() && isPlacingHome == true)
+			if (inputEventMouse.IsPressed() && isPlacingHome == true && this.coins >= GameGlobals.housePrice)
 			{
 				
-				PhysicsShapeQueryParameters3D parameters3D = new PhysicsShapeQueryParameters3D();
-				parameters3D.Shape = this.homePlacer.GetNode<CollisionShape3D>("CollisionShape3D").Shape;
+				List<Godot.Vector3> tiles = new List<Godot.Vector3>(GameGlobals.SoldierHomeOccupiedTiles);
 
-				Transform3D transform = this.homePlacer.GlobalTransform;
-				parameters3D.Transform = transform;
-				parameters3D.CollisionMask = 1;
-				
-
-				var spaceState = GetWorld3D().DirectSpaceState;
-				var results = spaceState.IntersectShape(parameters3D, 2);
-				if (results.Count <= 1)
+				for (int i = 0; i< tiles.Count; i++)
 				{
-					AddHome( this.homePlacer.GlobalPosition);
+					tiles[i] += this.homePlacer.GlobalPosition;
+				}
+
+				
+				if (this.world.CheckIfFreeSpace(tiles))
+				{
+					AddHome( this.homePlacer.GlobalPosition );
+					this.coins -= GameGlobals.housePrice;
 					TurnOffHomePlacer();
 				}
+				else
+				{
+					return;
+				}
 				
-				
+
 			}
 		}
 	}
@@ -157,6 +160,8 @@ public partial class Player : CharacterBody3D
 
 	private void HandleSoldierHomePlacing()
 	{
+
+		
 		
 		var spaceState = GetWorld3D().DirectSpaceState;
 		var cam = this.camera;
@@ -173,24 +178,25 @@ public partial class Player : CharacterBody3D
 	
 
 		Chunk chunk = this.world.GetChunkAtPos(hitPos);
+		if (chunk == null)
+		{
+			GD.Print(hitPos);
+			return;
+		}
 
-		if (chunk.CheckIfTileExistsPos(hitPos) == null)
+		WorldTile tile = chunk.GetTileAtPos((Godot.Vector3I)hitPos);
+		if (tile == null)
+		{
+			return;
+		}
+		if (tile is not Block)
 		{
 			return;
 		}
 		
-		
-		
-		
 	
-		this.homePlacer.GlobalPosition = hitPos;	
+		this.homePlacer.GlobalPosition = this.world.GetTilePosition(hitPos) + new Godot.Vector3(0,0.5f,0) +GameGlobals.soldierHomePositionOffset;	
 		
-
-
-		
-
-		
-
 	}
 
 	public void ExpandSoldierSlots(int slotsDelta)
@@ -210,7 +216,7 @@ public partial class Player : CharacterBody3D
 			return;
 		}
 		
-		List<Ore> ores = this.world.GetChunkOres(this.GlobalPosition);
+		List<Ore> ores = this.world.GetChunkOres((Godot.Vector3I)this.GlobalPosition);
 		if (ores == null) return;
 		if (ores.Count < 0) return;
 
@@ -234,7 +240,7 @@ public partial class Player : CharacterBody3D
 	
 
 		GoldMine mine = GameGlobals.GoldMineScene.Instantiate<GoldMine>();
-		mine.Initialize(this, selectedOre.GlobalPosition);
+		mine.Initialize(this, selectedOre.GlobalPosition, this.world);
 
 		selectedOre.AddChild(mine);
 

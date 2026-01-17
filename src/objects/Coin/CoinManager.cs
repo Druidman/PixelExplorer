@@ -6,7 +6,7 @@ using Godot;
 public abstract class CoinManager
 {
 
-	protected Dictionary<Godot.Vector3, Coin> coins = new Dictionary<Godot.Vector3, Coin>();
+	protected Dictionary<Godot.Vector3I, Coin> coins = new Dictionary<Godot.Vector3I, Coin>();
 	protected Random random = new Random();
 	protected Node3D parentNode;
 
@@ -14,9 +14,9 @@ public abstract class CoinManager
 	{
 		this.parentNode = parentNode;
 	}
-	public void SpawnCoin(Godot.Vector3 pos)
+	public void SpawnCoin(Godot.Vector3I localPos)
 	{
-		if (!ValidatePos(pos))
+		if (!ValidatePos(localPos))
 		{
 
 			return;
@@ -24,25 +24,25 @@ public abstract class CoinManager
 	
 		
 		Coin coin = GameGlobals.coinScene.Instantiate<Coin>();
-		coin.Position = pos;
-		coin.removeCallback = ()=>this.RemoveCoin(pos);
+		coin.Position = localPos;
+		coin.removeCallback = ()=>this.RemoveCoin(localPos);
 		
-		this.coins[pos] = coin;
+		this.coins[localPos] = coin;
 		this.parentNode.CallDeferred(Node3D.MethodName.AddChild, coin);
 	}
-	public void RemoveCoin(Godot.Vector3 pos)
+	public void RemoveCoin(Godot.Vector3I localPos)
 	{
-		if (!ValidatePos(pos))
+		if (!ValidatePos(localPos))
 		{
 			return;
 		}
-		this.parentNode.CallDeferred(Node3D.MethodName.RemoveChild, this.coins[pos]);
-		this.coins[pos].QueueFree();
-		this.coins.Remove(pos);
+		this.parentNode.CallDeferred(Node3D.MethodName.RemoveChild, this.coins[localPos]);
+		this.coins[localPos].QueueFree();
+		this.coins.Remove(localPos);
 		UpdateCoins();
 	}
 
-	public virtual bool ValidatePos(Godot.Vector3 pos){return true;}
+	public virtual bool ValidatePos(Godot.Vector3 localPos){return true;}
 
 	public abstract void UpdateCoins();
 }

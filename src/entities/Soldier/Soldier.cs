@@ -4,12 +4,9 @@ using Godot;
 public partial class Soldier : Node3D
 {
 
-	[Export]
-	RayCast3D BottomRayCast;
-	[Export]
-	RayCast3D LeftRayCast;
-	[Export]
-	RayCast3D RightRayCast;
+
+
+	private World world;
 	private Player player;
 
 	private Godot.Vector3 relativeToPlayer;
@@ -28,6 +25,7 @@ public partial class Soldier : Node3D
 	{
 		this.player = player;
 		this.relativeToPlayer = relativeToPlayer;
+		this.world = this.player.world;
 
 	}
 	public override void _Ready()
@@ -36,34 +34,40 @@ public partial class Soldier : Node3D
 	}
 
 	public void MoveAndSlide()
-	{
+	{	
+
+		Godot.Vector3 globalPos = this.GlobalPosition;
+		Godot.Vector3I currentTilePosition = this.world.GetTilePosition(this.GlobalPosition);
+
+		Godot.Vector3I bottomTilePosition = currentTilePosition;
+		bottomTilePosition.Y -= GameGlobals.TileWidth;
+
+		Godot.Vector3I topTilePosition = currentTilePosition;
+		topTilePosition.Y += GameGlobals.TileWidth;
 		
-		bool isGroundUnder = this.BottomRayCast.IsColliding();
-		bool isWallInFront = this.LeftRayCast.IsColliding() || this.RightRayCast.IsColliding();
+		// we have tiles positions
 
-		if (isGroundUnder){
-			GlobalPosition = new Vector3(
-				GlobalPosition.X,
-				BottomRayCast.GetCollisionPoint().Y + GroundCheckOffset,
-				GlobalPosition.Z
-			);
-			velocity.Y = 0;
-		}
-
-		if (isWallInFront && isMoving)
+		if (!this.world.CheckIfFreeSpace(currentTilePosition))
+		// tile we are in is occupied 
 		{
-			GD.Print("UP VELO!");
-			GD.Print(velocity);
-			velocity.Y = GameGlobals.PlayerJumpForce * 0.1f;
+			globalPos.Y = topTilePosition.Y;
+			this.velocity.Y = 0;
 		}
 
-		this.GlobalPosition += velocity;
-
-		if (this.GlobalPosition.Y < -20){
-			this.GlobalPosition = this.player.GlobalPosition + startOffsetPos; 
-			velocity *= 0;
+		if (!this.world.CheckIfFreeSpace(bottomTilePosition))
+		// under us there is a tile so we won't apply gravity
+		{
+			this.velocity.Y = 0;
+			globalPos.Y = currentTilePosition.Y;
+		}
+		globalPos += velocity;
+		if (globalPos.Y < GameGlobals.StartWorldMiddle.Y)
+		{
+			globalPos = this.player.GlobalPosition + this.startOffsetPos;
+	
 		}
 
+		this.GlobalPosition = globalPos;
 	}
 
 	public void Tick(float delta, Godot.Vector3 rotation)
@@ -88,12 +92,13 @@ public partial class Soldier : Node3D
 		
 		velocity.X = direction.X * delta;
 		velocity.Z = direction.Z * delta;
-		velocity.Y -= GameGlobals.GravitySpeed * delta;
-
-
-		
-		this.BottomRayCast.TargetPosition = new Godot.Vector3(0,velocity.Y,0);
-		
+		if (velocity.Y <= -GameGlobals.TileWidth)
+		{
+			velocity.Y = -GameGlobals.TileWidth;
+		}
+		else {
+			velocity.Y -= GameGlobals.GravitySpeed * delta;	
+		}
 
 	}
 

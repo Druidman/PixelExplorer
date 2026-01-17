@@ -10,9 +10,9 @@ public class ChunkCoinManager : CoinManager
 		this.chunk = chunk;
 	}
 
-	public override bool ValidatePos(Godot.Vector3 pos)
+	public override bool ValidatePos(Godot.Vector3 localPos)
 	{
-		return this.chunk.CheckIfLocalPosFits(pos);
+		return this.chunk.CheckIfValidLocalPosition(localPos);
 	}
 
 	public override void UpdateCoins()
@@ -24,31 +24,28 @@ public class ChunkCoinManager : CoinManager
 
 		for (int i=0; i < GameGlobals.ChunkCoinLimit - this.coins.Count; i++)
 		{
-			Godot.Vector3 pos;
+			Godot.Vector3I localPos;
 
 			do
 			{
-				float x = this.random.Next(
+				int x = this.random.Next(
 						(-GameGlobals.ChunkWidth/2),
-						(GameGlobals.ChunkWidth/2) - 1
+						(GameGlobals.ChunkWidth/2)
 					)  + (int)this.chunk.chunkPos.X ;
-				float z = this.random.Next(
+				int z = this.random.Next(
 						(-GameGlobals.ChunkWidth/2),
-						(GameGlobals.ChunkWidth/2) - 1 
+						(GameGlobals.ChunkWidth/2)
 					) + this.chunk.chunkPos.Z ;
 
 				
-				float y = this.chunk.world.getBlockHeightAtPos(x,z) + 1;
-				
-				int platform = this.chunk.getPlatformGlobalY(y);
-				int row = this.chunk.getRowGlobalZ(z);
-				int col = this.chunk.getColGlobalX(x);
-				
-				pos = this.chunk.getLocalPositionOfTile(platform,row,col);
+				int y = this.chunk.world.getBlockHeightAtPos(x,z) + 1;
 
-			} while (this.coins.ContainsKey(pos));
+				localPos = (Godot.Vector3I)this.chunk.ConvertToLocalPosition(new Godot.Vector3I(x,y,z));
+				
+
+			} while (this.coins.ContainsKey(localPos));
 		
-			SpawnCoin(pos);
+			SpawnCoin(localPos);
 		}
 		
 		

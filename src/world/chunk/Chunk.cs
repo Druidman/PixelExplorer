@@ -19,8 +19,13 @@ public partial class Chunk : Node3D
 	static int Width = GameGlobals.ChunkWidth;
 	static int Height = 100;
 
-	public Godot.Vector3 chunkPos;
-	public Godot.Vector3 chunkTopLeft; // -z, -x
+	public Godot.Vector3I chunkPos;
+	public Godot.Vector3I chunkTopLeft; // -z, -x
+	public Godot.Vector3I chunkTopRight; // -z, +x
+	public Godot.Vector3I chunkBottomRight; // +z, +x
+	public Godot.Vector3I chunkBottomLeft; // +z, -x
+
+
 	public World world;
 
 	private ChunkCoinManager chunkCoinManager;
@@ -42,14 +47,22 @@ public partial class Chunk : Node3D
 	public ChunkCollisionState chunkCollisionState = ChunkCollisionState.NONE;
 
 		  
-	public void Initialize(Godot.Vector3 chunkPosition, World world)
+	public void Initialize(Godot.Vector3I chunkPosition, World world)
 	{
 		
 		this.chunkPos = chunkPosition;
-		this.chunkTopLeft = chunkPos - new Godot.Vector3((Width/2f), 0, (Width/2f));
+		this.chunkTopLeft = chunkPos - new Godot.Vector3I(Width/2, 0, Width/2); // int division is intentional!
+		this.chunkTopRight = chunkPos - new Godot.Vector3I(-Width/2, 0, Width/2); // int division is intentional!
+
+		this.chunkBottomRight = chunkPos + new Godot.Vector3I(Width/2, 0, Width/2); // int division is intentional!
+		this.chunkBottomLeft = chunkPos + new Godot.Vector3I(-Width/2, 0, Width/2); // int division is intentional!
+
 		this.world = world;
+
+
 		this.chunkCoinManager = new ChunkCoinManager(this);
 		this.chunkCoinManager.UpdateCoins(); // gen base one
+
 	}
 	public override void _EnterTree()
 	{
@@ -89,28 +102,22 @@ public partial class Chunk : Node3D
 
 	private void GenerateChunkTileMesh()
 	{
-		for (int i =0; i< this.tiles.Count(); i++)
+		int i =1;
+		foreach (WorldTile tile in this.tiles.Values)
 		{
-			for (int j =0; j< this.tiles[i].Count(); j++)
+	
+			if (tile is Block block)
 			{
-				for (int k =0; k< this.tiles[i][j].Count(); k++)
-				{
-					if (tiles[i][j][k].blockType != BlockType.NONE)
-					{
-						this.Vertices.AddRange(tiles[i][j][k].GetVertices());
-						
-						this.Normals.AddRange(tiles[i][j][k].GetNormals());
-						
-						this.Uvs.AddRange(tiles[i][j][k].GetUvs());
-						
-						
-						
-					}
-					
-				}	
+				
+				this.Vertices.AddRange(block.GetVertices());
+		
+				this.Normals.AddRange(block.GetNormals());
+		
+				this.Uvs.AddRange(block.GetUvs());
 			}
+			i++;
+			
 		}
-
 		
 	}
 	public void ApplyChunkTileMesh()
@@ -137,6 +144,7 @@ public partial class Chunk : Node3D
 		var arrays = new Godot.Collections.Array();
 		
 		arrays.Resize((int)Godot.Mesh.ArrayType.Max);
+		
 		arrays[(int)Godot.Mesh.ArrayType.Vertex] = this.Vertices.ToArray();
 		arrays[(int)Godot.Mesh.ArrayType.Normal] = this.Normals.ToArray();
 		arrays[(int)Godot.Mesh.ArrayType.TexUV] = this.Uvs.ToArray();
@@ -153,37 +161,28 @@ public partial class Chunk : Node3D
 
 	private void generateTiles()
 	{
-		int minY = 0;
-		int maxY = 0;
-		for (float x = this.chunkTopLeft.X + (GameGlobals.TileWidth / 2f); x <= this.chunkTopLeft.X + Width; x += GameGlobals.TileWidth)
+		int i = 1;
+		for (int x = this.chunkTopLeft.X; x <= this.chunkTopRight.X; x += GameGlobals.TileWidth)
 		{
-			for (float z = this.chunkTopLeft.Z + (GameGlobals.TileWidth / 2f); z <= this.chunkTopLeft.Z + Width; z += GameGlobals.TileWidth)
+			for (int z = this.chunkTopLeft.Z; z <= this.chunkBottomLeft.Z; z += GameGlobals.TileWidth)
 			{
 				int y = this.world.getBlockHeightAtPos(x,z);
-				if (y < minY)
-				{
-					minY = y;
-				}
-				if (y > maxY)
-				{
-					maxY = y;
-				}
-
+			
 				
-				int platform = getPlatformGlobalY(y);
-				int row = getRowGlobalZ(z);
-				int col = getColGlobalX(x);
+				Godot.Vector3I globalTilePosition = new Godot.Vector3I(x,y,z);
+				Godot.Vector3I localTilePosition = (Godot.Vector3I) ConvertToLocalPosition(globalTilePosition);
 
-				
-				if (!CheckIfValidTileIndicies(platform, 0, 0))
+				if (!CheckIfValidTileGlobalPosition(globalTilePosition))
 				{
-					platform = 0;
+					throw new Exception("Wrong position somehow " + globalTilePosition + ' ' + localTilePosition);
 				}
 	
 				BlockType blockType = BlockType.Grass;
 				
 				
-				UpdateTile(platform, row, col, new WorldTile(getLocalPositionOfTile(platform, row, col), blockType));
+				UpdateTile(localTilePosition, new Block(localTilePosition, blockType));
+				
+				i++;
 				
 			}	
 		}

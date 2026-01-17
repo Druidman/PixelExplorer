@@ -23,26 +23,7 @@ public class WorldNoise
 	private float DefaultHeight(float y)
 	{
 		
-		// if (y < 0.25f)
-		// {
-		// 	return 0;
-		// }
-		// else if (y < 0.40f)
-		// {
-		// 	return y - 0.25f;
-		// }
-		// else if (y<0.6f)
-		// {
-		// 	return 0.55f;
-		// }
-		// else if (y < 0.7f)
-		// {
-		// 	return y-0.55f;
-		// }
-		// else
-		// {
-		// 	return 0.85f;
-		// }
+
 
 		return 0;
 		
