@@ -20,6 +20,10 @@ public partial class World : Node3D
 	{
 		return this.oreManager.GetOresAtChunkPos(this.GetChunkPositionFromGlobalPos(chunkPosition));
 	}
+	public Ore GetOreAtExactGlobalPosition(Godot.Vector3I orePos)
+	{
+		return this.oreManager.GetOreAtPos(orePos);
+	}
 	public void Initialize()
 	{
 		this.oreManager = new OreManager(this);

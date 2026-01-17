@@ -1,17 +1,15 @@
-[gd_scene load_steps=6 format=3 uid="uid://s2uye1o3mxru"]
+[gd_scene load_steps=5 format=3 uid="uid://s2uye1o3mxru"]
 
 [ext_resource type="Script" uid="uid://ddim1yijkse0g" path="res://src/entities/player/Player.cs" id="1_4flbx"]
 [ext_resource type="Script" uid="uid://brwqho7jxh6a6" path="res://src/entities/player/Camera.cs" id="2_onrkg"]
 [ext_resource type="ArrayMesh" uid="uid://h404y3oo05vk" path="res://images/CharacterMesh.res" id="3_i3pqv"]
-[ext_resource type="PackedScene" uid="uid://casukohfhom4n" path="res://src/objects/SoldierHome/soldier_home_placer.tscn" id="4_wrxq6"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_hqtel"]
 size = Vector3(1.2, 2.5, 0.6)
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("homePlacer")]
+[node name="Player" type="CharacterBody3D"]
 collision_layer = 2
 script = ExtResource("1_4flbx")
-homePlacer = NodePath("SoldierHomePlacer")
 
 [node name="Camera" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.76613414, 0.6426807, 0, -0.6426807, 0.76613414, 0.016, 34, 30)
@@ -25,7 +23,3 @@ shape = SubResource("BoxShape3D_hqtel")
 [node name="Character" type="MeshInstance3D" parent="."]
 transform = Transform3D(-8.742278e-09, -0.2, -8.742278e-09, 0, -8.742278e-09, 0.2, -0.2, 8.742278e-09, 3.821371e-16, -0.2, 0, 0)
 mesh = ExtResource("3_i3pqv")
-
-[node name="SoldierHomePlacer" parent="." instance=ExtResource("4_wrxq6")]
-process_mode = 4
-visible = false
