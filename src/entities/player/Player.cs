@@ -41,10 +41,18 @@ public partial class Player : CharacterBody3D
 		
 	}
 
-	public int GetCoins()
+	public int GetCoinCount()
 	{
 		
 		return coins;
+	}
+	public int GetSoldierCount()
+	{
+		return this.soldierManager.soldiers.Count;
+	}
+	public int GetMaxSoldierCount()
+	{
+		return this.SoldierSlots;
 	}
 
 	public void AddCoins(int coinsToAdd)

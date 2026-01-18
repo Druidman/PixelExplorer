@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://ukvhat7uai3x" path="res://AppScenes/game/PlayerUi/PlayerUi.cs" id="1_8lcsp"]
 
-[node name="PlayerUi" type="Control" node_paths=PackedStringArray("Coins")]
+[node name="PlayerUi" type="Control" node_paths=PackedStringArray("Coins", "Soldiers", "MaxSoldiers")]
 layout_mode = 3
 anchors_preset = 2
 anchor_top = 1.0
@@ -10,6 +10,8 @@ anchor_bottom = 1.0
 grow_vertical = 0
 script = ExtResource("1_8lcsp")
 Coins = NodePath("HBoxContainer/Coins/Value")
+Soldiers = NodePath("HBoxContainer/Soldiers/Value")
+MaxSoldiers = NodePath("HBoxContainer/Soldiers/value2")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 1
@@ -28,5 +30,24 @@ layout_mode = 2
 text = "Coins: "
 
 [node name="Value" type="Label" parent="HBoxContainer/Coins"]
+layout_mode = 2
+text = "0"
+
+[node name="Soldiers" type="HBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/Soldiers"]
+layout_mode = 2
+text = "Soldiers:"
+
+[node name="Value" type="Label" parent="HBoxContainer/Soldiers"]
+layout_mode = 2
+text = "0"
+
+[node name="By" type="Label" parent="HBoxContainer/Soldiers"]
+layout_mode = 2
+text = "/"
+
+[node name="value2" type="Label" parent="HBoxContainer/Soldiers"]
 layout_mode = 2
 text = "0"

@@ -17,7 +17,7 @@ public partial class SoldierHomePlacerObject : WorldObjectPlacerObject
 
 	public override bool PlaceObject(World world, Player player)
 	{
-		if (player.GetCoins() < GameGlobals.housePrice) return false;
+		if (player.GetCoinCount() < GameGlobals.housePrice) return false;
 		if (!world.CheckIfFreeSpace(this.GetOccupiedTiles()))
 		{
 			return false;

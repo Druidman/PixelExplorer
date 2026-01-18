@@ -8,6 +8,12 @@ public partial class PlayerUi : Control
 	public Label Coins;
 
 	[Export]
+	public Label Soldiers;
+
+	[Export]
+	public Label MaxSoldiers;
+
+	[Export]
 	public Player player;
 	
 	public override void _Ready()
@@ -17,6 +23,8 @@ public partial class PlayerUi : Control
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		Coins.Text = player.GetCoins().ToString();
+		Coins.Text = player.GetCoinCount().ToString();
+		Soldiers.Text = player.GetSoldierCount().ToString();
+		MaxSoldiers.Text = player.GetMaxSoldierCount().ToString();
 	}
 }
