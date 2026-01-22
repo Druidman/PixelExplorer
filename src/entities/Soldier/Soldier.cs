@@ -4,21 +4,19 @@ using Godot;
 public partial class Soldier : Node3D
 {
 
-
+	static float strength = 0.5f;
 
 	private World world;
 	private Player player;
 
-	private Godot.Vector3 relativeToPlayer;
-	Godot.Vector3 destination;
-	Godot.Vector3 move;
+	public Godot.Vector3 relativeToPlayer;
 
 	Godot.Vector3 velocity;
-	float GroundCheckOffset = 0.1f;
-
-	bool isMoving = false;
+	public Godot.Vector3 destination;
 	
 	private float stopDistance = 2f;
+
+	public Building destroyObjective = null;
 
 	Godot.Vector3 startOffsetPos = new Godot.Vector3(0,10,0);
 	public void Initialize(Player player, Godot.Vector3 relativeToPlayer)
@@ -26,6 +24,7 @@ public partial class Soldier : Node3D
 		this.player = player;
 		this.relativeToPlayer = relativeToPlayer;
 		this.world = this.player.world;
+		
 
 	}
 	public override void _Ready()
@@ -72,21 +71,19 @@ public partial class Soldier : Node3D
 
 	public void Tick(float delta, Godot.Vector3 rotation)
 	{
+		UpdateActions();
 		MoveAndSlide();
 		this.Rotation = rotation;
-		
-		Godot.Vector3 destination = this.player.GlobalPosition + this.relativeToPlayer;
 		Godot.Vector3 direction = (destination - this.GlobalPosition) * 0.5f;
+		direction = direction.Normalized();
 		destination.Y = this.GlobalPosition.Y;
 
 		if (this.GlobalPosition.DistanceSquaredTo(destination) < this.stopDistance * this.stopDistance)
 		{
 			direction *= 0;
-			isMoving = false;
 		}
 		else
 		{
-			isMoving = true;
 			direction *= GameGlobals.PlayerSpeed;
 		}
 		
@@ -102,4 +99,12 @@ public partial class Soldier : Node3D
 
 	}
 
+	public void UpdateActions()
+	{
+		if (this.GlobalPosition.DistanceSquaredTo(destination) <= 25 && IsInstanceValid(destroyObjective)) // squared 5
+		{
+			this.destroyObjective?.TakeHealth(Soldier.strength);
+		}
+		
+	}
 }

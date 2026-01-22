@@ -9,8 +9,20 @@ public abstract partial class Building : WorldBody
 
     protected override WorldTileType tileType => WorldTileType.BuildingTile;
 
-    protected float healthPoints = 20;
+    private float healthPoints = 20;
     protected Player player;
+
+    public void TakeHealth(float delta)
+    {
+        healthPoints -= delta;
+        if (healthPoints <= 0)
+        {
+            this.OnDestroy();
+            GetParent()?.RemoveChild(this);
+        }
+    }
+
+    protected abstract void OnDestroy();
 
 
     public void Initialize(Player player, Godot.Vector3 pos, World world)

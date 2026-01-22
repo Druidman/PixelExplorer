@@ -24,4 +24,9 @@ public partial class GoldMine : Building
 		
 		this.player.AddCoins(10);
 	}
+	protected override void OnDestroy()
+	{
+		// TODO
+		// for now nothing because timer will just stop triggering so player won't receive benefits
+	}
 }

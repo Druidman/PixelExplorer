@@ -25,13 +25,23 @@ public partial class SoldierHome : Building
 	
 	protected override void OnEnterSceneTree()
 	{
+		this.player.houses.Add(this); // TODO, not elegant
 		if (this.player != null) this.player.ExpandSoldierSlots(10);
 		this.canRemoveSlots = true;
 	}
 	protected override void OnExitSceneTree()
 	{
+		this.player.houses.Remove(this); // TODO, fix performance somehow
 		if (this.player != null && canRemoveSlots) this.player.ExpandSoldierSlots(-10);
 	}
+
+	protected override void OnDestroy()
+	{
+		// TODO
+		// for now nothing because we take back slots when we leave the tree
+	}
+
+
 
 
 }

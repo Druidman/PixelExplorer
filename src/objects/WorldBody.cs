@@ -49,7 +49,6 @@ public abstract partial class WorldBody : StaticBody3D, IWorldObject
 	}
 	public override void _ExitTree()
 	{
-		this.GlobalPosition = this.GlobalPos;
 		OnExitSceneTree();
 		List<Godot.Vector3> tilesOccupied = this.GetTiles();
 		foreach (Godot.Vector3 globalPos in tilesOccupied)
@@ -68,6 +67,8 @@ public abstract partial class WorldBody : StaticBody3D, IWorldObject
 
 			
 		}
+		QueueFree();
+		
 	}
 
 	protected virtual void OnEnterSceneTree(){}

@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 
 public partial class Player : CharacterBody3D
@@ -19,6 +20,9 @@ public partial class Player : CharacterBody3D
 
 	[Export]
 	SoldierManager soldierManager;
+
+
+	public List<SoldierHome> houses = new List<SoldierHome>();
 
 
 	private int coins = GameGlobals.PlayerStartCoins;
@@ -89,6 +93,14 @@ public partial class Player : CharacterBody3D
 		{
 			this.soldierManager.SpawnSoldier();
 			
+		}
+		if (Input.IsActionJustPressed("attack"))
+		{
+			soldierManager.SetDestroyObjective(this.houses.ElementAtOrDefault(0)); // TODO
+		}
+		if (Input.IsActionJustReleased("attack"))
+		{
+			soldierManager.SetDestroyObjective(null);
 		}
 
 	
