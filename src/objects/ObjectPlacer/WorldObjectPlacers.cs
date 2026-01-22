@@ -28,6 +28,7 @@ public partial class WorldObjectPlacers : Node3D
 		this.isPlacingObject = false;
 		this.currentObjectPlacerObject = null;
 		this.player.canMove = true;
+		this.player.isMouseButtonEventFree = true;
 		
 	
 	}
@@ -41,6 +42,7 @@ public partial class WorldObjectPlacers : Node3D
 
 		this.isPlacingObject = true;
 		this.player.canMove = false;
+		this.player.isMouseButtonEventFree = false;
 		
 
 	}

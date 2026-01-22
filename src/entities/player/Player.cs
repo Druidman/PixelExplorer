@@ -30,6 +30,7 @@ public partial class Player : CharacterBody3D
 	public int SoldierSlots = 2;
 
 	public bool canMove = true;
+	public bool isMouseButtonEventFree = true;
 	public override void _EnterTree()
 	{
 		GlobalPosition = GameGlobals.PlayerStartPos;
@@ -71,6 +72,31 @@ public partial class Player : CharacterBody3D
 		{
 			movement.HandleInputEvent(inputEvent);
 		}
+		if (inputEvent is InputEventMouseButton inputEventMouseButton && isMouseButtonEventFree)
+		{
+			var spaceState = GetWorld3D().DirectSpaceState;
+			var cam = GetViewport().GetCamera3D();
+			var mousePos = GetViewport().GetMousePosition();
+
+			var origin = cam.ProjectRayOrigin(mousePos);
+			var end = origin + cam.ProjectRayNormal(mousePos) * 1000; // TODO add normal length
+			var query = PhysicsRayQueryParameters3D.Create(origin, end);
+			query.CollideWithAreas = true;
+
+			var result = spaceState.IntersectRay(query);	
+			Godot.GodotObject godotObject = (Godot.GodotObject)result["collider"];
+			if (godotObject is Building buildingObject)
+			{
+				soldierManager.SetDestroyObjective(buildingObject); // TODO
+				
+			}
+			else
+			{
+				soldierManager.SetDestroyObjective(null);
+			}
+				
+			
+		}
 	
 		
 	}
@@ -93,14 +119,6 @@ public partial class Player : CharacterBody3D
 		{
 			this.soldierManager.SpawnSoldier();
 			
-		}
-		if (Input.IsActionJustPressed("attack"))
-		{
-			soldierManager.SetDestroyObjective(this.houses.ElementAtOrDefault(0)); // TODO
-		}
-		if (Input.IsActionJustReleased("attack"))
-		{
-			soldierManager.SetDestroyObjective(null);
 		}
 
 	
