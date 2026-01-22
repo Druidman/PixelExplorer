@@ -2,24 +2,19 @@ using Godot;
 using System.Collections.Generic;
 
 
-public partial class GoldMine : WorldObject
+public partial class GoldMine : Building
 {
-	Player player = null;
-
-	public override List<Vector3> GetTiles()
-	{
-		return GameGlobals.GoldMineOccupiedTiles;
+	public override Vector3 PositionOffset { 
+		get
+		{
+			return GameGlobals.goldMinePositionOffset;
+		}
 	}
-	public override void _Ready()
-	{
-		this.GlobalPosition = globalPos;
-		
-	}
-	public void Initialize(Player player, Godot.Vector3 position, World world)
-	{
-		this.player = player;
-		this.globalPos = position;
-		this.world = world;
+	public override List<Godot.Vector3> BaseTiles {
+		get
+		{
+			return GameGlobals.GoldMineOccupiedTiles;
+		}
 	}
 
 	public void OnTimerCall()

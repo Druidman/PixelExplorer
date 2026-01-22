@@ -59,7 +59,6 @@ public partial class ChunkRenderer : Node3D
 		
 		
 		chunk.ApplyChunkTileMesh();
-		chunk.ApplyChunkObjects();
 		chunk.CreateChunkCollision();
 		
 

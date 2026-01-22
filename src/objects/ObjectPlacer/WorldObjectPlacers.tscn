@@ -1,0 +1,22 @@
+[gd_scene load_steps=6 format=3 uid="uid://bnr1g6wydmk6v"]
+
+[ext_resource type="Script" uid="uid://cte8umcgoy5jy" path="res://src/objects/ObjectPlacer/WorldObjectPlacers.cs" id="1_qu26l"]
+[ext_resource type="PackedScene" uid="uid://bq260ntypcifh" path="res://src/objects/SoldierHome/soldier_home.tscn" id="2_32lq0"]
+[ext_resource type="Script" uid="uid://b4o07hpo6l4ds" path="res://src/objects/SoldierHome/SoldierHomePlacer.cs" id="3_qu26l"]
+[ext_resource type="PackedScene" uid="uid://cfw8qumc6mkj7" path="res://src/objects/GoldMine/gold_mine.tscn" id="4_l2j2o"]
+[ext_resource type="Script" uid="uid://dw4s0bqg0gh28" path="res://src/objects/GoldMine/GoldMinePlacer.cs" id="5_32lq0"]
+
+[node name="WorldObjectPlacers" type="Node3D" node_paths=PackedStringArray("worldObjects")]
+script = ExtResource("1_qu26l")
+worldObjects = {
+"SpawnGoldMine": NodePath("GoldMine"),
+"SpawnHome": NodePath("SoldierHome")
+}
+
+[node name="SoldierHome" parent="." instance=ExtResource("2_32lq0")]
+visible = false
+script = ExtResource("3_qu26l")
+
+[node name="GoldMine" parent="." instance=ExtResource("4_l2j2o")]
+visible = false
+script = ExtResource("5_32lq0")

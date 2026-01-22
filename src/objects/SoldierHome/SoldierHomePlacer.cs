@@ -1,15 +1,16 @@
 using System.Collections.Generic;
 using Godot;
 
-public partial class SoldierHomePlacerObject : WorldObjectPlacerObject
+public partial class SoldierHomePlacer : WorldObjectPlacer
 {
-	public override Vector3 positionOffset { 
+	public override Vector3 PositionOffset { 
 		get
 		{
 			return GameGlobals.soldierHomePositionOffset;
 		}
 	}
-	public override List<Vector3> baseOccupiedTiles { get
+	public override List<Godot.Vector3> BaseTiles {
+		get
 		{
 			return GameGlobals.SoldierHomeOccupiedTiles;
 		}
@@ -18,14 +19,17 @@ public partial class SoldierHomePlacerObject : WorldObjectPlacerObject
 	public override bool PlaceObject(World world, Player player)
 	{
 		if (player.GetCoinCount() < GameGlobals.housePrice) return false;
-		if (!world.CheckIfFreeSpace(this.GetOccupiedTiles()))
+
+		GD.Print(this.GetTiles()[0]);
+		if (!world.CheckIfFreeSpace(this.GetTiles()))
 		{
 			return false;
 		}
+
 		SoldierHome home = GameGlobals.SoldierHomeScene.Instantiate<SoldierHome>();
 		home.Initialize(player, this.GlobalPosition, world);
-		player.removeCoins(GameGlobals.housePrice);
 		world.AddChild(home);
+		player.removeCoins(GameGlobals.housePrice);
 		return true;
 	}
 }

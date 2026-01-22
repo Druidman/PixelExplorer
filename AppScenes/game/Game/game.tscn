@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://oygs71j4weck" path="res://src/chunkRenderer/chunk_renderer.tscn" id="3_uwqyn"]
 [ext_resource type="PackedScene" uid="uid://dw1qlpywtiiuo" path="res://AppScenes/game/PlayerUi/player_ui.tscn" id="5_xwdwh"]
 [ext_resource type="PackedScene" uid="uid://d2k8q1wgb36lt" path="res://src/entities/Soldier/soldier_manager.tscn" id="6_g2ybg"]
-[ext_resource type="PackedScene" uid="uid://bnr1g6wydmk6v" path="res://src/objects/ObjectPlacer/WorldObjectPlacer.tscn" id="7_mc7xl"]
+[ext_resource type="PackedScene" uid="uid://bnr1g6wydmk6v" path="res://src/objects/ObjectPlacer/WorldObjectPlacers.tscn" id="7_mc7xl"]
 
 [node name="Game" type="Node3D" node_paths=PackedStringArray("world", "player", "chunkRenderer")]
 script = ExtResource("1_feb5d")
@@ -30,8 +30,9 @@ player = NodePath("../Player")
 
 [node name="SoldierManager" parent="." instance=ExtResource("6_g2ybg")]
 
-[node name="WorldObjectPlacer" parent="." node_paths=PackedStringArray("worldObjects", "world", "player") instance=ExtResource("7_mc7xl")]
+[node name="WorldObjectPlacers" parent="." node_paths=PackedStringArray("worldObjects", "world", "player") instance=ExtResource("7_mc7xl")]
 worldObjects = {
+"SpawnGoldMine": NodePath("GoldMine"),
 "SpawnHome": NodePath("SoldierHome")
 }
 world = NodePath("../World")

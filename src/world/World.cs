@@ -15,8 +15,7 @@ public partial class World : Node3D
 	private Dictionary<Godot.Vector3I, Chunk> chunks = new Dictionary<Godot.Vector3I, Chunk>();
 	public OreManager oreManager = null;
 
-
-	public List<Ore> GetChunkOres(Godot.Vector3I chunkPosition)
+	public Dictionary<Godot.Vector3I, Ore> GetChunkOres(Godot.Vector3I chunkPosition)
 	{
 		return this.oreManager.GetOresAtChunkPos(this.GetChunkPositionFromGlobalPos(chunkPosition));
 	}
