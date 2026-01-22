@@ -125,6 +125,7 @@ public partial class WorldObjectPlacers : Node3D
 			return;
 		}
 		
+		
 	
 		currentObjectPlacerObject.GlobalPosition = this.world.GetTilePosition(hitPos) + new Godot.Vector3(0,0.5f,0) + currentObjectPlacerObject.PositionOffset;	
 		

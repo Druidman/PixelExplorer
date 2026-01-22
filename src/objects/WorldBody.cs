@@ -14,6 +14,9 @@ public abstract partial class WorldBody : StaticBody3D, IWorldObject
 			return new Godot.Vector3(0,0,0);
 		}
 	}
+
+	protected virtual WorldTileType tileType => WorldTileType.WorldBodyTile;		
+	
 	
 	protected World world;
 
@@ -37,7 +40,7 @@ public abstract partial class WorldBody : StaticBody3D, IWorldObject
 
 			chunk.UpdateTile(
 				chunk.ConvertToLocalPosition(this.world.GetTilePosition(globalPos)), 
-				new WorldTile(WorldTileState.Occupied, this.world.GetTilePosition(globalPos))
+				new WorldTile(WorldTileState.Occupied, this.world.GetTilePosition(globalPos), tileType)
 			);
 			GD.Print("TIle occupied!");
 
@@ -60,7 +63,7 @@ public abstract partial class WorldBody : StaticBody3D, IWorldObject
 
 			chunk.UpdateTile(
 				chunk.ConvertToLocalPosition(this.world.GetTilePosition(globalPos)),
-				new WorldTile(WorldTileState.Free, this.world.GetTilePosition(globalPos))
+				new WorldTile(WorldTileState.Free, this.world.GetTilePosition(globalPos), tileType)
 			);
 
 			

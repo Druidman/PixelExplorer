@@ -2,6 +2,10 @@ public enum WorldTileState
 {
     Occupied, Free
 }
+public enum WorldTileType
+{
+    BlockTile, WorldBodyTile, BuildingTile, None
+}
 
 
 // state means if something is in this tile for example:
@@ -12,9 +16,12 @@ public class WorldTile
 {  
     public WorldTileState state = WorldTileState.Free;
     public Godot.Vector3I position {get; private set;}
-    public WorldTile(WorldTileState state, Godot.Vector3I position)
+
+    public WorldTileType worldTileType = WorldTileType.None;
+    public WorldTile(WorldTileState state, Godot.Vector3I position, WorldTileType worldTileType = WorldTileType.None)
     {
         this.state = state;
         this.position = position;
+        this.worldTileType = worldTileType;
     }
 }

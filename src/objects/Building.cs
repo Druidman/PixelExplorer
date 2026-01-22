@@ -6,6 +6,10 @@ public abstract partial class Building : WorldBody
     public abstract override List<Godot.Vector3> BaseTiles {get;}
 	public abstract override Godot.Vector3 PositionOffset {get;}
 
+
+    protected override WorldTileType tileType => WorldTileType.BuildingTile;
+
+    protected float healthPoints = 20;
     protected Player player;
 
 
