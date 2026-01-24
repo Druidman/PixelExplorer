@@ -3,7 +3,6 @@ using Godot;
 public partial class ObjectPlacingPlayerAction : PlayerAction
 {
 	public bool isPlacingObject = false;
-
 	
 
 	WorldObjectPlacer currentObjectPlacerObject;
@@ -16,6 +15,14 @@ public partial class ObjectPlacingPlayerAction : PlayerAction
 	[Export]
 	World world;
 
+	public override void OnEnd()
+    {
+        
+    }
+    public override void OnStart()
+    {
+        
+    }
 	private void TurnOffObjectPlacerObject()
 	{
 		if (!isPlacingObject) return;

@@ -1,7 +1,19 @@
-[gd_scene load_steps=2 format=3 uid="uid://bscyq51oo4mby"]
+[gd_scene load_steps=4 format=3 uid="uid://bscyq51oo4mby"]
 
 [ext_resource type="Script" uid="uid://605y60r0u20c" path="res://src/entities/player/Actions/AttackPlayerAction/AttackPlayerAction.cs" id="1_1754t"]
 
-[node name="AttackPlayerAction" type="Node3D"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1754t"]
+albedo_color = Color(1, 0.120000005, 0.120000005, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_jeclw"]
+material = SubResource("StandardMaterial3D_1754t")
+
+[node name="AttackPlayerAction" type="Node3D" node_paths=PackedStringArray("arrow")]
 script = ExtResource("1_1754t")
+arrow = NodePath("MeshInstance3D")
 actionName = "StartAttackingObjects"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+visible = false
+layers = 32
+mesh = SubResource("BoxMesh_jeclw")

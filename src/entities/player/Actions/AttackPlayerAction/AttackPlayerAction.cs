@@ -2,6 +2,18 @@ using Godot;
 
 public partial class AttackPlayerAction : PlayerAction
 {
+	[Export]
+	MeshInstance3D arrow;
+
+	public override void OnEnd()
+	{
+        this.player.soldierManager.SetDestroyObjective(null);
+		this.arrow.Visible = false;
+	}
+	public override void OnStart()
+	{
+		
+	}
 	public override void HandleInput(InputEvent inputEvent)
 	{
 		if (inputEvent is InputEventMouseButton inputEventMouseButton)
@@ -20,11 +32,14 @@ public partial class AttackPlayerAction : PlayerAction
 			if (godotObject is Building buildingObject)
 			{
 				this.player.soldierManager.SetDestroyObjective(buildingObject); // TODO
+				arrow.GlobalPosition = buildingObject.GlobalPosition + new Godot.Vector3(0,5,0);
+				arrow.Visible = true;
 				
 			}
 			else
 			{
 				this.player.soldierManager.SetDestroyObjective(null);
+				arrow.Visible = false;
 			}
 
 		}

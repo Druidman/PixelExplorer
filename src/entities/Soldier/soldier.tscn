@@ -3,10 +3,10 @@
 [ext_resource type="Script" uid="uid://bifs7anyqjm7" path="res://src/entities/Soldier/Soldier.cs" id="1_r672h"]
 [ext_resource type="ArrayMesh" uid="uid://oj10peiig47c" path="res://images/SoldierMesh.res" id="2_d8nwj"]
 
-[node name="Soldier" type="Node3D" node_paths=PackedStringArray("BottomRayCast")]
+[node name="Soldier" type="Node3D"]
 script = ExtResource("1_r672h")
-BottomRayCast = NodePath("")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.2, 0, 0, 0, -8.742278e-09, 0.2, 0, -0.2, -8.742278e-09, -0.1, -0.5, -0.3)
+layers = 8
 mesh = ExtResource("2_d8nwj")

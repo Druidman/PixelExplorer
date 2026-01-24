@@ -20,4 +20,7 @@ public abstract partial class PlayerAction : Node3D
     public abstract void HandleInput(InputEvent inputEvent);
     public abstract void Update(double delta);
 
+    public abstract void OnStart();
+    public abstract void OnEnd();
+
 }

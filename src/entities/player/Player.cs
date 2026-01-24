@@ -87,11 +87,13 @@ public partial class Player : CharacterBody3D
 			{
 				if (this.currentlyActiveAction == action)
 				{
+					this.currentlyActiveAction.OnEnd();
 					this.currentlyActiveAction = null;
 				}
 				else
 				{
 					this.currentlyActiveAction = action;	
+					this.currentlyActiveAction.OnStart();
 				}
 				
 				break;
