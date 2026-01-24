@@ -31,7 +31,9 @@ public partial class GoldMinePlacer : WorldObjectPlacer
 				}
 				
 				GoldMine goldMine = GameGlobals.GoldMineScene.Instantiate<GoldMine>();
-				goldMine.Initialize(player, ore.GlobalPosition, world);
+				
+			
+				goldMine.Initialize(player, ore.GlobalPosition, world, ore);
 				ore.AddChild(goldMine);
 		
 			

@@ -65,7 +65,7 @@ public partial class SoldierManager : Godot.Node3D
 			{
 				soldier.destination = this.player.GlobalPosition + soldier.relativeToPlayer;	
 				soldier.destroyObjective = null;
-				this.player.canMove = true; // TODO make it more elegant like event based or smth
+				
 			}
 			
 			soldier.Tick(delta, this.soldiersRotation);

@@ -25,7 +25,7 @@ public abstract partial class Building : WorldBody
     protected abstract void OnDestroy();
 
 
-    public void Initialize(Player player, Godot.Vector3 pos, World world)
+    protected void Initialize(Player player, Godot.Vector3 pos, World world)
     {
         this.Initialize(world,pos);
         this.player = player;
