@@ -19,7 +19,15 @@ public partial class Player : CharacterBody3D
 	Movement movement;
 
 	[Export]
-	SoldierManager soldierManager;
+	public SoldierManager soldierManager;
+
+	[Export]
+	public Godot.Collections.Array<PlayerAction> playerActions = new Godot.Collections.Array<PlayerAction>
+	{
+	};
+
+
+	private PlayerAction currentlyActiveAction = null;
 
 
 	public List<SoldierHome> houses = new List<SoldierHome>();
@@ -29,7 +37,12 @@ public partial class Player : CharacterBody3D
 
 	public int SoldierSlots = 2;
 
-	public bool canMove = true;
+	public bool canMove {
+		get
+		{
+			return (this.currentlyActiveAction?.blocksMovement != null) ? !this.currentlyActiveAction.blocksMovement : true;
+		}
+	}
 	public bool isMouseButtonEventFree = true;
 	public override void _EnterTree()
 	{
@@ -67,36 +80,35 @@ public partial class Player : CharacterBody3D
 	}
 
 	public override void _Input(InputEvent inputEvent)
-	{
+	{	
+		foreach (PlayerAction action in this.playerActions)
+		{
+			if (inputEvent.IsActionPressed(action.actionName))
+			{
+				if (this.currentlyActiveAction == action)
+				{
+					this.currentlyActiveAction = null;
+				}
+				else
+				{
+					this.currentlyActiveAction = action;	
+				}
+				
+				break;
+			}
+		}
+		
+
+		// here events that can run no matter what action we are doing
 		if (inputEvent is InputEventMouseMotion eventMouseMotion)
 		{
 			movement.HandleInputEvent(inputEvent);
 		}
-		if (inputEvent is InputEventMouseButton inputEventMouseButton && isMouseButtonEventFree)
-		{
-			var spaceState = GetWorld3D().DirectSpaceState;
-			var cam = GetViewport().GetCamera3D();
-			var mousePos = GetViewport().GetMousePosition();
 
-			var origin = cam.ProjectRayOrigin(mousePos);
-			var end = origin + cam.ProjectRayNormal(mousePos) * 1000; // TODO add normal length
-			var query = PhysicsRayQueryParameters3D.Create(origin, end);
-			query.CollideWithAreas = true;
+		currentlyActiveAction?.HandleInput(inputEvent);
+		
 
-			var result = spaceState.IntersectRay(query);	
-			Godot.GodotObject godotObject = (Godot.GodotObject)result["collider"];
-			if (godotObject is Building buildingObject)
-			{
-				soldierManager.SetDestroyObjective(buildingObject); // TODO
-				
-			}
-			else
-			{
-				soldierManager.SetDestroyObjective(null);
-			}
-				
-			
-		}
+		
 	
 		
 	}
@@ -124,6 +136,9 @@ public partial class Player : CharacterBody3D
 	
 		MoveAndSlide();
 		soldierManager.Update((float)delta, this.characterCollider.Rotation);
+
+
+		currentlyActiveAction?.Update(delta);
 		
 	}
 

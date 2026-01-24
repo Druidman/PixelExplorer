@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using Godot;
-public partial class WorldObjectPlacers : Node3D
+public partial class ObjectPlacingPlayerAction : PlayerAction
 {
 	public bool isPlacingObject = false;
+
+	
 
 	WorldObjectPlacer currentObjectPlacerObject;
 
@@ -14,10 +16,6 @@ public partial class WorldObjectPlacers : Node3D
 	[Export]
 	World world;
 
-	[Export]
-	Player player;
-	
-
 	private void TurnOffObjectPlacerObject()
 	{
 		if (!isPlacingObject) return;
@@ -27,10 +25,7 @@ public partial class WorldObjectPlacers : Node3D
 
 		this.isPlacingObject = false;
 		this.currentObjectPlacerObject = null;
-		this.player.canMove = true;
-		this.player.isMouseButtonEventFree = true;
 		
-	
 	}
 	private void TurnOnObjectPlacerObject(WorldObjectPlacer currentObject)
 	{
@@ -41,9 +36,6 @@ public partial class WorldObjectPlacers : Node3D
 		this.currentObjectPlacerObject.ProcessMode = ProcessModeEnum.Disabled; 
 
 		this.isPlacingObject = true;
-		this.player.canMove = false;
-		this.player.isMouseButtonEventFree = false;
-		
 
 	}
 
@@ -53,7 +45,7 @@ public partial class WorldObjectPlacers : Node3D
 		return this.currentObjectPlacerObject.PlaceObject(this.world, this.player);
 	}
 
-	public override void _Input(InputEvent inputEvent)
+	public override void HandleInput(InputEvent inputEvent)
 	{
 		if (isPlacingObject && inputEvent is InputEventMouseMotion inputEventMouseMotion)
 		{
@@ -89,6 +81,10 @@ public partial class WorldObjectPlacers : Node3D
 		}
 	}
 
+	public override void Update(double delta)
+	{
+		return;
+	}
 	private Godot.Vector3 GetMouseHitPos()
 	{
 		var spaceState = GetWorld3D().DirectSpaceState;

@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://bscyq51oo4mby"]
+
+[ext_resource type="Script" uid="uid://605y60r0u20c" path="res://src/entities/player/Actions/AttackPlayerAction/AttackPlayerAction.cs" id="1_1754t"]
+
+[node name="AttackPlayerAction" type="Node3D"]
+script = ExtResource("1_1754t")
+actionName = "StartAttackingObjects"
