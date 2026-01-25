@@ -1,23 +1,28 @@
 using System.Collections.Generic;
 using Godot;
-public partial class WorldObjectPlacer : Node3D
+public partial class ObjectPlacingPlayerAction : PlayerAction
 {
 	public bool isPlacingObject = false;
+	
 
-	WorldObjectPlacerObject currentObjectPlacerObject;
+	WorldObjectPlacer currentObjectPlacerObject;
 
 	[Export]
-	public Godot.Collections.Dictionary<string, WorldObjectPlacerObject> worldObjects = new Godot.Collections.Dictionary<string, WorldObjectPlacerObject>
+	public Godot.Collections.Dictionary<string, WorldObjectPlacer> worldObjects = new Godot.Collections.Dictionary<string, WorldObjectPlacer>
 	{
 	};
 
 	[Export]
 	World world;
 
-	[Export]
-	Player player;
-	
-
+	public override void OnEnd()
+    {
+        
+    }
+    public override void OnStart()
+    {
+        
+    }
 	private void TurnOffObjectPlacerObject()
 	{
 		if (!isPlacingObject) return;
@@ -27,11 +32,9 @@ public partial class WorldObjectPlacer : Node3D
 
 		this.isPlacingObject = false;
 		this.currentObjectPlacerObject = null;
-		this.player.canMove = true;
 		
-	
 	}
-	private void TurnOnObjectPlacerObject(WorldObjectPlacerObject currentObject)
+	private void TurnOnObjectPlacerObject(WorldObjectPlacer currentObject)
 	{
 		if (isPlacingObject) return;
 
@@ -40,8 +43,6 @@ public partial class WorldObjectPlacer : Node3D
 		this.currentObjectPlacerObject.ProcessMode = ProcessModeEnum.Disabled; 
 
 		this.isPlacingObject = true;
-		this.player.canMove = false;
-		
 
 	}
 
@@ -51,7 +52,7 @@ public partial class WorldObjectPlacer : Node3D
 		return this.currentObjectPlacerObject.PlaceObject(this.world, this.player);
 	}
 
-	public override void _Input(InputEvent inputEvent)
+	public override void HandleInput(InputEvent inputEvent)
 	{
 		if (isPlacingObject && inputEvent is InputEventMouseMotion inputEventMouseMotion)
 		{
@@ -87,48 +88,10 @@ public partial class WorldObjectPlacer : Node3D
 		}
 	}
 
-
-	// private void PlaceGoldMine()
-	// {
-
-	// 	if (this.coins < GameGlobals.GoldMineCost)
-	// 	{
-	// 		return;
-	// 	}
-		
-	// 	List<Ore> ores = this.world.GetChunkOres((Godot.Vector3I)this.GlobalPosition);
-	// 	if (ores == null) return;
-	// 	if (ores.Count < 0) return;
-
-
-
-	// 	Ore selectedOre = ores[0];
-
-	// 	// select closest ore
-	// 	float CurMinDist = 100000f;
-	// 	foreach (Ore ore in ores)
-	// 	{
-	// 		float dist = ore.GlobalPosition.DistanceSquaredTo(this.GlobalPosition);
-	// 		if (dist < CurMinDist)
-	// 		{
-	// 			CurMinDist = dist;
-	// 			selectedOre = ore;
-	// 		}
-	// 	}
-
-
-	
-
-	// 	GoldMine mine = GameGlobals.GoldMineScene.Instantiate<GoldMine>();
-	// 	mine.Initialize(this, selectedOre.GlobalPosition, this.world);
-
-	// 	selectedOre.AddChild(mine);
-
-	// 	this.coins -= GameGlobals.GoldMineCost;
-		
-		
-	// }
-
+	public override void Update(double delta)
+	{
+		return;
+	}
 	private Godot.Vector3 GetMouseHitPos()
 	{
 		var spaceState = GetWorld3D().DirectSpaceState;
@@ -167,8 +130,9 @@ public partial class WorldObjectPlacer : Node3D
 			return;
 		}
 		
+		
 	
-		currentObjectPlacerObject.GlobalPosition = this.world.GetTilePosition(hitPos) + new Godot.Vector3(0,0.5f,0) + currentObjectPlacerObject.positionOffset;	
+		currentObjectPlacerObject.GlobalPosition = this.world.GetTilePosition(hitPos) + new Godot.Vector3(0,0.5f,0) + currentObjectPlacerObject.PositionOffset;	
 		
 	}
 }

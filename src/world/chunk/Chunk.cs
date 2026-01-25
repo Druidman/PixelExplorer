@@ -68,6 +68,10 @@ public partial class Chunk : Node3D
 	{
 		this.GlobalPosition = this.chunkPos;
 	}
+    public override void _Ready()
+    {
+        this.ApplyChunkObjects();
+    }
 	
 	public void GenerateChunk()
 	{
@@ -77,12 +81,14 @@ public partial class Chunk : Node3D
 
 	public void ApplyChunkObjects()
 	{
-		List<Ore> ores = this.world.GetChunkOres(this.chunkPos);
+		Dictionary<Godot.Vector3I, Ore> ores = this.world.GetChunkOres(this.chunkPos);
 		if (ores != null)
 		{
-			foreach (Ore ore in ores)
+			foreach (Godot.Vector3I orePos in ores.Keys)
 			{
-				AddChild(ore);
+				ores[orePos].Initialize(world, orePos);
+				AddChild(ores[orePos]);
+				
 			}
 		}
 		

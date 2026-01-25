@@ -1,25 +1,23 @@
 using Godot;
 using System.Collections.Generic;
+using System.Net;
 
 
-public partial class GoldMine : WorldObject
+public partial class GoldMine : Building
 {
-	Player player = null;
+	Ore ore = null;
 
-	public override List<Vector3> GetTiles()
-	{
-		return GameGlobals.GoldMineOccupiedTiles;
+	public override Vector3 PositionOffset { 
+		get
+		{
+			return GameGlobals.goldMinePositionOffset;
+		}
 	}
-	public override void _Ready()
-	{
-		this.GlobalPosition = globalPos;
-		
-	}
-	public void Initialize(Player player, Godot.Vector3 position, World world)
-	{
-		this.player = player;
-		this.globalPos = position;
-		this.world = world;
+	public override List<Godot.Vector3> BaseTiles {
+		get
+		{
+			return GameGlobals.GoldMineOccupiedTiles;
+		}
 	}
 
 	public void OnTimerCall()
@@ -28,5 +26,19 @@ public partial class GoldMine : WorldObject
 		
 		
 		this.player.AddCoins(10);
+	}
+	public void Initialize(Player player, Godot.Vector3 pos, World world, Ore ore)
+	{
+		this.Initialize(player,pos,world);
+		this.ore = ore;
+	}
+	protected override void OnDestroy()
+	{
+		// TODO
+		// for now nothing because timer will just stop triggering so player won't receive benefits
+		this.ore.containsGoldMine = false;
+
+		
+		
 	}
 }

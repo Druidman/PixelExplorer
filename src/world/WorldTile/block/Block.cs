@@ -32,7 +32,8 @@ public class Block : WorldTile
     public Block(Godot.Vector3I pos, BlockType blockType) : 
     base(
         WorldTileState.Occupied, 
-        pos
+        pos,
+        WorldTileType.BlockTile
     )
     {
         this.blockType = blockType;

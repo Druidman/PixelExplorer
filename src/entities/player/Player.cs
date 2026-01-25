@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 
 public partial class Player : CharacterBody3D
@@ -18,14 +19,31 @@ public partial class Player : CharacterBody3D
 	Movement movement;
 
 	[Export]
-	SoldierManager soldierManager;
+	public SoldierManager soldierManager;
+
+	[Export]
+	public Godot.Collections.Array<PlayerAction> playerActions = new Godot.Collections.Array<PlayerAction>
+	{
+	};
+
+
+	private PlayerAction currentlyActiveAction = null;
+
+
+	public List<SoldierHome> houses = new List<SoldierHome>();
 
 
 	private int coins = GameGlobals.PlayerStartCoins;
 
 	public int SoldierSlots = 2;
 
-	public bool canMove = true;
+	public bool canMove {
+		get
+		{
+			return (this.currentlyActiveAction?.blocksMovement != null) ? !this.currentlyActiveAction.blocksMovement : true;
+		}
+	}
+	public bool isMouseButtonEventFree = true;
 	public override void _EnterTree()
 	{
 		GlobalPosition = GameGlobals.PlayerStartPos;
@@ -62,11 +80,37 @@ public partial class Player : CharacterBody3D
 	}
 
 	public override void _Input(InputEvent inputEvent)
-	{
+	{	
+		foreach (PlayerAction action in this.playerActions)
+		{
+			if (inputEvent.IsActionPressed(action.actionName))
+			{
+				if (this.currentlyActiveAction == action)
+				{
+					this.currentlyActiveAction.OnEnd();
+					this.currentlyActiveAction = null;
+				}
+				else
+				{
+					this.currentlyActiveAction = action;	
+					this.currentlyActiveAction.OnStart();
+				}
+				
+				break;
+			}
+		}
+		
+
+		// here events that can run no matter what action we are doing
 		if (inputEvent is InputEventMouseMotion eventMouseMotion)
 		{
 			movement.HandleInputEvent(inputEvent);
 		}
+
+		currentlyActiveAction?.HandleInput(inputEvent);
+		
+
+		
 	
 		
 	}
@@ -94,6 +138,9 @@ public partial class Player : CharacterBody3D
 	
 		MoveAndSlide();
 		soldierManager.Update((float)delta, this.characterCollider.Rotation);
+
+
+		currentlyActiveAction?.Update(delta);
 		
 	}
 

@@ -22,4 +22,5 @@ shape = SubResource("BoxShape3D_hqtel")
 
 [node name="Character" type="MeshInstance3D" parent="."]
 transform = Transform3D(-8.742278e-09, -0.2, -8.742278e-09, 0, -8.742278e-09, 0.2, -0.2, 8.742278e-09, 3.821371e-16, -0.2, 0, 0)
+layers = 12
 mesh = ExtResource("3_i3pqv")

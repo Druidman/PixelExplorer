@@ -1,80 +1,28 @@
 using Godot;
 using System.Collections.Generic;
-
-public abstract partial class WorldObject : StaticBody3D
+public interface IWorldObject
 {
+    public Godot.Vector3 GlobalPosition {get; set;}
+    public Godot.Vector3 PositionOffset {get;}
 
-    protected World world = null;
-    public Godot.Vector3 globalPos;
-    public override void _EnterTree()
-    {
-        List<Godot.Vector3> tilesToOccupy = this.GetTiles();
-        foreach (Godot.Vector3 localPos in tilesToOccupy)
+    public Godot.Vector3 GlobalPos {get; set;}
+
+    public List<Godot.Vector3> BaseTiles {get;}
+    public List<Godot.Vector3> Tiles {
+        get
         {
-            Godot.Vector3 pos = localPos + this.globalPos;
-            Chunk chunk = this.world.GetChunkAtPos(pos);
-            if (chunk == null)
+            List<Godot.Vector3> tiles = new List<Godot.Vector3>(BaseTiles);
+            for (int i =0; i< tiles.Count; i++)
             {
-                continue;
+                tiles[i] += this.GlobalPosition;
             }
-
-            chunk.UpdateTile(
-                chunk.ConvertToLocalPosition(this.world.GetTilePosition(pos)), 
-                new WorldTile(WorldTileState.Occupied, this.world.GetTilePosition(pos))
-            );
-            GD.Print("TIle occupied!");
-
-            
-        }
-    }
-    public override void _ExitTree()
-    {
-        List<Godot.Vector3> tilesOccupied = this.GetTiles();
-        foreach (Godot.Vector3 localPos in tilesOccupied)
-        {
-            Godot.Vector3 pos = localPos + this.globalPos;
-            Chunk chunk = this.world.GetChunkAtPos(pos);
-            if (chunk == null)
-            {
-                continue;
-            }
-
-            chunk.UpdateTile(
-                chunk.ConvertToLocalPosition(this.world.GetTilePosition(pos)),
-                new WorldTile(WorldTileState.Free, this.world.GetTilePosition(pos))
-            );
-
-            
+            return tiles;
         }
     }
 
-    public abstract List<Godot.Vector3> GetTiles();
+    public void Initialize(Godot.Vector3 globalPosition)
+	{
+		this.GlobalPos = globalPosition;
+	}
+    
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

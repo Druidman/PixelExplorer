@@ -83,6 +83,7 @@ class GameGlobals
     ];
     public static Godot.Vector3 soldierHomePositionOffset = new Godot.Vector3(0,0.5f,0);
     public static Godot.Vector3 goldMinePositionOffset = new Godot.Vector3(0,0.5f,0);
+    public static Godot.Vector3 OrePositionOffset = new Godot.Vector3(0,0f,0);
 
 
     public static void Initialize()
