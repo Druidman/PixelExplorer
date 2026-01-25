@@ -7,7 +7,7 @@ public partial class AttackPlayerAction : PlayerAction
 
 	public override void OnEnd()
 	{
-        this.player.soldierManager.SetDestroyObjective(null);
+		this.player.soldierManager.SetDestroyObjective(null);
 		this.arrow.Visible = false;
 	}
 	public override void OnStart()

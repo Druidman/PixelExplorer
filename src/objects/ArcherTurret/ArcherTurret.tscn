@@ -1,0 +1,28 @@
+[gd_scene load_steps=5 format=3 uid="uid://c5nmsxf22xjsh"]
+
+[ext_resource type="ArrayMesh" uid="uid://dcm3j3sn6bh1e" path="res://images/ArcherTurret.res" id="1_qcx5v"]
+[ext_resource type="Script" uid="uid://c76nssbjejwf5" path="res://src/objects/ArcherTurret/ArcherTurret.cs" id="1_txdyt"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_txdyt"]
+size = Vector3(3, 3.2, 3)
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_bdb5l"]
+height = 3.2
+radius = 7.61
+
+[node name="ArcherTurret" type="StaticBody3D"]
+script = ExtResource("1_txdyt")
+
+[node name="Mesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.2, 0, 0, 0, -8.742278e-09, 0.2, 0, -0.2, -8.742278e-09, 0.3, -0.5, -0.3)
+mesh = ExtResource("1_qcx5v")
+
+[node name="CollisionBox" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
+shape = SubResource("BoxShape3D_txdyt")
+
+[node name="DefenseArea" type="Area3D" parent="."]
+
+[node name="area" type="CollisionShape3D" parent="DefenseArea"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
+shape = SubResource("CylinderShape3D_bdb5l")
