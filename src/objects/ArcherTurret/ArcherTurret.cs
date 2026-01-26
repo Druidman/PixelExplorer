@@ -27,7 +27,10 @@ public partial class ArcherTurret : Building<ArcherTurretDimensions>
 	}
 	public void OnAreaEntered(Area3D area)
 	{
-		GD.Print(area);
+		if (area is Soldier s)
+		{
+			GD.Print(s);
+		}
 	}
 
 

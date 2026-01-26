@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using Godot;
 
-public partial class Soldier : Node3D
+public partial class Soldier : Area3D
 {
 
 	static float strength = 0.5f;
