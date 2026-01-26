@@ -25,12 +25,13 @@ public partial class AttackPlayerAction : PlayerAction
 			var origin = cam.ProjectRayOrigin(mousePos);
 			var end = origin + cam.ProjectRayNormal(mousePos) * 1000; // TODO add normal length
 			var query = PhysicsRayQueryParameters3D.Create(origin, end);
-			query.CollideWithAreas = true;
+			query.CollisionMask = 8;
 
 			var result = spaceState.IntersectRay(query);	
 			Godot.GodotObject godotObject = (Godot.GodotObject)result["collider"];
 			if (godotObject is IBuilding buildingObject)
 			{
+				GD.Print("hitObject");
 				this.player.soldierManager.SetDestroyObjective(buildingObject); // TODO
 				arrow.GlobalPosition = buildingObject.GlobalPosition + new Godot.Vector3(0,5,0);
 				arrow.Visible = true;

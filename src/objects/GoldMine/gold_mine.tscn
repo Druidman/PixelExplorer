@@ -8,6 +8,7 @@ size = Vector3(2, 2, 2)
 
 [node name="GoldMine" type="StaticBody3D"]
 collision_layer = 9
+collision_mask = 0
 script = ExtResource("1_t8sqi")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
