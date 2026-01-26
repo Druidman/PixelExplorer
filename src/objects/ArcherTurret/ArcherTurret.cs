@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 public class ArcherTurretDimensions : IWorldObjectDimensions<ArcherTurretDimensions>
 {
@@ -11,6 +12,8 @@ public class ArcherTurretDimensions : IWorldObjectDimensions<ArcherTurretDimensi
 
 public partial class ArcherTurret : Building<ArcherTurretDimensions>
 {
+	public static readonly float damageDealt = 1f;
+	private List<Soldier> soldiersInAttackArea = new List<Soldier>();
 	protected override void OnEnterSceneTree()
 	{
 		this.player.archerTowers.Add(this); // TODO, not elegant
@@ -25,12 +28,43 @@ public partial class ArcherTurret : Building<ArcherTurretDimensions>
 		base.Initialize(player, pos, world);
 		
 	}
+
 	public void OnAreaEntered(Area3D area)
 	{
-		if (area is Soldier s)
+		if (area is not Soldier)
 		{
-			GD.Print(s);
+			return;
 		}
+
+		Soldier soldier = (Soldier)area;
+
+		if (!this.soldiersInAttackArea.Contains(soldier)){
+			this.soldiersInAttackArea.Add(soldier);
+		}
+	}
+	public void OnAreaExited(Area3D area)
+	{
+		if (area is not Soldier s)
+		{
+			return;
+		}
+		Soldier soldier = (Soldier)area;
+
+		if (this.soldiersInAttackArea.Contains(soldier)){
+			this.soldiersInAttackArea.Remove(soldier);
+		}
+	}
+
+	public void OnAttack()
+	{
+		Soldier soldier = this.soldiersInAttackArea.ElementAtOrDefault(0);
+		if (soldier == null)
+		{
+			return;
+		}
+		GD.Print("Attacking soldier");
+
+		// soldier.TakeHealth(damageDealt);
 	}
 
 

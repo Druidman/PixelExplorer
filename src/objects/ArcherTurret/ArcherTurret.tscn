@@ -24,10 +24,16 @@ mesh = ExtResource("1_qcx5v")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
 shape = SubResource("BoxShape3D_txdyt")
 
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.2
+autostart = true
+
 [node name="DefenseArea" type="Area3D" parent="."]
 
 [node name="area" type="CollisionShape3D" parent="DefenseArea"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
 shape = SubResource("CylinderShape3D_bdb5l")
 
+[connection signal="timeout" from="Timer" to="." method="OnAttack"]
 [connection signal="area_entered" from="DefenseArea" to="." method="OnAreaEntered"]
+[connection signal="area_exited" from="DefenseArea" to="." method="OnAreaExited"]
