@@ -1,12 +1,23 @@
-[gd_scene load_steps=3 format=3 uid="uid://cl4vodydfv3b3"]
+[gd_scene load_steps=4 format=3 uid="uid://cl4vodydfv3b3"]
 
 [ext_resource type="Script" uid="uid://bifs7anyqjm7" path="res://src/entities/Soldier/Soldier.cs" id="1_r672h"]
 [ext_resource type="ArrayMesh" uid="uid://oj10peiig47c" path="res://images/SoldierMesh.res" id="2_d8nwj"]
 
-[node name="Soldier" type="Node3D"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_r672h"]
+
+[node name="Soldier" type="Area3D" node_paths=PackedStringArray("attackTimer")]
 script = ExtResource("1_r672h")
+attackTimer = NodePath("Timer")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.2, 0, 0, 0, -8.742278e-09, 0.2, 0, -0.2, -8.742278e-09, -0.1, -0.5, -0.3)
 layers = 8
 mesh = ExtResource("2_d8nwj")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_r672h")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.9
+
+[connection signal="timeout" from="Timer" to="." method="OnAttack"]

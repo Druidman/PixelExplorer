@@ -25,6 +25,7 @@ class GameGlobals
     public static float PlayerDecelerationSpeed = GameGlobals.PlayerSpeed * 0.1f;
     public static int GoldMineCost = 10;
     public static int housePrice = 10;
+    public static int archerTurretPrice = 10;
 
     public static int TileWidth = 1;
     public static Godot.Vector2 TextureAtlasSize = new Godot.Vector2(48,64);
@@ -49,41 +50,10 @@ class GameGlobals
     public static PackedScene SoldierHomeScene = null;
     public static PackedScene chunkScene = null;
     public static PackedScene soldierScene = null;
+    public static PackedScene ArcherTurretScene = null;
     public static Chunk placeholderChunk = null;
 
     public static int SoldierCost = 5;
-
-    public static List<Godot.Vector3> OreOccupiedTiles = [
-        new Godot.Vector3(-1,0,-1), new Godot.Vector3(0,0,-1), new Godot.Vector3(1,0,-1),
-        new Godot.Vector3(-1,0,0), new Godot.Vector3(0,0,0), new Godot.Vector3(1,0,0),
-        new Godot.Vector3(-1,0,1), new Godot.Vector3(0,0,1), new Godot.Vector3(1,0,1)
-    ];
-    public static List<Godot.Vector3> GoldMineOccupiedTiles = [
-        new Godot.Vector3(-1,0,-1), new Godot.Vector3(0,0,-1), new Godot.Vector3(1,0,-1),
-        new Godot.Vector3(-1,0,0), new Godot.Vector3(0,0,0), new Godot.Vector3(1,0,0),
-        new Godot.Vector3(-1,0,1), new Godot.Vector3(0,0,1), new Godot.Vector3(1,0,1),
-        
-        new Godot.Vector3(-1,1,-1),new Godot.Vector3(0,1,-1),new Godot.Vector3(1,1,-1),
-        new Godot.Vector3(-1,1,0), new Godot.Vector3(0,1,0), new Godot.Vector3(1,1,0),
-        new Godot.Vector3(-1,1,1), new Godot.Vector3(0,1,1), new Godot.Vector3(1,1,1)
-    ];
-    
-    public static List<Godot.Vector3> SoldierHomeOccupiedTiles = [
-        new Godot.Vector3(-1,0,-1), new Godot.Vector3(0,0,-1), new Godot.Vector3(1,0,-1),
-        new Godot.Vector3(-1,0,0), new Godot.Vector3(0,0,0), new Godot.Vector3(1,0,0),
-        new Godot.Vector3(-1,0,1), new Godot.Vector3(0,0,1), new Godot.Vector3(1,0,1),
-
-        new Godot.Vector3(-1,1,-1),new Godot.Vector3(0,1,-1),new Godot.Vector3(1,1,-1),
-        new Godot.Vector3(-1,1,0), new Godot.Vector3(0,1,0), new Godot.Vector3(1,1,0),
-        new Godot.Vector3(-1,1,1), new Godot.Vector3(0,1,1), new Godot.Vector3(1,1,1),
-
-        new Godot.Vector3(-1,2,-1),new Godot.Vector3(0,2,-1),new Godot.Vector3(1,2,-1),
-        new Godot.Vector3(-1,2,0), new Godot.Vector3(0,2,0), new Godot.Vector3(1,2,0),
-        new Godot.Vector3(-1,2,1), new Godot.Vector3(0,2,1), new Godot.Vector3(1,2,1)
-    ];
-    public static Godot.Vector3 soldierHomePositionOffset = new Godot.Vector3(0,0.5f,0);
-    public static Godot.Vector3 goldMinePositionOffset = new Godot.Vector3(0,0.5f,0);
-    public static Godot.Vector3 OrePositionOffset = new Godot.Vector3(0,0f,0);
 
 
     public static void Initialize()
@@ -99,6 +69,7 @@ class GameGlobals
         GoldOreScene = GD.Load<PackedScene>("res://src/objects/Ores/Gold/GoldOre.tscn");
         GoldMineScene = GD.Load<PackedScene>("res://src/objects/GoldMine/gold_mine.tscn");
         SoldierHomeScene = GD.Load<PackedScene>("res://src/objects/SoldierHome/soldier_home.tscn");
+        ArcherTurretScene = GD.Load<PackedScene>("res://src/objects/ArcherTurret/ArcherTurret.tscn");
         placeholderChunk = chunkScene.Instantiate<Chunk>();
  
     }

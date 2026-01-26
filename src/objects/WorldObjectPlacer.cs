@@ -2,16 +2,22 @@ using System.Collections.Generic;
 using System.Threading;
 using Godot;
 
-public abstract partial class WorldObjectPlacer : Node3D, IWorldObject
+public abstract partial class WorldObjectPlacerBase : Node3D
 {
-	public abstract List<Godot.Vector3> BaseTiles {get;}
-	public abstract Godot.Vector3 PositionOffset {get;}
 	public Godot.Vector3 GlobalPos {get; set;}
 	public abstract bool PlaceObject(World world, Player player);
 
-	public List<Godot.Vector3> GetTiles()
+	public abstract List<Godot.Vector3I> GetTiles();
+}
+
+
+public abstract partial class WorldObjectPlacer<T> : WorldObjectPlacerBase, IWorldObject<T> where T : IWorldObjectDimensions<T> 
+{
+	public abstract override bool PlaceObject(World world, Player player);
+
+	public override List<Godot.Vector3I> GetTiles()
 	{
-		return ((IWorldObject)this).Tiles;
+		return ((IWorldObject<T>)this).Tiles;
 	}
 
 	

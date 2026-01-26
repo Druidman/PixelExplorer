@@ -1,28 +1,16 @@
 using System.Collections.Generic;
 using Godot;
 
-public partial class GoldMinePlacer : WorldObjectPlacer
+public partial class GoldMinePlacer : WorldObjectPlacer<GoldMineDimensions>
 {
-	public override Vector3 PositionOffset { 
-		get
-		{
-			return GameGlobals.goldMinePositionOffset;
-		}
-	}
-	public override List<Godot.Vector3> BaseTiles {
-		get
-		{
-			return GameGlobals.GoldMineOccupiedTiles;
-		}
-	}
+	
 	public override bool PlaceObject(World world, Player player)
 	{
 		if (player.GetCoinCount() < GameGlobals.GoldMineCost) return false;
-		List<Godot.Vector3> listOfOccupiedTiles = this.GetTiles();
-		GD.Print("Placing: ", listOfOccupiedTiles.ToString());
-		foreach (Godot.Vector3 pos in listOfOccupiedTiles)
+		List<Godot.Vector3I> listOfOccupiedTiles = this.GetTiles();
+		foreach (Godot.Vector3I pos in listOfOccupiedTiles)
 		{
-			Ore ore = world.GetOreAtExactGlobalPosition((Godot.Vector3I)pos);
+			Ore ore = world.GetOreAtExactGlobalPosition(pos);
 			if (ore != null)
 			{
 				if (ore.containsGoldMine)

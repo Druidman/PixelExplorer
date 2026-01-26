@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://c5nmsxf22xjsh"]
 
-[ext_resource type="ArrayMesh" uid="uid://dcm3j3sn6bh1e" path="res://images/ArcherTurret.res" id="1_qcx5v"]
+[ext_resource type="ArrayMesh" uid="uid://byu2yjf833xpu" path="res://images/ArcherTurret.res" id="1_qcx5v"]
 [ext_resource type="Script" uid="uid://c76nssbjejwf5" path="res://src/objects/ArcherTurret/ArcherTurret.cs" id="1_txdyt"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_txdyt"]
@@ -11,18 +11,29 @@ height = 3.2
 radius = 7.61
 
 [node name="ArcherTurret" type="StaticBody3D"]
+collision_layer = 9
+collision_mask = 0
 script = ExtResource("1_txdyt")
 
 [node name="Mesh" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.2, 0, 0, 0, -8.742278e-09, 0.2, 0, -0.2, -8.742278e-09, 0.3, -0.5, -0.3)
+layers = 2
 mesh = ExtResource("1_qcx5v")
 
 [node name="CollisionBox" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
 shape = SubResource("BoxShape3D_txdyt")
 
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.5
+autostart = true
+
 [node name="DefenseArea" type="Area3D" parent="."]
 
 [node name="area" type="CollisionShape3D" parent="DefenseArea"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
 shape = SubResource("CylinderShape3D_bdb5l")
+
+[connection signal="timeout" from="Timer" to="." method="OnAttack"]
+[connection signal="area_entered" from="DefenseArea" to="." method="OnAreaEntered"]
+[connection signal="area_exited" from="DefenseArea" to="." method="OnAreaExited"]

@@ -8,6 +8,9 @@ public abstract partial class PlayerAction : Node3D
     [Export]
     public bool blocksMovement = false;
 
+    [Export]
+    public bool blocksDefaultPlayerActions = true;
+
 	protected Player player;
 
     public override void _Ready()

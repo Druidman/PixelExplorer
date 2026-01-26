@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 public partial class SoldierManager : Godot.Node3D
 {
-	public List<Soldier> soldiers = new List<Soldier>();
+	public List<Soldier> soldiers {get; private set;}= new List<Soldier>();
 
 
 	Godot.Vector3 soldierPos = new Godot.Vector3(0,0,0);
@@ -16,16 +16,30 @@ public partial class SoldierManager : Godot.Node3D
 
 	Player player;
 
-	Building destroyObjective = null;
+	IBuilding destroyObjective = null;
 
 	public void Initialize(Player player)
 	{
 		this.player = player;
 	}
 
-	public void SetDestroyObjective(Building building)
+	public void SetDestroyObjective(IBuilding building)
 	{
 		destroyObjective = building;
+	}
+
+	public bool RemoveSoldier(Soldier soldier)
+	{
+		if (soldier == null){
+			return false;
+		}
+		if (!this.soldiers.Contains(soldier))
+		{
+			return false;
+		}
+
+		this.soldiers.Remove(soldier);
+		return true;
 	}
 	
 	public bool SpawnSoldier()
@@ -56,7 +70,7 @@ public partial class SoldierManager : Godot.Node3D
 		this.soldiersRotation = rotation  + rotationOffset;
 		foreach (Soldier soldier in soldiers)
 		{
-			if (IsInstanceValid(destroyObjective) && destroyObjective.IsInsideTree())
+			if (destroyObjective != null && destroyObjective.healthPoints > 0)
 			{
 				soldier.destination = this.destroyObjective.GlobalPosition;
 				soldier.destroyObjective = this.destroyObjective;

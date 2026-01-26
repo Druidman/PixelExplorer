@@ -1,10 +1,14 @@
 using System.Diagnostics;
 using Godot;
 
-public partial class Soldier : Node3D
+public partial class Soldier : Area3D
 {
+	[Export]
+	Godot.Timer attackTimer;
+	
+	static float strength = 2;
 
-	static float strength = 0.5f;
+	public float Health {get; private set;} = 2;
 
 	private World world;
 	private Player player;
@@ -16,7 +20,7 @@ public partial class Soldier : Node3D
 	
 	private float stopDistance = 2f;
 
-	public Building destroyObjective = null;
+	public IBuilding destroyObjective = null;
 
 	Godot.Vector3 startOffsetPos = new Godot.Vector3(0,10,0);
 	public void Initialize(Player player, Godot.Vector3 relativeToPlayer)
@@ -26,6 +30,26 @@ public partial class Soldier : Node3D
 		this.world = this.player.world;
 		
 
+	}
+
+	public void TakeHealth(float delta)
+	{
+		if (delta < 0)
+		{
+			return;
+		}
+
+		this.Health -= delta;
+		if (this.Health <= 0){
+			this.Kill();
+		}
+	}
+
+	private void Kill()
+	{
+		this.player.soldierManager.RemoveSoldier(this);
+		GetParent()?.RemoveChild(this);
+		QueueFree();
 	}
 	public override void _Ready()
 	{
@@ -101,10 +125,18 @@ public partial class Soldier : Node3D
 
 	public void UpdateActions()
 	{
-		if (this.GlobalPosition.DistanceSquaredTo(destination) <= 25 && IsInstanceValid(destroyObjective)) // squared 5
+		if (this.GlobalPosition.DistanceSquaredTo(destination) <= 25 && destroyObjective != null && destroyObjective.healthPoints > 0) // squared 5
 		{
-			this.destroyObjective?.TakeHealth(Soldier.strength);
+			if (this.attackTimer.IsStopped()) this.attackTimer.Start();
+		}
+		else
+		{
+			if (!this.attackTimer.IsStopped()) this.attackTimer.Stop();
 		}
 		
+	}
+	public void OnAttack()
+	{
+		this.destroyObjective?.TakeHealth(Soldier.strength);
 	}
 }

@@ -17,7 +17,6 @@ public enum ChunkCollisionState
 public partial class Chunk : Node3D
 {
 	static int Width = GameGlobals.ChunkWidth;
-	static int Height = 100;
 
 	public Godot.Vector3I chunkPos;
 	public Godot.Vector3I chunkTopLeft; // -z, -x
