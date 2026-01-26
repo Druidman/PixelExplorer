@@ -91,11 +91,11 @@ public partial class World : Node3D
 		}
 		return true;
 	}
-	public bool CheckIfFreeSpace(List<Godot.Vector3> tilePositions)
+	public bool CheckIfFreeSpace(List<Godot.Vector3I> tilePositions)
 	{
-		foreach (Godot.Vector3 tilePos in tilePositions)
+		foreach (Godot.Vector3I tilePos in tilePositions)
 		{
-			if (!CheckIfFreeSpace((Godot.Vector3I)tilePos))
+			if (!CheckIfFreeSpace(tilePos))
 			{
 				return false;
 			}	

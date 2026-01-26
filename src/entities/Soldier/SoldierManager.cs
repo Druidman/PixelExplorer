@@ -16,14 +16,14 @@ public partial class SoldierManager : Godot.Node3D
 
 	Player player;
 
-	Building destroyObjective = null;
+	IBuilding destroyObjective = null;
 
 	public void Initialize(Player player)
 	{
 		this.player = player;
 	}
 
-	public void SetDestroyObjective(Building building)
+	public void SetDestroyObjective(IBuilding building)
 	{
 		destroyObjective = building;
 	}
@@ -56,7 +56,7 @@ public partial class SoldierManager : Godot.Node3D
 		this.soldiersRotation = rotation  + rotationOffset;
 		foreach (Soldier soldier in soldiers)
 		{
-			if (IsInstanceValid(destroyObjective) && destroyObjective.IsInsideTree())
+			if (destroyObjective != null && destroyObjective.healthPoints > 0)
 			{
 				soldier.destination = this.destroyObjective.GlobalPosition;
 				soldier.destroyObjective = this.destroyObjective;

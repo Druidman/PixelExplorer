@@ -2,27 +2,16 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public partial class SoldierHome : Building
+public class SoldierHomeDimensions : IWorldObjectDimensions<SoldierHomeDimensions>
 {
+	public static int TilesX => 2;
+	public static int TilesY => 4;
+	public static int TilesZ => 2;
+}
 
-	public override List<Godot.Vector3> BaseTiles
-	{
-		get
-		{
-			return GameGlobals.SoldierHomeOccupiedTiles;
-		}
-	}
-	public override Godot.Vector3 PositionOffset
-	{
-		get
-		{
-			return GameGlobals.soldierHomePositionOffset;
-		}
-	}
+public partial class SoldierHome : Building<SoldierHomeDimensions>
+{
 	bool canRemoveSlots = false;
-
-
-	
 	protected override void OnEnterSceneTree()
 	{
 		this.player.houses.Add(this); // TODO, not elegant

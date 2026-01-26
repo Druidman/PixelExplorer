@@ -1,35 +1,24 @@
 using Godot;
 using System.Collections.Generic;
 
-public abstract partial class WorldBody : StaticBody3D, IWorldObject
+public abstract partial class WorldBody<T> : StaticBody3D, IWorldObject<T> where T : IWorldObjectDimensions<T> 
 {
-
-
-	public abstract List<Godot.Vector3> BaseTiles {get;}
 	public Godot.Vector3 GlobalPos {get; set;}
-	public virtual Godot.Vector3 PositionOffset
-	{
-		get
-		{
-			return new Godot.Vector3(0,0,0);
-		}
-	}
 
 	protected virtual WorldTileType tileType => WorldTileType.WorldBodyTile;		
 	
-	
 	protected World world;
 
-	public List<Godot.Vector3> GetTiles()
+	public List<Godot.Vector3I> GetTiles()
 	{
-		return ((IWorldObject)this).Tiles;
+		return ((IWorldObject<T>)this).Tiles;
 	}
 	public override void _EnterTree()
 	{
 		this.GlobalPosition = this.GlobalPos;
 		OnEnterSceneTree();
-		List<Godot.Vector3> tilesToOccupy = this.GetTiles();
-		foreach (Godot.Vector3 globalPos in tilesToOccupy)
+		List<Godot.Vector3I> tilesToOccupy = this.GetTiles();
+		foreach (Godot.Vector3I globalPos in tilesToOccupy)
 		{
 			
 			Chunk chunk = this.world.GetChunkAtPos(globalPos);
@@ -50,8 +39,8 @@ public abstract partial class WorldBody : StaticBody3D, IWorldObject
 	public override void _ExitTree()
 	{
 		OnExitSceneTree();
-		List<Godot.Vector3> tilesOccupied = this.GetTiles();
-		foreach (Godot.Vector3 globalPos in tilesOccupied)
+		List<Godot.Vector3I> tilesOccupied = this.GetTiles();
+		foreach (Godot.Vector3I globalPos in tilesOccupied)
 		{
 			
 			Chunk chunk = this.world.GetChunkAtPos(globalPos);
@@ -75,7 +64,7 @@ public abstract partial class WorldBody : StaticBody3D, IWorldObject
 	protected virtual void OnExitSceneTree(){}
 	protected void Initialize(World world, Godot.Vector3 pos)
 	{
-		((IWorldObject)this).Initialize(pos);
+		((IWorldObject<T>)this).Initialize(pos);
 		this.world = world;
 		
 	}
