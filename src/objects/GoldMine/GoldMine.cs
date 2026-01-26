@@ -3,23 +3,15 @@ using System.Collections.Generic;
 using System.Net;
 
 
-public partial class GoldMine : Building
+public class GoldMineDimensions : IWorldObjectDimensions<GoldMineDimensions>
+{
+	public static int TilesX => 2;
+	public static int TilesY => 2;
+	public static int TilesZ => 2;
+}
+public partial class GoldMine : Building<GoldMineDimensions>
 {
 	Ore ore = null;
-
-	public override Vector3 PositionOffset { 
-		get
-		{
-			return GameGlobals.goldMinePositionOffset;
-		}
-	}
-	public override List<Godot.Vector3> BaseTiles {
-		get
-		{
-			return GameGlobals.GoldMineOccupiedTiles;
-		}
-	}
-
 	public void OnTimerCall()
 	{
 		if (this.player == null) return;

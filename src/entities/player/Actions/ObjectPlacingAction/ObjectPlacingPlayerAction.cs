@@ -5,10 +5,10 @@ public partial class ObjectPlacingPlayerAction : PlayerAction
 	public bool isPlacingObject = false;
 	
 
-	WorldObjectPlacer currentObjectPlacerObject;
+	WorldObjectPlacerBase currentObjectPlacerObject;
 
 	[Export]
-	public Godot.Collections.Dictionary<string, WorldObjectPlacer> worldObjects = new Godot.Collections.Dictionary<string, WorldObjectPlacer>
+	public Godot.Collections.Dictionary<string, WorldObjectPlacerBase> worldObjects = new Godot.Collections.Dictionary<string, WorldObjectPlacerBase>
 	{
 	};
 
@@ -34,7 +34,7 @@ public partial class ObjectPlacingPlayerAction : PlayerAction
 		this.currentObjectPlacerObject = null;
 		
 	}
-	private void TurnOnObjectPlacerObject(WorldObjectPlacer currentObject)
+	private void TurnOnObjectPlacerObject(WorldObjectPlacerBase currentObject)
 	{
 		if (isPlacingObject) return;
 
@@ -132,7 +132,7 @@ public partial class ObjectPlacingPlayerAction : PlayerAction
 		
 		
 	
-		currentObjectPlacerObject.GlobalPosition = this.world.GetTilePosition(hitPos) + new Godot.Vector3(0,0.5f,0) + currentObjectPlacerObject.PositionOffset;	
+		currentObjectPlacerObject.GlobalPosition = this.world.GetTilePosition(hitPos) + new Godot.Vector3(0,1f,0);
 		
 	}
 }

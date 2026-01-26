@@ -16,7 +16,7 @@ public partial class Soldier : Node3D
 	
 	private float stopDistance = 2f;
 
-	public Building destroyObjective = null;
+	public IBuilding destroyObjective = null;
 
 	Godot.Vector3 startOffsetPos = new Godot.Vector3(0,10,0);
 	public void Initialize(Player player, Godot.Vector3 relativeToPlayer)
@@ -101,7 +101,7 @@ public partial class Soldier : Node3D
 
 	public void UpdateActions()
 	{
-		if (this.GlobalPosition.DistanceSquaredTo(destination) <= 25 && IsInstanceValid(destroyObjective)) // squared 5
+		if (this.GlobalPosition.DistanceSquaredTo(destination) <= 25 && destroyObjective != null && destroyObjective.healthPoints > 0) // squared 5
 		{
 			this.destroyObjective?.TakeHealth(Soldier.strength);
 		}
