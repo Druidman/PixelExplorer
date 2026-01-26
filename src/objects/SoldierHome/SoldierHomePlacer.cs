@@ -7,7 +7,7 @@ public partial class SoldierHomePlacer : WorldObjectPlacer<SoldierHomeDimensions
 	{
 		if (player.GetCoinCount() < GameGlobals.housePrice) return false;
 
-		GD.Print(this.GetTiles()[0]);
+	
 		if (!world.CheckIfFreeSpace(this.GetTiles()))
 		{
 			return false;

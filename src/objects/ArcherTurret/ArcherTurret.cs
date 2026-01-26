@@ -12,7 +12,7 @@ public class ArcherTurretDimensions : IWorldObjectDimensions<ArcherTurretDimensi
 
 public partial class ArcherTurret : Building<ArcherTurretDimensions>
 {
-	public static readonly float damageDealt = 1f;
+	public static readonly float damageDealt = 2f;
 	private List<Soldier> soldiersInAttackArea = new List<Soldier>();
 	protected override void OnEnterSceneTree()
 	{
@@ -62,7 +62,7 @@ public partial class ArcherTurret : Building<ArcherTurretDimensions>
 		{
 			return;
 		}
-		GD.Print("Attacking soldier");
+		
 
 		soldier.TakeHealth(ArcherTurret.damageDealt);
 	}

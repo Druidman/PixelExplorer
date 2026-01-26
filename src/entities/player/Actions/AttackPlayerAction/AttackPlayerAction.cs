@@ -32,7 +32,7 @@ public partial class AttackPlayerAction : PlayerAction
 			Godot.GodotObject godotObject = (Godot.GodotObject)result.GetValueOrDefault("collider");
 			if (godotObject is IBuilding buildingObject)
 			{
-				GD.Print("hitObject");
+			
 				this.player.soldierManager.SetDestroyObjective(buildingObject); // TODO
 				arrow.GlobalPosition = buildingObject.GlobalPosition + new Godot.Vector3(0,5,0);
 				arrow.Visible = true;

@@ -31,7 +31,7 @@ public abstract partial class WorldBody<T> : StaticBody3D, IWorldObject<T> where
 				chunk.ConvertToLocalPosition(this.world.GetTilePosition(globalPos)), 
 				new WorldTile(WorldTileState.Occupied, this.world.GetTilePosition(globalPos), tileType)
 			);
-			GD.Print("TIle occupied!");
+			
 
 			
 		}

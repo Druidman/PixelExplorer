@@ -6,9 +6,9 @@ public partial class Soldier : Area3D
 	[Export]
 	Godot.Timer attackTimer;
 	
-	static float strength = 0.5f;
+	static float strength = 2;
 
-	public float Health {get; private set;} = 1;
+	public float Health {get; private set;} = 2;
 
 	private World world;
 	private Player player;
