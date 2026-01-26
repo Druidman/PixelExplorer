@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class SoldierHomeDimensions : IWorldObjectDimensions<SoldierHomeDimensions>
 {
 	public static int TilesX => 2;
-	public static int TilesY => 4;
+	public static int TilesY => 3;
 	public static int TilesZ => 2;
 }
 

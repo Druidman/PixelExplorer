@@ -1,15 +1,36 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
-public partial class ArcherTurret : StaticBody3D
+public class ArcherTurretDimensions : IWorldObjectDimensions<ArcherTurretDimensions>
 {
-	// Called when the node enters the scene tree for the first time.
-	public override void _Ready()
+	public static int TilesX => 3;
+	public static int TilesY => 4;
+	public static int TilesZ => 3;
+}
+
+public partial class ArcherTurret : Building<ArcherTurretDimensions>
+{
+	protected override void OnEnterSceneTree()
 	{
+		this.player.archerTowers.Add(this); // TODO, not elegant
+	}
+	protected override void OnExitSceneTree()
+	{
+		this.player.archerTowers.Remove(this); // TODO, fix performance somehow
 	}
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
+	public new void Initialize(Player player, Godot.Vector3 pos, World world)
 	{
+		base.Initialize(player, pos, world);
+		
 	}
+	public void OnAreaEntered(Area3D area)
+	{
+		GD.Print(area);
+	}
+
+
+
+
 }

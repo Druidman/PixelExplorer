@@ -39,7 +39,7 @@ public abstract partial class Building<T> : WorldBody<T>, IBuilding where T : IW
         this.player = player;
     }
 
-    protected abstract void OnDestroy();
+    protected virtual void OnDestroy(){}
     protected void Destroy()
     {
         this.OnDestroy();

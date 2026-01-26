@@ -1,7 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://c2v8gyshy0hav"]
+[gd_scene load_steps=8 format=3 uid="uid://c2v8gyshy0hav"]
 
 [ext_resource type="Script" uid="uid://dfhi4s40pwwj7" path="res://src/entities/player/Actions/ObjectPlacingAction/ObjectPlacingPlayerAction.cs" id="1_udk4x"]
 [ext_resource type="PackedScene" uid="uid://bq260ntypcifh" path="res://src/objects/SoldierHome/soldier_home.tscn" id="2_32lq0"]
+[ext_resource type="PackedScene" uid="uid://c5nmsxf22xjsh" path="res://src/objects/ArcherTurret/ArcherTurret.tscn" id="2_hywmy"]
+[ext_resource type="Script" uid="uid://chl7qnhwtmkbf" path="res://src/objects/ArcherTurret/ArcherTurretPlacer.cs" id="3_5a385"]
 [ext_resource type="Script" uid="uid://b4o07hpo6l4ds" path="res://src/objects/SoldierHome/SoldierHomePlacer.cs" id="3_qu26l"]
 [ext_resource type="PackedScene" uid="uid://cfw8qumc6mkj7" path="res://src/objects/GoldMine/gold_mine.tscn" id="4_l2j2o"]
 [ext_resource type="Script" uid="uid://dw4s0bqg0gh28" path="res://src/objects/GoldMine/GoldMinePlacer.cs" id="5_32lq0"]
@@ -9,11 +11,19 @@
 [node name="PlayerObjectPlacingAction" type="Node3D" node_paths=PackedStringArray("worldObjects")]
 script = ExtResource("1_udk4x")
 worldObjects = {
+"PlaceArcherTurret": NodePath("ArcherTurret"),
 "PlaceGoldMine": NodePath("GoldMine"),
 "PlaceSoldierHome": NodePath("SoldierHome")
 }
 actionName = "StartPlacingObjects"
 blocksMovement = true
+
+[node name="ArcherTurret" parent="." instance=ExtResource("2_hywmy")]
+physics_interpolation_mode = 2
+visible = false
+collision_layer = 0
+collision_mask = 0
+script = ExtResource("3_5a385")
 
 [node name="SoldierHome" parent="." instance=ExtResource("2_32lq0")]
 physics_interpolation_mode = 2
