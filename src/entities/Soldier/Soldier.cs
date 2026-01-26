@@ -3,7 +3,9 @@ using Godot;
 
 public partial class Soldier : Area3D
 {
-
+	[Export]
+	Godot.Timer attackTimer;
+	
 	static float strength = 0.5f;
 
 	public float Health {get; private set;} = 1;
@@ -125,8 +127,16 @@ public partial class Soldier : Area3D
 	{
 		if (this.GlobalPosition.DistanceSquaredTo(destination) <= 25 && destroyObjective != null && destroyObjective.healthPoints > 0) // squared 5
 		{
-			this.destroyObjective?.TakeHealth(Soldier.strength);
+			if (this.attackTimer.IsStopped()) this.attackTimer.Start();
+		}
+		else
+		{
+			if (!this.attackTimer.IsStopped()) this.attackTimer.Stop();
 		}
 		
+	}
+	public void OnAttack()
+	{
+		this.destroyObjective?.TakeHealth(Soldier.strength);
 	}
 }
