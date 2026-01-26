@@ -64,7 +64,7 @@ public partial class ArcherTurret : Building<ArcherTurretDimensions>
 		}
 		GD.Print("Attacking soldier");
 
-		// soldier.TakeHealth(damageDealt);
+		soldier.TakeHealth(ArcherTurret.damageDealt);
 	}
 
 

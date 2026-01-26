@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 public partial class SoldierManager : Godot.Node3D
 {
-	public List<Soldier> soldiers = new List<Soldier>();
+	public List<Soldier> soldiers {get; private set;}= new List<Soldier>();
 
 
 	Godot.Vector3 soldierPos = new Godot.Vector3(0,0,0);
@@ -26,6 +26,20 @@ public partial class SoldierManager : Godot.Node3D
 	public void SetDestroyObjective(IBuilding building)
 	{
 		destroyObjective = building;
+	}
+
+	public bool RemoveSoldier(Soldier soldier)
+	{
+		if (soldier == null){
+			return false;
+		}
+		if (!this.soldiers.Contains(soldier))
+		{
+			return false;
+		}
+
+		this.soldiers.Remove(soldier);
+		return true;
 	}
 	
 	public bool SpawnSoldier()

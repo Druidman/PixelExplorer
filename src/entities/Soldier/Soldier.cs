@@ -6,6 +6,8 @@ public partial class Soldier : Area3D
 
 	static float strength = 0.5f;
 
+	public float Health {get; private set;} = 1;
+
 	private World world;
 	private Player player;
 
@@ -26,6 +28,26 @@ public partial class Soldier : Area3D
 		this.world = this.player.world;
 		
 
+	}
+
+	public void TakeHealth(float delta)
+	{
+		if (delta < 0)
+		{
+			return;
+		}
+
+		this.Health -= delta;
+		if (this.Health <= 0){
+			this.Kill();
+		}
+	}
+
+	private void Kill()
+	{
+		this.player.soldierManager.RemoveSoldier(this);
+		GetParent()?.RemoveChild(this);
+		QueueFree();
 	}
 	public override void _Ready()
 	{
