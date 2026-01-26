@@ -44,7 +44,13 @@ public partial class Player : CharacterBody3D
 			return (this.currentlyActiveAction?.blocksMovement != null) ? !this.currentlyActiveAction.blocksMovement : true;
 		}
 	}
-	public bool isMouseButtonEventFree = true;
+
+	public bool allowDefaultActions {
+		get
+		{
+			return (this.currentlyActiveAction?.blocksDefaultPlayerActions != null) ? !this.currentlyActiveAction.blocksDefaultPlayerActions : true;
+		}
+	}
 	public override void _EnterTree()
 	{
 		GlobalPosition = GameGlobals.PlayerStartPos;
@@ -101,12 +107,17 @@ public partial class Player : CharacterBody3D
 			}
 		}
 		
-
-		// here events that can run no matter what action we are doing
 		if (inputEvent is InputEventMouseMotion eventMouseMotion)
 		{
 			movement.HandleInputEvent(inputEvent);
+		}	
+
+		// here default events
+		if (allowDefaultActions)
+		{
+			
 		}
+		
 
 		currentlyActiveAction?.HandleInput(inputEvent);
 		
@@ -130,11 +141,15 @@ public partial class Player : CharacterBody3D
 		
 		movement.HandleProcess(delta);
 
-		if (Input.IsActionPressed("spawn_soldier") && this.coins >= GameGlobals.SoldierCost)
+		if (allowDefaultActions)
 		{
-			this.soldierManager.SpawnSoldier();
-			
+			if (Input.IsActionPressed("spawn_soldier") && this.coins >= GameGlobals.SoldierCost)
+			{
+				this.soldierManager.SpawnSoldier();
+				
+			}	
 		}
+		
 
 	
 		MoveAndSlide();
