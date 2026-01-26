@@ -92,16 +92,23 @@ public partial class Player : CharacterBody3D
 		{
 			if (inputEvent.IsActionPressed(action.actionName))
 			{
-				if (this.currentlyActiveAction == action)
+				if (this.currentlyActiveAction == null)
+				{
+					this.currentlyActiveAction = action;	
+					this.currentlyActiveAction.OnStart();
+				}
+				else if (this.currentlyActiveAction == action)
 				{
 					this.currentlyActiveAction.OnEnd();
 					this.currentlyActiveAction = null;
 				}
 				else
 				{
+					this.currentlyActiveAction.OnEnd();
 					this.currentlyActiveAction = action;	
 					this.currentlyActiveAction.OnStart();
 				}
+				
 				
 				break;
 			}

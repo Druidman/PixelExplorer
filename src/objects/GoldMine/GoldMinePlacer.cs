@@ -8,7 +8,6 @@ public partial class GoldMinePlacer : WorldObjectPlacer<GoldMineDimensions>
 	{
 		if (player.GetCoinCount() < GameGlobals.GoldMineCost) return false;
 		List<Godot.Vector3I> listOfOccupiedTiles = this.GetTiles();
-		GD.Print("Placing: ", listOfOccupiedTiles.ToString());
 		foreach (Godot.Vector3I pos in listOfOccupiedTiles)
 		{
 			Ore ore = world.GetOreAtExactGlobalPosition(pos);
