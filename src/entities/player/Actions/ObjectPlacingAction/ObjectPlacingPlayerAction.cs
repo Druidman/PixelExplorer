@@ -101,7 +101,6 @@ public partial class ObjectPlacingPlayerAction : PlayerAction
 		var origin = cam.ProjectRayOrigin(mousePos);
 		var end = origin + cam.ProjectRayNormal(mousePos) * 1000; // TODO add normal length
 		var query = PhysicsRayQueryParameters3D.Create(origin, end);
-		query.CollideWithAreas = true;
 
 		var result = spaceState.IntersectRay(query);
 		Godot.Vector3 hitPos = (Godot.Vector3)result.GetValueOrDefault("position");
