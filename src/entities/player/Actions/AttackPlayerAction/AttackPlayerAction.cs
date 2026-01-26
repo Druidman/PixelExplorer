@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Godot;
 
 public partial class AttackPlayerAction : PlayerAction
@@ -25,10 +26,10 @@ public partial class AttackPlayerAction : PlayerAction
 			var origin = cam.ProjectRayOrigin(mousePos);
 			var end = origin + cam.ProjectRayNormal(mousePos) * 1000; // TODO add normal length
 			var query = PhysicsRayQueryParameters3D.Create(origin, end);
-			query.CollisionMask = 8;
+			query.CollisionMask = 8; // points to 4th bit in mask
 
 			var result = spaceState.IntersectRay(query);	
-			Godot.GodotObject godotObject = (Godot.GodotObject)result["collider"];
+			Godot.GodotObject godotObject = (Godot.GodotObject)result.GetValueOrDefault("collider");
 			if (godotObject is IBuilding buildingObject)
 			{
 				GD.Print("hitObject");
