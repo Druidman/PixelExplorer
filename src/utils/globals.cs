@@ -69,7 +69,7 @@ class GameGlobals
         GoldOreScene = GD.Load<PackedScene>("res://src/objects/Ores/Gold/GoldOre.tscn");
         GoldMineScene = GD.Load<PackedScene>("res://src/objects/GoldMine/gold_mine.tscn");
         SoldierHomeScene = GD.Load<PackedScene>("res://src/objects/SoldierHome/soldier_home.tscn");
-        ArcherTurretScene = GD.Load<PackedScene>("res://src/objects/ArcherTurret/ArcherTurret.tscn");
+        ArcherTurretScene = GD.Load<PackedScene>("res://src/objects/Turrets/ArcherTurret/ArcherTurret.tscn");
         placeholderChunk = chunkScene.Instantiate<Chunk>();
  
     }

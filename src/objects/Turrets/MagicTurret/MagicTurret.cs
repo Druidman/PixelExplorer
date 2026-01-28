@@ -3,33 +3,26 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-public class ArcherTurretDimensions : IWorldObjectDimensions<ArcherTurretDimensions>
+public class MagicTurretDimensions : IWorldObjectDimensions<MagicTurretDimensions>
 {
 	public static int TilesX => 3;
-	public static int TilesY => 4;
+	public static int TilesY => 2;
 	public static int TilesZ => 3;
 }
 
-public partial class ArcherTurret : Building<ArcherTurretDimensions>
+public partial class MagicTurret : Turret<MagicTurretDimensions>
 {
-	public static readonly float damageDealt = 2f;
-	private List<Soldier> soldiersInAttackArea = new List<Soldier>();
+	public override float attackDmg {get; protected set;} = 2f;
 	protected override void OnEnterSceneTree()
 	{
-		this.player.archerTowers.Add(this); // TODO, not elegant
+		this.player.magicTurrets.Add(this); // TODO, not elegant
 	}
 	protected override void OnExitSceneTree()
 	{
-		this.player.archerTowers.Remove(this); // TODO, fix performance somehow
+		this.player.magicTurrets.Remove(this); // TODO, fix performance somehow
 	}
 
-	public new void Initialize(Player player, Godot.Vector3 pos, World world)
-	{
-		base.Initialize(player, pos, world);
-		
-	}
-
-	public void OnAreaEntered(Area3D area)
+	public override void OnAreaEntered(Area3D area)
 	{
 		if (area is not Soldier)
 		{
@@ -42,7 +35,7 @@ public partial class ArcherTurret : Building<ArcherTurretDimensions>
 			this.soldiersInAttackArea.Add(soldier);
 		}
 	}
-	public void OnAreaExited(Area3D area)
+	public override void OnAreaExited(Area3D area)
 	{
 		if (area is not Soldier s)
 		{
@@ -64,7 +57,7 @@ public partial class ArcherTurret : Building<ArcherTurretDimensions>
 		}
 		
 
-		soldier.TakeHealth(ArcherTurret.damageDealt);
+		soldier.TakeHealth(this.attackDmg);
 	}
 
 

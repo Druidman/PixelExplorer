@@ -32,6 +32,7 @@ public partial class Player : CharacterBody3D
 
 	public List<SoldierHome> houses = new List<SoldierHome>();
 	public List<ArcherTurret> archerTowers = new List<ArcherTurret>();
+	public List<MagicTurret> magicTurrets = new List<MagicTurret>();
 
 
 	private int coins = GameGlobals.PlayerStartCoins;
