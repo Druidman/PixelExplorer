@@ -1,0 +1,30 @@
+[gd_scene load_steps=5 format=3 uid="uid://drt1hjylw66v2"]
+
+[ext_resource type="Script" uid="uid://bknjoy87trf2n" path="res://src/objects/MagicTurret/MagicTurret.cs" id="1_f7qv1"]
+[ext_resource type="ArrayMesh" uid="uid://dx3frrko0anh8" path="res://images/MagicTurret.res" id="1_qgyn0"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_f7qv1"]
+size = Vector3(2.5, 1, 2.5)
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_qgyn0"]
+height = 3.2
+radius = 7.0
+
+[node name="MagicTurret" type="StaticBody3D"]
+script = ExtResource("1_f7qv1")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.2, 0, 0, 0, -8.742278e-09, 0.2, 0, -0.2, -8.742278e-09, -0.6, -0.5, 0.8)
+mesh = ExtResource("1_qgyn0")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_f7qv1")
+
+[node name="DefenseArea" type="Area3D" parent="."]
+
+[node name="area" type="CollisionShape3D" parent="DefenseArea"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
+shape = SubResource("CylinderShape3D_qgyn0")
+
+[connection signal="area_entered" from="DefenseArea" to="." method="OnAreaEntered"]
+[connection signal="area_exited" from="DefenseArea" to="." method="OnAreaExited"]
