@@ -20,5 +20,6 @@ public abstract partial class Turret<T> : Building<T> where T : IWorldObjectDime
 
 	public abstract void OnAreaEntered(Area3D area);
 	public abstract void OnAreaExited(Area3D area);
+    public abstract void OnAttack();
 
 }

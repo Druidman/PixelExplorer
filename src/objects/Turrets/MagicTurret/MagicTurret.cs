@@ -48,7 +48,7 @@ public partial class MagicTurret : Turret<MagicTurretDimensions>
 		}
 	}
 
-	public void OnAttack()
+	public override void OnAttack()
 	{
 		Soldier soldier = this.soldiersInAttackArea.ElementAtOrDefault(0);
 		if (soldier == null)

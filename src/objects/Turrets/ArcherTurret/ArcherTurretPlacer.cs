@@ -15,7 +15,7 @@ public partial class ArcherTurretPlacer : WorldObjectPlacer<ArcherTurretDimensio
 		ArcherTurret archerTurret = GameGlobals.ArcherTurretScene.Instantiate<ArcherTurret>();
 		archerTurret.Initialize(player, this.GlobalPosition, world);
 		world.AddChild(archerTurret);
-		player.removeCoins(GameGlobals.housePrice);
+		player.removeCoins(GameGlobals.archerTurretPrice);
 		return true;
 	}
 }

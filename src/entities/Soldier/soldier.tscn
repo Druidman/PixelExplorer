@@ -6,6 +6,8 @@
 [sub_resource type="BoxShape3D" id="BoxShape3D_r672h"]
 
 [node name="Soldier" type="Area3D" node_paths=PackedStringArray("attackTimer")]
+collision_layer = 4
+collision_mask = 0
 script = ExtResource("1_r672h")
 attackTimer = NodePath("Timer")
 

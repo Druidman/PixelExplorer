@@ -26,6 +26,7 @@ class GameGlobals
     public static int GoldMineCost = 10;
     public static int housePrice = 10;
     public static int archerTurretPrice = 10;
+    public static int magicTurretPrice = 10;
 
     public static int TileWidth = 1;
     public static Godot.Vector2 TextureAtlasSize = new Godot.Vector2(48,64);
@@ -51,6 +52,7 @@ class GameGlobals
     public static PackedScene chunkScene = null;
     public static PackedScene soldierScene = null;
     public static PackedScene ArcherTurretScene = null;
+    public static PackedScene MagicTurretScene = null;
     public static Chunk placeholderChunk = null;
 
     public static int SoldierCost = 5;
@@ -69,6 +71,7 @@ class GameGlobals
         GoldOreScene = GD.Load<PackedScene>("res://src/objects/Ores/Gold/GoldOre.tscn");
         GoldMineScene = GD.Load<PackedScene>("res://src/objects/GoldMine/gold_mine.tscn");
         SoldierHomeScene = GD.Load<PackedScene>("res://src/objects/SoldierHome/soldier_home.tscn");
+        MagicTurretScene = GD.Load<PackedScene>("res://src/objects/Turrets/MagicTurret/MagicTurret.tscn");
         ArcherTurretScene = GD.Load<PackedScene>("res://src/objects/Turrets/ArcherTurret/ArcherTurret.tscn");
         placeholderChunk = chunkScene.Instantiate<Chunk>();
  
