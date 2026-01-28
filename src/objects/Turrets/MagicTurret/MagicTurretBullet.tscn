@@ -1,0 +1,28 @@
+[gd_scene load_steps=5 format=3 uid="uid://dw6x65y3m1vep"]
+
+[ext_resource type="Script" uid="uid://bwcx8ovqaowev" path="res://src/objects/Turrets/MagicTurret/MagicTurretBullet.cs" id="1_enehh"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_5s4ne"]
+radius = 2.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_enehh"]
+albedo_color = Color(1, 0.07999998, 0.07999998, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_enehh"]
+radius = 0.4
+height = 0.8
+
+[node name="MagicTurretBullet" type="Area3D"]
+collision_layer = 0
+collision_mask = 4
+script = ExtResource("1_enehh")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+shape = SubResource("SphereShape3D_5s4ne")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+material_override = SubResource("StandardMaterial3D_enehh")
+mesh = SubResource("SphereMesh_enehh")
+skeleton = NodePath("")

@@ -12,6 +12,10 @@ public class MagicTurretDimensions : IWorldObjectDimensions<MagicTurretDimension
 
 public partial class MagicTurret : Turret<MagicTurretDimensions>
 {
+
+	[Export]
+	PackedScene turretBullet;
+
 	public override float attackDmg {get; protected set;} = 2f;
 	protected override void OnEnterSceneTree()
 	{
@@ -56,8 +60,9 @@ public partial class MagicTurret : Turret<MagicTurretDimensions>
 			return;
 		}
 		
-
-		soldier.TakeHealth(this.attackDmg);
+		MagicTurretBullet bullet = this.turretBullet.Instantiate<MagicTurretBullet>();
+		bullet.Instantiate(soldier.GlobalPosition, this.GlobalPosition, this.attackDmg);
+		AddChild(bullet);
 	}
 
 

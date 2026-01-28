@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://drt1hjylw66v2"]
+[gd_scene load_steps=6 format=3 uid="uid://drt1hjylw66v2"]
 
 [ext_resource type="Script" uid="uid://bknjoy87trf2n" path="res://src/objects/Turrets/MagicTurret/MagicTurret.cs" id="1_f7qv1"]
 [ext_resource type="ArrayMesh" uid="uid://duf62kd5lsbqi" path="res://images/MagicTurret.res" id="1_qgyn0"]
+[ext_resource type="PackedScene" uid="uid://dw6x65y3m1vep" path="res://src/objects/Turrets/MagicTurret/MagicTurretBullet.tscn" id="2_45dbr"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_f7qv1"]
 size = Vector3(2.5, 1, 2.5)
@@ -14,6 +15,7 @@ radius = 7.0
 collision_layer = 9
 collision_mask = 0
 script = ExtResource("1_f7qv1")
+turretBullet = ExtResource("2_45dbr")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.2, 0, 0, 0, -8.742278e-09, 0.2, 0, -0.2, -8.742278e-09, -0.6, -0.5, 0.8)
@@ -23,7 +25,7 @@ mesh = ExtResource("1_qgyn0")
 shape = SubResource("BoxShape3D_f7qv1")
 
 [node name="Timer" type="Timer" parent="."]
-wait_time = 0.5
+wait_time = 2.0
 autostart = true
 
 [node name="DefenseArea" type="Area3D" parent="."]
