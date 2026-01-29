@@ -22,26 +22,15 @@ public partial class ArcherTurret : Turret<ArcherTurretDimensions>
 		this.player.archerTowers.Remove(this); // TODO, fix performance somehow
 	}
 
-	public override void OnAreaEntered(Area3D area)
+	protected override void OnEnemySoldierEntered(Soldier soldier)
 	{
-		if (area is not Soldier)
-		{
-			return;
-		}
-
-		Soldier soldier = (Soldier)area;
 
 		if (!this.soldiersInAttackArea.Contains(soldier)){
 			this.soldiersInAttackArea.Add(soldier);
 		}
 	}
-	public override void OnAreaExited(Area3D area)
+	protected override void OnEnemySoldierExited(Soldier soldier)
 	{
-		if (area is not Soldier s)
-		{
-			return;
-		}
-		Soldier soldier = (Soldier)area;
 
 		if (this.soldiersInAttackArea.Contains(soldier)){
 			this.soldiersInAttackArea.Remove(soldier);

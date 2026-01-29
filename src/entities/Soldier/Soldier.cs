@@ -11,7 +11,7 @@ public partial class Soldier : Area3D
 	public float Health {get; private set;} = 2;
 
 	private World world;
-	private Player player;
+	public Player player;
 
 	public Godot.Vector3 relativeToPlayer;
 
