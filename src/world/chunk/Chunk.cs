@@ -26,8 +26,6 @@ public partial class Chunk : Node3D
 
 
 	public World world;
-
-	private ChunkCoinManager chunkCoinManager;
 	
 
 	[Export]
@@ -58,10 +56,6 @@ public partial class Chunk : Node3D
 
 		this.world = world;
 
-
-		this.chunkCoinManager = new ChunkCoinManager(this);
-		this.chunkCoinManager.UpdateCoins(); // gen base one
-
 	}
 	public override void _EnterTree()
 	{
@@ -80,6 +74,8 @@ public partial class Chunk : Node3D
 
 	public void ApplyChunkObjects()
 	{
+
+		// ores
 		Dictionary<Godot.Vector3I, Ore> ores = this.world.GetChunkOres(this.chunkPos);
 		if (ores != null)
 		{
@@ -90,6 +86,8 @@ public partial class Chunk : Node3D
 				
 			}
 		}
+
+		// coins, TODO
 		
 	}
 	public void CreateChunkCollision()
