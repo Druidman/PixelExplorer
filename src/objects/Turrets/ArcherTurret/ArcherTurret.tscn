@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://c5nmsxf22xjsh"]
 
 [ext_resource type="ArrayMesh" uid="uid://byu2yjf833xpu" path="res://images/ArcherTurret.res" id="1_qcx5v"]
-[ext_resource type="Script" uid="uid://c76nssbjejwf5" path="res://src/objects/ArcherTurret/ArcherTurret.cs" id="1_txdyt"]
+[ext_resource type="Script" uid="uid://c76nssbjejwf5" path="res://src/objects/Turrets/ArcherTurret/ArcherTurret.cs" id="1_txdyt"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_txdyt"]
 size = Vector3(3, 3.2, 3)
@@ -29,6 +29,8 @@ wait_time = 0.5
 autostart = true
 
 [node name="DefenseArea" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 4
 
 [node name="area" type="CollisionShape3D" parent="DefenseArea"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
