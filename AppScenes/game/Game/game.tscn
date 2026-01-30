@@ -29,9 +29,7 @@ playerActions = [NodePath("PlayerObjectPlacingAction"), NodePath("AttackPlayerAc
 
 [node name="PlayerObjectPlacingAction" parent="Player" node_paths=PackedStringArray("worldObjects", "world") instance=ExtResource("5_mc7xl")]
 worldObjects = {
-"PlaceArcherTurret": NodePath("ArcherTurret"),
 "PlaceGoldMine": NodePath("GoldMine"),
-"PlaceMagicTurret": NodePath("MagicTurret"),
 "PlaceSoldierHome": NodePath("SoldierHome")
 }
 world = NodePath("../../World")

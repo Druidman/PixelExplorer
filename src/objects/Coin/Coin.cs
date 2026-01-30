@@ -3,15 +3,10 @@ using System;
 
 public partial class Coin : Area3D
 {
-	private Action removeCallback = ()=>{};
+	public Action removeCallback = ()=>{};
 
 
 
-
-	public void Initialize(Action removeCallback)
-	{
-		this.removeCallback = removeCallback;
-	}
 	public void collected(Player player)
 	{
 		player.AddCoins(1);

@@ -12,7 +12,9 @@ class GameGlobals
     public static int chunkRadius = 10;
 
     public static int PlayerStartCoins = 10;
-    
+    public static int WorldWidth = 500;
+    public static Godot.Vector3I MaxWorldTopLeft = new Godot.Vector3I(-WorldWidth / 2,0,-WorldWidth / 2);
+    public static Godot.Vector3I MaxWorldBottomRight = new Godot.Vector3I(WorldWidth / 2,0,WorldWidth / 2);
 
     public static Godot.Vector3 PlayerStartPos = new Godot.Vector3(0,200,0);
     public static float GravitySpeed = 30.0f;
