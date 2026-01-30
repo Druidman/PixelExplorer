@@ -22,7 +22,7 @@ public partial class GoldMinePlacer : WorldObjectPlacer<GoldMineDimensions>
 				
 			
 				goldMine.Initialize(player, world, ore);
-				goldMine.Position = world.ConvertToLocalPos(this.GlobalPosition);
+				goldMine.Position = world.ConvertToLocalPos(ore.GlobalPosition);
 				world.AddChild(goldMine);
 		
 			
