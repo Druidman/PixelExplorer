@@ -3,17 +3,13 @@ using System;
 using System.Collections.Generic;
 using Godot;
 
-public class CoinManager
+public partial class CoinManager : Node3D
 {
 
 	protected Dictionary<Godot.Vector3I, Dictionary<Godot.Vector3I, Coin>> coins = new Dictionary<Godot.Vector3I, Dictionary<Godot.Vector3I, Coin>>();
-	protected Random random = new Random();
-	public World world;
 
-	protected CoinManager(World world)
-	{
-		this.world = world;
-	}
+	[Export]
+	World world;
 
 	public Coin GetCoinAtGlobalPos(Godot.Vector3I globalPos)
 	{
@@ -21,15 +17,16 @@ public class CoinManager
 	}
 	public bool CreateCoin(Godot.Vector3I globalPos)
 	{
-		if (!ValidatePos(globalPos))
+		if (!this.world.CheckIfValidGlobalPosition(globalPos))
 		{
 			return false;
 		}
 	
 		
 		Coin coin = GameGlobals.coinScene.Instantiate<Coin>();
-		coin.Position = this.GetCoinEngineLocalPosition(globalPos);
+		coin.Position = this.GetLocalPosition(globalPos);
 		coin.Initialize(()=>this.RemoveCoin(globalPos));
+		coin.Visible = false;
 		
 
 		Godot.Vector3I chunkGlobalPos = this.world.GetChunkPositionFromGlobalPos(globalPos);
@@ -39,26 +36,24 @@ public class CoinManager
 		}
 		
 		this.coins[chunkGlobalPos][globalPos] = coin;
-		
-		
 
-		
+		AddChild(coin);
 		
 		return true;
 	}
 
-	public Godot.Vector3I GetCoinEngineLocalPosition(Godot.Vector3I globalPos)
+	public Godot.Vector3I GetLocalPosition(Godot.Vector3I globalPos)
 	{
-		return globalPos - this.world.GetChunkPositionFromGlobalPos(globalPos);
+		return (Godot.Vector3I)(globalPos - this.GlobalPosition);
 	}
 	public bool RemoveCoin(Godot.Vector3I globalPos)
 	{
-		if (!ValidatePos(globalPos))
+		if (!this.world.CheckIfValidGlobalPosition(globalPos))
 		{
 			return false;
 		}
-		
-		this.GetCoinAtGlobalPos(globalPos).QueueFree(); // free node
+		GD.Print(globalPos);
+		this.GetCoinAtGlobalPos(globalPos)?.QueueFree(); // free node
 
 		this.coins.GetValueOrDefault(this.world.GetChunkPositionFromGlobalPos(globalPos)).Remove(globalPos); // actual remove
 
@@ -67,27 +62,56 @@ public class CoinManager
 		return true;
 	}
 
-	public bool ValidatePos(Godot.Vector3 globalPos){
-		return this.world.CheckIfValidPosition(globalPos);
-	}
+	
 
 	public void UpdateCoins()
 	{
-		if (this.coins.Count >= GameGlobals.ChunkCoinLimit)
+		if (this.coins.Count >= GameGlobals.CoinLimit)
 		{
 			return;
 		}
 
-		for (int i=0; i < GameGlobals.ChunkCoinLimit - this.coins.Count; i++)
+		for (int i=0; i < GameGlobals.CoinLimit - this.coins.Count; i++)
 		{
 			Godot.Vector3I globalPos;
 
 			do
 			{
 				globalPos = this.world.GetRandomBlockPosInWorld();
-			} while (this.coins.ContainsKey(globalPos));
+				globalPos.Y += 1;
+
+			} while (
+				this.coins.GetValueOrDefault(this.world.GetChunkPositionFromGlobalPos(globalPos))?.ContainsKey(globalPos) != false &&
+				this.coins.GetValueOrDefault(this.world.GetChunkPositionFromGlobalPos(globalPos))?.ContainsKey(globalPos) != null
+			);
 		
 			CreateCoin(globalPos);
 		}
+	}
+
+	public bool ShowChunkCoins(Godot.Vector3I chunkGlobalPosition)
+	{	
+
+		Dictionary<Godot.Vector3I, Coin> coinsToShow = this.coins.GetValueOrDefault(chunkGlobalPosition);
+		if (coinsToShow == null) return false;
+		
+		foreach (Godot.Vector3I coinPos in coinsToShow.Keys)
+		{
+			coinsToShow[coinPos].Visible = true;
+		}
+		return true;
+	}
+
+	public bool HideChunkCoins(Godot.Vector3I chunkGlobalPosition)
+	{	
+
+		Dictionary<Godot.Vector3I, Coin> coinsToHide = this.coins.GetValueOrDefault(chunkGlobalPosition);
+		if (coinsToHide == null) return false;
+		
+		foreach (Godot.Vector3I coinPos in coinsToHide.Keys)
+		{
+			coinsToHide[coinPos].Visible = false;
+		}
+		return true;
 	}
 }

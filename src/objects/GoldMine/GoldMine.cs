@@ -19,9 +19,9 @@ public partial class GoldMine : Building<GoldMineDimensions>
 		
 		this.player.AddCoins(10);
 	}
-	public void Initialize(Player player, Godot.Vector3 pos, World world, Ore ore)
+	public void Initialize(Player player, World world, Ore ore)
 	{
-		this.Initialize(player,pos,world);
+		this.Initialize(player,world);
 		this.ore = ore;
 	}
 	protected override void OnDestroy()

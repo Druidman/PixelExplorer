@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 public abstract partial class WorldBody<T> : StaticBody3D, IWorldObject<T> where T : IWorldObjectDimensions<T> 
 {
-	public Godot.Vector3 GlobalPos {get; set;}
 
 	protected virtual WorldTileType tileType => WorldTileType.WorldBodyTile;		
 	
@@ -15,7 +14,6 @@ public abstract partial class WorldBody<T> : StaticBody3D, IWorldObject<T> where
 	}
 	public override void _EnterTree()
 	{
-		this.GlobalPosition = this.GlobalPos;
 		OnEnterSceneTree();
 		List<Godot.Vector3I> tilesToOccupy = this.GetTiles();
 		foreach (Godot.Vector3I globalPos in tilesToOccupy)
@@ -62,11 +60,9 @@ public abstract partial class WorldBody<T> : StaticBody3D, IWorldObject<T> where
 
 	protected virtual void OnEnterSceneTree(){}
 	protected virtual void OnExitSceneTree(){}
-	protected void Initialize(World world, Godot.Vector3 pos)
+	protected void Initialize(World world)
 	{
-		((IWorldObject<T>)this).Initialize(pos);
 		this.world = world;
-		
 	}
 
    

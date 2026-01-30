@@ -44,7 +44,7 @@ public interface IWorldObjectDimensions<T> where T : IWorldObjectDimensions<T>
 public interface IWorldObject<T> where T : IWorldObjectDimensions<T>
 {
     public Godot.Vector3 GlobalPosition {get; set;}
-    public Godot.Vector3 GlobalPos {get; set;}
+    public Godot.Vector3 Position {get; set;}
 
     public List<Godot.Vector3I> Tiles {
         get
@@ -57,10 +57,5 @@ public interface IWorldObject<T> where T : IWorldObjectDimensions<T>
             return tiles;
         }
     }
-
-    public void Initialize(Godot.Vector3 globalPosition)
-	{
-		this.GlobalPos = globalPosition;
-	}
     
 }

@@ -11,7 +11,7 @@ public partial class World : Node3D
 
 	public static int WorldWidth = 500;
 	public Godot.Vector3I MaxWorldTopLeftGlobal = new Godot.Vector3I(-WorldWidth / 2,0,-WorldWidth / 2);
-    public Godot.Vector3I MaxWorldBottomRightGlobal = new Godot.Vector3I(WorldWidth / 2,0,WorldWidth / 2);
+	public Godot.Vector3I MaxWorldBottomRightGlobal = new Godot.Vector3I(WorldWidth / 2,0,WorldWidth / 2);
 
 
 
@@ -20,14 +20,18 @@ public partial class World : Node3D
 	private Random r = new Random();
 
 	private Dictionary<Godot.Vector3I, Chunk> chunks = new Dictionary<Godot.Vector3I, Chunk>();
-	public OreManager oreManager = null;
-	public CoinManager coinManager = null;
 
-    public override void _Ready()
-    {
-        MaxWorldTopLeftGlobal = (Godot.Vector3I)(this.GlobalPosition + new Godot.Vector3I(-WorldWidth / 2,0,-WorldWidth / 2));
-    	MaxWorldBottomRightGlobal = (Godot.Vector3I)(this.GlobalPosition + new Godot.Vector3I(WorldWidth / 2,0,WorldWidth / 2));
-    }
+	[Export]
+	OreManager oreManager;
+
+	[Export]
+	CoinManager coinManager;
+
+	public override void _Ready()
+	{
+		if (this.GlobalPosition.X !=0 || this.GlobalPosition.Y != 0 || this.GlobalPosition.Z != 0) 
+			throw new Exception("World not in middle 0,0,0");
+	}
 
 	public Dictionary<Godot.Vector3I, Ore> GetChunkOres(Godot.Vector3I chunkPosition)
 	{
@@ -39,8 +43,8 @@ public partial class World : Node3D
 	}
 	public void Initialize()
 	{
-		this.oreManager = new OreManager(this);
 		this.oreManager.GenerateOres();
+		this.coinManager.UpdateCoins();
 	}
 
 	public bool CheckIfFreeSpace(Godot.Vector3I tilePosition)
@@ -107,11 +111,11 @@ public partial class World : Node3D
 	}
 
 
-	public bool UpdateChunkAtPosition(Godot.Vector3I chunkWorldPosition, Chunk chunk)
+	public bool UpdateChunkAtPosition(Godot.Vector3I chunkGlobalPosition, Chunk chunk)
 	{
-		if (this.CheckIfValidGlobalPosition(chunkPosition))
+		if (this.CheckIfValidGlobalPosition(chunkGlobalPosition))
 		{
-			this.chunks[chunkPosition] = chunk;
+			this.chunks[chunkGlobalPosition] = chunk;
 			return true;
 		}
 		return false;
@@ -149,6 +153,16 @@ public partial class World : Node3D
 
 		return new Godot.Vector3I(x,this.getBlockHeightAtPos(x,z),z);
 	}
+
+	public bool ShowChunkOres(Godot.Vector3I chunkGlobalPosition)
+	{
+		return this.oreManager.ShowChunkOres(chunkGlobalPosition);
+	} 
+
+	public bool ShowChunkCoins(Godot.Vector3I chunkGlobalPosition)
+	{
+		return this.coinManager.ShowChunkCoins(chunkGlobalPosition);
+	} 
 
 
 

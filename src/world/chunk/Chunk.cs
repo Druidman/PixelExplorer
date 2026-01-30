@@ -63,7 +63,8 @@ public partial class Chunk : Node3D
 	}
     public override void _Ready()
     {
-        this.ApplyChunkObjects();
+		this.world.ShowChunkOres(this.chunkPos);
+		this.world.ShowChunkCoins(this.chunkPos);
     }
 	
 	public void GenerateChunk()
@@ -72,24 +73,6 @@ public partial class Chunk : Node3D
 		this.GenerateChunkTileMesh();
 	}
 
-	public void ApplyChunkObjects()
-	{
-
-		// ores
-		Dictionary<Godot.Vector3I, Ore> ores = this.world.GetChunkOres(this.chunkPos);
-		if (ores != null)
-		{
-			foreach (Godot.Vector3I orePos in ores.Keys)
-			{
-				ores[orePos].Initialize(world, orePos);
-				AddChild(ores[orePos]);
-				
-			}
-		}
-
-		// coins, TODO
-		
-	}
 	public void CreateChunkCollision()
 	{
 		if (Thread.CurrentThread.ManagedThreadId != ThreadGuard.MainThreadId)

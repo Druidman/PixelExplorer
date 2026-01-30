@@ -1,5 +1,4 @@
 using Godot;
-using System.Collections.Generic;
 
 public class OreDimensions : IWorldObjectDimensions<OreDimensions>
 {
@@ -10,8 +9,8 @@ public class OreDimensions : IWorldObjectDimensions<OreDimensions>
 public partial class Ore : WorldBody<OreDimensions>
 {
 	public bool containsGoldMine = false;
-	public new void Initialize(World world, Godot.Vector3 globalPos)
+	public new void Initialize(World world)
 	{
-		base.Initialize(world, globalPos);
+		base.Initialize(world);
 	}
 }

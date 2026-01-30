@@ -3,9 +3,14 @@ using System;
 public partial class World : Node3D
 {
 
-	public Godot.Vector3 GetLocalEnginePosition(Godot.Vector3 globalPos)
+	public Godot.Vector3 ConvertToLocalPos(Godot.Vector3 globalPos)
 	{
 		return globalPos - this.GlobalPosition;
+	}
+	
+	public Godot.Vector3 ConvertToGlobalPos(Godot.Vector3 localPos)
+	{
+		return localPos + this.GlobalPosition;
 	}
 		
     public Godot.Vector3I GetChunkPositionFromGlobalPos(Godot.Vector3 globalPosition)
@@ -46,9 +51,9 @@ public partial class World : Node3D
 		}		
 		return true;
 	}
-	public bool CheckIfValidPosition(Godot.Vector3 position)
+	public bool CheckIfValidLocalPosition(Godot.Vector3 position)
 	{
-		return this.CheckIfValidGlobalPosition()
+		return this.CheckIfValidGlobalPosition(ConvertToGlobalPos(position));
 	}
 
     public Godot.Vector3I GetTilePosition(Godot.Vector3 globalPos)

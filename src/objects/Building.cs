@@ -33,9 +33,9 @@ public abstract partial class Building<T> : WorldBody<T>, IBuilding where T : IW
         }
     }
     
-    protected void Initialize(Player player, Godot.Vector3 pos, World world)
+    protected void Initialize(Player player, World world)
     {
-        this.Initialize(world,pos);
+        this.Initialize(world);
         this.player = player;
     }
 

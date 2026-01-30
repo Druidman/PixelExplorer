@@ -9,9 +9,9 @@ public abstract partial class Turret<T> : Building<T> where T : IWorldObjectDime
 	public abstract float attackDmg {get; protected set;}
 	protected List<Soldier> soldiersInAttackArea = new List<Soldier>();
 
-    public new void Initialize(Player player, Godot.Vector3 pos, World world)
+    public new void Initialize(Player player, World world)
 	{
-		base.Initialize(player, pos, world);
+		base.Initialize(player, world);
 		
 	}
 	protected abstract override void OnEnterSceneTree();

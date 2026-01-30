@@ -150,7 +150,7 @@ public partial class ChunkRenderer : Node3D
 			{
 				Godot.Vector3I pos = new Godot.Vector3I(x,this.origin.Y,z);
 				if (
-					this.world.CheckIfValidPosition(pos) &&
+					this.world.CheckIfValidGlobalPosition(pos) &&
 					this.world.GetChunkAtExactPos(pos) == null 
 					// if is null then chunk in given pos is not scheduled and non existent
 				)
@@ -161,7 +161,7 @@ public partial class ChunkRenderer : Node3D
 				}
 				else if (
 					this.world.GetChunkAtExactPos(pos) != GameGlobals.placeholderChunk && 
-					this.world.CheckIfValidPosition(pos) &&
+					this.world.CheckIfValidGlobalPosition(pos) &&
 					this.world.GetChunkAtExactPos(pos) != null 
 				)
 				{
