@@ -9,7 +9,7 @@ using Godot;
 public partial class World : Node3D
 {
 
-	public static int WorldWidth = 500;
+	public static int WorldWidth = 5000;
 	public Godot.Vector3I MaxWorldTopLeftGlobal = new Godot.Vector3I(-WorldWidth / 2,0,-WorldWidth / 2);
 	public Godot.Vector3I MaxWorldBottomRightGlobal = new Godot.Vector3I(WorldWidth / 2,0,WorldWidth / 2);
 
@@ -88,6 +88,21 @@ public partial class World : Node3D
 		return this.chunks.GetValueOrDefault(chunkGlobalPosition);
 	}
 
+	public Chunk CreateChunkAtPosition(Godot.Vector3I chunkGlobalPosition)
+	{
+
+		if (
+			!this.CheckIfValidGlobalPosition(chunkGlobalPosition) ||
+			this.GetChunkPositionFromGlobalPos(chunkGlobalPosition) != chunkGlobalPosition
+		) return null;
+		
+
+		Chunk chunk = GameGlobals.chunkScene.Instantiate<Chunk>();
+		chunk.Initialize(chunkGlobalPosition, this);
+
+		return chunk;
+	}
+
 	public WorldTile GetTileAtExactGlobalPosition(Godot.Vector3I exactTileGlobalPosition)
 	{
 		Chunk chunk = this.GetChunkAtPos(exactTileGlobalPosition);
@@ -113,12 +128,15 @@ public partial class World : Node3D
 
 	public bool UpdateChunkAtPosition(Godot.Vector3I chunkGlobalPosition, Chunk chunk)
 	{
-		if (this.CheckIfValidGlobalPosition(chunkGlobalPosition))
-		{
-			this.chunks[chunkGlobalPosition] = chunk;
-			return true;
-		}
-		return false;
+
+		if (
+			!this.CheckIfValidGlobalPosition(chunkGlobalPosition) ||
+			this.GetChunkPositionFromGlobalPos(chunkGlobalPosition) != chunkGlobalPosition
+		) return false;
+	
+		this.chunks[chunkGlobalPosition] = chunk;
+		return true;
+		
 	}
 
 	public List<Godot.Vector3I> GetAvailableChunkPositions()

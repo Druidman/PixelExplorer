@@ -6,13 +6,6 @@ using System.Linq;
 using System.Threading;
 using Godot;
 
-
-public enum ChunkCollisionState
-{
-	NONE,
-	QUEUED,
-	GENERATED
-}
 // chunk Position is declared as bottom center pos !!!
 public partial class Chunk : Node3D
 {
@@ -38,10 +31,17 @@ public partial class Chunk : Node3D
 	private List<Godot.Vector3> Vertices = new List<Godot.Vector3>();
 	private List<Godot.Vector3> Normals = new List<Godot.Vector3>();
 	private List<Godot.Vector2> Uvs = new List<Godot.Vector2>();
-	public bool meshReady = false;
-	public bool addedToTree = false;
-	public bool disabled = false;
-	public ChunkCollisionState chunkCollisionState = ChunkCollisionState.NONE;
+	public bool isAddedToTree
+	{
+		get
+		{
+			return (GetParent() == null) ? false : true;
+		}
+	}
+	public bool isChunkCollisionShapeGenerated = false;
+	public bool isBlockMeshGenerated = false;
+	public bool isBlockMeshApplied = false;
+
 
 		  
 	public void Initialize(Godot.Vector3I chunkPosition, World world)
@@ -59,6 +59,7 @@ public partial class Chunk : Node3D
 	}
 	public override void _EnterTree()
 	{
+
 		this.GlobalPosition = this.chunkPos;
 	}
     public override void _Ready()
@@ -78,12 +79,11 @@ public partial class Chunk : Node3D
 		if (Thread.CurrentThread.ManagedThreadId != ThreadGuard.MainThreadId)
 			throw new InvalidOperationException("Method must be called from main thread");
 
-		this.chunkCollisionState = ChunkCollisionState.NONE;
-
+		this.isChunkCollisionShapeGenerated = false;
+		
 		this.mesh.CreateTrimeshCollision();
 		
-
-		this.chunkCollisionState = ChunkCollisionState.GENERATED;
+		this.isChunkCollisionShapeGenerated = true;
 	}
 
 	private void GenerateChunkTileMesh()
@@ -104,6 +104,7 @@ public partial class Chunk : Node3D
 			i++;
 			
 		}
+		this.isBlockMeshGenerated = true;
 		
 	}
 	public void ApplyChunkTileMesh()
@@ -138,10 +139,8 @@ public partial class Chunk : Node3D
 		newMesh.AddSurfaceFromArrays(Godot.Mesh.PrimitiveType.Triangles, arrays);
 		
 		mesh.Mesh = newMesh;
-		
-		
-		this.meshReady = true;
 
+		this.isBlockMeshApplied = true;
 		
 	}
 
