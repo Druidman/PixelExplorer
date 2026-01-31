@@ -69,7 +69,7 @@ public partial class Soldier : Area3D
 		topTilePosition.Y += GameGlobals.TileWidth;
 		
 		// we have tiles positions
-		
+
 		if (!this.world.CheckIfFreeSpace(currentTilePosition))
 		// tile we are in is occupied 
 		{

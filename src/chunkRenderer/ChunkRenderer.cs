@@ -46,6 +46,8 @@ public partial class ChunkRenderer : Node3D
 	private bool CommitChunk(Chunk chunk)
 	{
 		if (chunk == null) return false;
+		if (!this.queuedChunks.ContainsKey(chunk.chunkPos))
+		 throw new Exception("Attemptiong to commit unqueued chunk");
 		if (chunk.isAddedToTree) return false;
 
 		
@@ -179,7 +181,7 @@ public partial class ChunkRenderer : Node3D
 				{
 					lock (_dataLock)
 					{
-						this.pendingAdd.AddLast(chunk);
+						RequestChunkGen(chunk);
 						GD.Print("add");
 					}
 				}

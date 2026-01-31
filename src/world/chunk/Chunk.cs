@@ -7,7 +7,7 @@ using System.Threading;
 using Godot;
 
 // chunk Position is declared as bottom center pos !!!
-public partial class Chunk : Node3D
+public partial class Chunk : MeshInstance3D
 {
 	static int Width = GameGlobals.ChunkWidth;
 
@@ -19,10 +19,6 @@ public partial class Chunk : Node3D
 
 
 	public World world;
-	
-
-	[Export]
-	public MeshInstance3D mesh;
 
 
 	public CollisionShape3D collisionShape;
@@ -81,7 +77,7 @@ public partial class Chunk : Node3D
 
 		this.isChunkCollisionShapeGenerated = false;
 		
-		this.mesh.CreateTrimeshCollision();
+		this.CreateTrimeshCollision();
 		
 		this.isChunkCollisionShapeGenerated = true;
 	}
@@ -124,7 +120,7 @@ public partial class Chunk : Node3D
 
 		mat.AlbedoTexture = GameGlobals.texture;
 
-		mesh.MaterialOverride = mat; // IMPORTANT
+		this.MaterialOverride = mat; // IMPORTANT
 
 		
 		
@@ -138,10 +134,9 @@ public partial class Chunk : Node3D
 
 		newMesh.AddSurfaceFromArrays(Godot.Mesh.PrimitiveType.Triangles, arrays);
 		
-		mesh.Mesh = newMesh;
+		this.Mesh = newMesh;
 
 		this.isBlockMeshApplied = true;
-		
 	}
 
 	private void generateTiles()

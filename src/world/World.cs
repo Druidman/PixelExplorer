@@ -9,7 +9,7 @@ using Godot;
 public partial class World : Node3D
 {
 
-	public static int WorldWidth = 5000;
+	public static int WorldWidth = 500;
 	public Godot.Vector3I MaxWorldTopLeftGlobal = new Godot.Vector3I(-WorldWidth / 2,0,-WorldWidth / 2);
 	public Godot.Vector3I MaxWorldBottomRightGlobal = new Godot.Vector3I(WorldWidth / 2,0,WorldWidth / 2);
 

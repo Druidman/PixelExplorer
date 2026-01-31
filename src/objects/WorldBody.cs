@@ -22,7 +22,17 @@ public abstract partial class WorldBody<T> : StaticBody3D, IWorldObject<T> where
 			Chunk chunk = this.world.GetChunkAtPos(globalPos);
 			if (chunk == null)
 			{
-				continue;
+				
+
+				chunk = this.world.CreateChunkAtPosition(
+					this.world.GetChunkPositionFromGlobalPos(globalPos)
+				);
+				if (chunk == null) continue; //this means that position is invalid
+
+				if (!this.world.UpdateChunkAtPosition(
+					chunk.chunkPos,
+					chunk
+				)) continue; //this means that position is invalid
 			}
 
 			chunk.UpdateTile(
@@ -44,7 +54,7 @@ public abstract partial class WorldBody<T> : StaticBody3D, IWorldObject<T> where
 			Chunk chunk = this.world.GetChunkAtPos(globalPos);
 			if (chunk == null)
 			{
-				continue;
+				continue; // here we can ignore chunk non existent for some reason because it dow not even matter
 			}
 
 			chunk.UpdateTile(
