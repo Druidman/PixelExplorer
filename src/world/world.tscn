@@ -7,10 +7,11 @@
 [ext_resource type="PackedScene" uid="uid://cct8s72fbxp7u" path="res://src/world/WorldBaseObjectsManager/WorldBaseObjectsManager.tscn" id="4_bsf3i"]
 [ext_resource type="PackedScene" uid="uid://c08fxbj58dv0l" path="res://src/objects/Ores/Gold/GoldOre.tscn" id="5_l0av5"]
 
-[node name="World" type="Node3D" node_paths=PackedStringArray("oreManager", "coinManager")]
+[node name="World" type="Node3D" node_paths=PackedStringArray("oreManager", "coinManager", "worldBaseObjectsManager")]
 script = ExtResource("1_f3sb7")
 oreManager = NodePath("OreManager")
 coinManager = NodePath("CoinManager")
+worldBaseObjectsManager = NodePath("WorldBaseObjectsManager")
 
 [node name="CoinManager" parent="." node_paths=PackedStringArray("world") instance=ExtResource("2_jte2u")]
 objectScene = ExtResource("3_43c6p")
@@ -20,4 +21,5 @@ world = NodePath("..")
 objectScene = ExtResource("5_l0av5")
 world = NodePath("..")
 
-[node name="WorldBaseObjectsManager" parent="." instance=ExtResource("4_bsf3i")]
+[node name="WorldBaseObjectsManager" parent="." node_paths=PackedStringArray("world") instance=ExtResource("4_bsf3i")]
+world = NodePath("..")

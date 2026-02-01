@@ -25,6 +25,7 @@ public abstract partial class Turret<T> : Building<T> where T : IWorldObjectDime
 		{
 			return false;
 		}
+		if (this.player == null) return true;
 
 		if (soldier.player == this.player) return false;
 		return true;

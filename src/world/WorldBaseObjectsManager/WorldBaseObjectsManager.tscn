@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://cct8s72fbxp7u"]
+[gd_scene load_steps=3 format=3 uid="uid://cct8s72fbxp7u"]
 
 [ext_resource type="Script" uid="uid://cr36mqahpkisk" path="res://src/world/WorldBaseObjectsManager/WorldBaseObjectsManager.cs" id="1_jg4va"]
+[ext_resource type="PackedScene" uid="uid://drt1hjylw66v2" path="res://src/objects/Turrets/MagicTurret/MagicTurret.tscn" id="2_qak6b"]
 
 [node name="WorldBaseObjectsManager" type="Node3D"]
 script = ExtResource("1_jg4va")
+turretScene = ExtResource("2_qak6b")

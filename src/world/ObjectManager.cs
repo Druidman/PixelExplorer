@@ -84,7 +84,7 @@ public abstract partial class ObjectManager<Obj> : Node3D where Obj : Node3D
 
     protected void GenerateObjectsRandomlyOnWorldBlocksSurface()
     {
-		GD.Print(this.objects.Count);
+	
 		if (this.objects.Count >= this.ObjectsLimit)
 		{
 			return;
@@ -107,7 +107,6 @@ public abstract partial class ObjectManager<Obj> : Node3D where Obj : Node3D
 			
 		}
 
-		GD.Print(this.objects.Count);
     }
 
 	public bool ShowChunkObjects(Godot.Vector3I chunkGlobalPosition)
