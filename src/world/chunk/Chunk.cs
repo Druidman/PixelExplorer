@@ -63,11 +63,15 @@ public partial class Chunk : MeshInstance3D
 	{
 		this.world.ShowChunkObjects(this);
 		this.Visible = true;
+		this.ProcessMode = ProcessModeEnum.Inherit;
+		this.PhysicsInterpolationMode = PhysicsInterpolationModeEnum.Inherit;
 	}
 	public void HideChunk()
 	{
 		this.world.HideChunkObjects(this);
 		this.Visible = false;
+		this.ProcessMode = ProcessModeEnum.Disabled;
+		this.PhysicsInterpolationMode = PhysicsInterpolationModeEnum.Off;
 	}
 	
 	public void GenerateChunk()

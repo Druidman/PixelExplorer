@@ -7,13 +7,14 @@ public partial class CoinManager : Node3D
 {
 
 	protected Dictionary<Godot.Vector3I, Dictionary<Godot.Vector3I, Coin>> coins = new Dictionary<Godot.Vector3I, Dictionary<Godot.Vector3I, Coin>>();
+	protected Dictionary<Godot.Vector3I, Coin> coinsItself = new Dictionary<Godot.Vector3I, Coin>();
 
 	[Export]
 	World world;
 
 	public Coin GetCoinAtGlobalPos(Godot.Vector3I globalPos)
 	{
-		return this.coins.GetValueOrDefault(this.world.GetChunkPositionFromGlobalPos(globalPos)).GetValueOrDefault(globalPos);
+		return this.coinsItself.GetValueOrDefault(globalPos);
 	}
 	public bool CreateCoin(Godot.Vector3I globalPos)
 	{
@@ -36,6 +37,7 @@ public partial class CoinManager : Node3D
 		}
 		
 		this.coins[chunkGlobalPos][globalPos] = coin;
+		this.coinsItself[globalPos] = coin;
 
 		AddChild(coin);
 		
@@ -56,6 +58,7 @@ public partial class CoinManager : Node3D
 		this.GetCoinAtGlobalPos(globalPos)?.QueueFree(); // free node
 
 		this.coins.GetValueOrDefault(this.world.GetChunkPositionFromGlobalPos(globalPos)).Remove(globalPos); // actual remove
+		this.coinsItself.Remove(globalPos); // actual remove
 
 
 		UpdateCoins(); // to make new coin
@@ -66,27 +69,33 @@ public partial class CoinManager : Node3D
 
 	public void UpdateCoins()
 	{
-		if (this.coins.Count >= GameGlobals.CoinLimit)
+		GD.Print(this.coinsItself.Count);
+		if (this.coinsItself.Count >= GameGlobals.CoinLimit)
 		{
 			return;
 		}
 
-		for (int i=0; i < GameGlobals.CoinLimit - this.coins.Count; i++)
+		int amountToGen = GameGlobals.CoinLimit - this.coinsItself.Count;
+
+
+		for (int i=0; i < amountToGen; i++)
 		{
 			Godot.Vector3I globalPos;
-
 			do
 			{
 				globalPos = this.world.GetRandomBlockPosInWorld();
 				globalPos.Y += 1;
-
-			} while (
-				this.coins.GetValueOrDefault(this.world.GetChunkPositionFromGlobalPos(globalPos))?.ContainsKey(globalPos) != false &&
-				this.coins.GetValueOrDefault(this.world.GetChunkPositionFromGlobalPos(globalPos))?.ContainsKey(globalPos) != null
-			);
+				
+			} while ( this.coinsItself.ContainsKey(globalPos) );
+			
 		
-			CreateCoin(globalPos);
+			if (!CreateCoin(globalPos))
+			{
+				GD.Print("Smth wrong");	
+			}
+			
 		}
+		
 	}
 
 	public bool ShowChunkCoins(Godot.Vector3I chunkGlobalPosition)

@@ -100,9 +100,7 @@ public partial class ChunkRenderer : Node3D
 		if (chunk is null) return;
 		if (!chunk.isAddedToTree) return;
 
-		chunk.Visible = false;
-		chunk.ProcessMode = ProcessModeEnum.Disabled;
-		chunk.PhysicsInterpolationMode = PhysicsInterpolationModeEnum.Off;
+		chunk.HideChunk();
 
 		
 	}
@@ -112,9 +110,8 @@ public partial class ChunkRenderer : Node3D
 		if (chunk is null) return;
 		if (!chunk.isAddedToTree) return;
 
-		chunk.Visible = true;
-		chunk.ProcessMode = ProcessModeEnum.Inherit;
-		chunk.PhysicsInterpolationMode = PhysicsInterpolationModeEnum.Inherit;
+		chunk.ShowChunk();
+		
 
 		
 	}
