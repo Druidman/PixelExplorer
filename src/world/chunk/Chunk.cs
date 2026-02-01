@@ -58,11 +58,17 @@ public partial class Chunk : MeshInstance3D
 
 		this.GlobalPosition = this.chunkPos;
 	}
-    public override void _Ready()
-    {
-		this.world.ShowChunkOres(this.chunkPos);
-		this.world.ShowChunkCoins(this.chunkPos);
-    }
+
+	public void ShowChunk()
+	{
+		this.world.ShowChunkObjects(this);
+		this.Visible = true;
+	}
+	public void HideChunk()
+	{
+		this.world.HideChunkObjects(this);
+		this.Visible = false;
+	}
 	
 	public void GenerateChunk()
 	{

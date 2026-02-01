@@ -172,15 +172,23 @@ public partial class World : Node3D
 		return new Godot.Vector3I(x,this.getBlockHeightAtPos(x,z),z);
 	}
 
-	public bool ShowChunkOres(Godot.Vector3I chunkGlobalPosition)
-	{
-		return this.oreManager.ShowChunkOres(chunkGlobalPosition);
-	} 
 
-	public bool ShowChunkCoins(Godot.Vector3I chunkGlobalPosition)
+	public bool ShowChunkObjects(Chunk chunk)
 	{
-		return this.coinManager.ShowChunkCoins(chunkGlobalPosition);
-	} 
+		this.oreManager.ShowChunkOres(chunk.chunkPos);
+		this.coinManager.ShowChunkCoins(chunk.chunkPos);
+
+		return true;
+	}
+
+	public bool HideChunkObjects(Chunk chunk)
+	{
+		this.oreManager.HideChunkOres(chunk.chunkPos);
+		this.coinManager.HideChunkCoins(chunk.chunkPos);
+
+		return true;
+	}
+
 
 
 
