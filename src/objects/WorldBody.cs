@@ -12,6 +12,11 @@ public abstract partial class WorldBody<T> : StaticBody3D, IWorldObject<T> where
 	{
 		return ((IWorldObject<T>)this).Tiles;
 	}
+
+	protected void Initialize(World world)
+	{
+		this.world = world;
+	}
 	public override void _EnterTree()
 	{
 		OnEnterSceneTree();
@@ -70,10 +75,7 @@ public abstract partial class WorldBody<T> : StaticBody3D, IWorldObject<T> where
 
 	protected virtual void OnEnterSceneTree(){}
 	protected virtual void OnExitSceneTree(){}
-	protected void Initialize(World world)
-	{
-		this.world = world;
-	}
+	
 
    
 }

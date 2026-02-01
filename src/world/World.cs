@@ -35,16 +35,16 @@ public partial class World : Node3D
 
 	public Dictionary<Godot.Vector3I, Ore> GetChunkOres(Godot.Vector3I chunkPosition)
 	{
-		return this.oreManager.GetOresAtChunkPos(this.GetChunkPositionFromGlobalPos(chunkPosition));
+		return this.oreManager.GetObjectsAtChunkPos(this.GetChunkPositionFromGlobalPos(chunkPosition));
 	}
 	public Ore GetOreAtExactGlobalPosition(Godot.Vector3I orePos)
 	{
-		return this.oreManager.GetOreAtPos(orePos);
+		return this.oreManager.GetObjectAtPos(orePos);
 	}
 	public void Initialize()
 	{
-		this.oreManager.GenerateOres();
-		this.coinManager.UpdateCoins();
+		this.oreManager.GenerateObjects();
+		this.coinManager.GenerateObjects();
 	}
 
 	public bool CheckIfFreeSpace(Godot.Vector3I tilePosition)
@@ -175,16 +175,16 @@ public partial class World : Node3D
 
 	public bool ShowChunkObjects(Chunk chunk)
 	{
-		this.oreManager.ShowChunkOres(chunk.chunkPos);
-		this.coinManager.ShowChunkCoins(chunk.chunkPos);
+		this.oreManager.ShowChunkObjects(chunk.chunkPos);
+		this.coinManager.ShowChunkObjects(chunk.chunkPos);
 
 		return true;
 	}
 
 	public bool HideChunkObjects(Chunk chunk)
 	{
-		this.oreManager.HideChunkOres(chunk.chunkPos);
-		this.coinManager.HideChunkCoins(chunk.chunkPos);
+		this.oreManager.ShowChunkObjects(chunk.chunkPos);
+		this.coinManager.ShowChunkObjects(chunk.chunkPos);
 
 		return true;
 	}
