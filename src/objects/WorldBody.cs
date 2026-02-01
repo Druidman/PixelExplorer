@@ -6,7 +6,7 @@ public abstract partial class WorldBody<T> : StaticBody3D, IWorldObject<T> where
 
 	protected virtual WorldTileType tileType => WorldTileType.WorldBodyTile;		
 	
-	protected World world;
+	protected virtual World world {get; set;}
 
 	public List<Godot.Vector3I> GetTiles()
 	{
