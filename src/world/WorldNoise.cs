@@ -1,11 +1,13 @@
+using System;
 using Godot;
 
 public class WorldNoise
 {
 	FastNoiseLite noise = new FastNoiseLite();
+	Random random = new Random();
 	public WorldNoise() {
 		noise.NoiseType = FastNoiseLite.NoiseTypeEnum.Perlin;
-		
+		noise.Seed = random.Next();
 		
 	}
 
