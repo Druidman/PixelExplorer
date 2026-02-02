@@ -6,7 +6,8 @@ public abstract partial class WorldBody<T> : StaticBody3D, IWorldObject<T> where
 
 	protected virtual WorldTileType tileType => WorldTileType.WorldBodyTile;		
 	
-	protected virtual World world {get; set;}
+	[Export]
+	protected World world;
 
 	public List<Godot.Vector3I> GetTiles()
 	{
@@ -20,6 +21,17 @@ public abstract partial class WorldBody<T> : StaticBody3D, IWorldObject<T> where
 	public override void _EnterTree()
 	{
 		OnEnterSceneTree();
+		OccupyTiles();
+	}
+	public override void _ExitTree()
+	{
+		OnExitSceneTree();
+		FreeTiles();
+		QueueFree();
+		
+	}
+	public void OccupyTiles()
+	{
 		List<Godot.Vector3I> tilesToOccupy = this.GetTiles();
 		foreach (Godot.Vector3I globalPos in tilesToOccupy)
 		{
@@ -44,14 +56,12 @@ public abstract partial class WorldBody<T> : StaticBody3D, IWorldObject<T> where
 				chunk.ConvertToLocalPosition(this.world.GetTilePosition(globalPos)), 
 				new WorldTile(WorldTileState.Occupied, this.world.GetTilePosition(globalPos), tileType)
 			);
-			
 
-			
 		}
 	}
-	public override void _ExitTree()
+	
+	public void FreeTiles()
 	{
-		OnExitSceneTree();
 		List<Godot.Vector3I> tilesOccupied = this.GetTiles();
 		foreach (Godot.Vector3I globalPos in tilesOccupied)
 		{
@@ -69,9 +79,8 @@ public abstract partial class WorldBody<T> : StaticBody3D, IWorldObject<T> where
 
 			
 		}
-		QueueFree();
-		
 	}
+	
 
 	protected virtual void OnEnterSceneTree(){}
 	protected virtual void OnExitSceneTree(){}

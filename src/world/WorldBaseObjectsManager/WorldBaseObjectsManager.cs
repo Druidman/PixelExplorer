@@ -7,21 +7,25 @@ public partial class WorldBaseObjectsManager : Node3D
 	[Export]
 	World world;
 
-	[Export]
-	PackedScene turretScene;
+	
 	public void GenerateObjects()
 	{
 
-		MagicTurret turret = turretScene.InstantiateOrNull<MagicTurret>();
-		if (turret == null) throw new Exception("No magicturret set in WorldBaseObjectsManager");
+		// MagicTurret turret = turretScene.InstantiateOrNull<MagicTurret>();
+		Godot.Collections.Array<Node> children = GetChildren();
+		if (children.Count == 0) throw new Exception("No children set in WorldBaseObjectsManager");
 
-		Godot.Vector3I towerPos = new Godot.Vector3I(0,this.world.getBlockHeightAtPos(0,0) + 1,0);	
-		turret.Position = towerPos; //because world is in middle so no need to do conversion
-		turret.Initialize(null,this.world);
+		foreach (Node child in children)
+		{
+			if (child is not MagicTurret turret) continue;
+
+			turret.FreeTiles();
+			turret.Position = new Godot.Vector3(turret.Position.X,this.world.getBlockHeightAtPos(turret.Position.X,turret.Position.Z) + 1,turret.Position.Z); //because world is in middle so no need to do conversion
+			turret.OccupyTiles();
+			turret.TreeExited += OnTurretDestroyed;
+		}
 		
-		turret.TreeExited += OnTurretDestroyed;
 
-		AddChild(turret);
 	}
 
 	private void OnTurretDestroyed(){
