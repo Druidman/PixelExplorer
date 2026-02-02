@@ -30,6 +30,9 @@ public partial class World : Node3D
 	[Export]
 	WorldBaseObjectsManager worldBaseObjectsManager;
 
+	[Export]
+	GameEndScreen endScreen;
+
 	public override void _Ready()
 	{
 		if (this.GlobalPosition.X !=0 || this.GlobalPosition.Y != 0 || this.GlobalPosition.Z != 0) 
@@ -175,7 +178,11 @@ public partial class World : Node3D
 
 		return new Godot.Vector3I(x,this.getBlockHeightAtPos(x,z),z);
 	}
-
+	public void GameEnd()
+	{
+		endScreen.Visible = true;
+		GetTree().Paused = true;
+	}
 
 	public bool ShowChunkObjects(Chunk chunk)
 	{

@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://clbu5yls05nll"]
+[gd_scene load_steps=10 format=3 uid="uid://clbu5yls05nll"]
 
 [ext_resource type="PackedScene" uid="uid://bkb347g86res2" path="res://src/world/world.tscn" id="1_e2o6t"]
 [ext_resource type="Script" uid="uid://dyplm4iftprwb" path="res://AppScenes/game/Game/Game.cs" id="1_feb5d"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://dw1qlpywtiiuo" path="res://AppScenes/game/PlayerUi/player_ui.tscn" id="5_xwdwh"]
 [ext_resource type="PackedScene" uid="uid://d2k8q1wgb36lt" path="res://src/entities/Soldier/soldier_manager.tscn" id="6_g2ybg"]
 [ext_resource type="PackedScene" uid="uid://bscyq51oo4mby" path="res://src/entities/player/Actions/AttackPlayerAction/AttackPlayerAction.tscn" id="6_k2ghl"]
+[ext_resource type="PackedScene" uid="uid://da8ngix44aqpa" path="res://AppScenes/game/GameEnd/game_end_screen.tscn" id="9_dotuk"]
 
 [node name="Game" type="Node3D" node_paths=PackedStringArray("world", "player", "chunkRenderer")]
 script = ExtResource("1_feb5d")
@@ -15,7 +16,8 @@ world = NodePath("World")
 player = NodePath("Player")
 chunkRenderer = NodePath("ChunkRenderer")
 
-[node name="World" parent="." instance=ExtResource("1_e2o6t")]
+[node name="World" parent="." node_paths=PackedStringArray("endScreen") instance=ExtResource("1_e2o6t")]
+endScreen = NodePath("../GameEndScreen")
 
 [node name="ChunkRenderer" parent="." node_paths=PackedStringArray("player", "world") instance=ExtResource("3_uwqyn")]
 player = NodePath("../Player")
@@ -43,3 +45,7 @@ blocksMovement = true
 player = NodePath("../Player")
 
 [node name="SoldierManager" parent="." instance=ExtResource("6_g2ybg")]
+
+[node name="GameEndScreen" parent="." instance=ExtResource("9_dotuk")]
+process_mode = 3
+visible = false
