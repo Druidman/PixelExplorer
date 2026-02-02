@@ -15,11 +15,11 @@ public partial class ArcherTurret : Turret<ArcherTurretDimensions>
 	public override float attackDmg {get; protected set;} = 2f;
 	protected override void OnEnterSceneTree()
 	{
-		this.player.archerTowers.Add(this); // TODO, not elegant
+		this.player?.archerTowers.Add(this); // TODO, not elegant
 	}
 	protected override void OnExitSceneTree()
 	{
-		this.player.archerTowers.Remove(this); // TODO, fix performance somehow
+		this.player?.archerTowers.Remove(this); // TODO, fix performance somehow
 	}
 
 	protected override void OnEnemySoldierEntered(Soldier soldier)

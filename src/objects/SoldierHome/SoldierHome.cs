@@ -24,9 +24,9 @@ public partial class SoldierHome : Building<SoldierHomeDimensions>
 		if (this.player != null && canRemoveSlots) this.player.ExpandSoldierSlots(-10);
 	}
 
-	public new void Initialize(Player player, Godot.Vector3 pos, World world)
+	public new void Initialize(Player player, World world)
 	{
-		base.Initialize(player, pos, world);
+		base.Initialize(player, world);
 		
 	}
 	protected override void OnDestroy()

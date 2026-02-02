@@ -13,8 +13,11 @@ public partial class MagicTurretPlacer : WorldObjectPlacer<MagicTurretDimensions
 		}
 
 		MagicTurret magicTurret = GameGlobals.MagicTurretScene.Instantiate<MagicTurret>();
-		magicTurret.Initialize(player, this.GlobalPosition, world);
+		magicTurret.Initialize(player, world);
+		magicTurret.Position = world.ConvertToLocalPos(this.GlobalPosition);
+
 		world.AddChild(magicTurret);
+		
 		player.removeCoins(GameGlobals.magicTurretPrice);
 		return true;
 	}

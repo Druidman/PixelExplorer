@@ -8,69 +8,50 @@ using Godot;
 
 public partial class World : Node3D
 {
+
+	public static int WorldWidth = 500;
+	public Godot.Vector3I MaxWorldTopLeftGlobal = new Godot.Vector3I(-WorldWidth / 2,0,-WorldWidth / 2);
+	public Godot.Vector3I MaxWorldBottomRightGlobal = new Godot.Vector3I(WorldWidth / 2,0,WorldWidth / 2);
+
+
+
 	private WorldNoise noise = new WorldNoise();
 	private Godot.Vector3I WorldPos = GameGlobals.StartWorldMiddle;
 	private Random r = new Random();
 
 	private Dictionary<Godot.Vector3I, Chunk> chunks = new Dictionary<Godot.Vector3I, Chunk>();
-	public OreManager oreManager = null;
+
+	[Export]
+	OreManager oreManager;
+
+	[Export]
+	CoinManager coinManager;
+
+	[Export]
+	WorldBaseObjectsManager worldBaseObjectsManager;
+
+	[Export]
+	GameEndScreen endScreen;
+
+	public override void _Ready()
+	{
+		if (this.GlobalPosition.X !=0 || this.GlobalPosition.Y != 0 || this.GlobalPosition.Z != 0) 
+			throw new Exception("World not in middle 0,0,0");
+	}
 
 	public Dictionary<Godot.Vector3I, Ore> GetChunkOres(Godot.Vector3I chunkPosition)
 	{
-		return this.oreManager.GetOresAtChunkPos(this.GetChunkPositionFromGlobalPos(chunkPosition));
+		return this.oreManager.GetObjectsAtChunkPos(this.GetChunkPositionFromGlobalPos(chunkPosition));
 	}
 	public Ore GetOreAtExactGlobalPosition(Godot.Vector3I orePos)
 	{
-		return this.oreManager.GetOreAtPos(orePos);
+		return this.oreManager.GetObjectAtPos(orePos);
 	}
 	public void Initialize()
 	{
-		this.oreManager = new OreManager(this);
-		this.oreManager.GenerateOres();
-	}
-
-	public Godot.Vector3I GetChunkPositionFromGlobalPos(Godot.Vector3 globalPosition)
-	{
-		// The way it works is as follows:
-		// 1. we construct int vector so eg. -2.5 = -2, 2.5 = 2
-		// 2. then we take given integers and divide them by width of chunk which result in us getting chunk index in every dimention
-		// 3. Then Index multiplied by chunkWidth gives us chunkPosition (Godot.Vector3I)
-		// You may be wondering why we divide and then multiply?
-		// well look at this: let's say chunkWidth = 16
-		// then we want to get chunk at position -20,0,-20
-		// if we just bumped it to int we would still end up with -20,0,-20 which is not valid chunkPos because it should be -16,0,-16
-		// SO -20 / 16 = -1 (in int division thats why we use ints)
-		// Then -1 * 16 = -16, So we get proper position
-		//
-		// Wierd I didn't use ai to explain this XDD
-
-		int x = (int)MathF.Round(globalPosition.X / (float)GameGlobals.ChunkWidth);
-		int z = (int)MathF.Round(globalPosition.Z / (float)GameGlobals.ChunkWidth);
-
-
-
-		return new Godot.Vector3I(x* GameGlobals.ChunkWidth, this.WorldPos.Y, z* GameGlobals.ChunkWidth);
-	}
-
-	public List<Godot.Vector3I> GenShapeTilePositions(Godot.Vector3I originPos, int tilesXZ = 1, int tilesY = 1)
-	{
-		List<Godot.Vector3I> tilePositions = new List<Vector3I>();	
-
-		Godot.Vector3I shapeTopLeft = originPos - new Godot.Vector3I(GameGlobals.TileWidth * (tilesXZ - 1), GameGlobals.TileWidth * (tilesY - 1), GameGlobals.TileWidth * (tilesXZ - 1));
-		Godot.Vector3I shapeBottomRight = originPos + new Godot.Vector3I(GameGlobals.TileWidth * (tilesXZ - 1), GameGlobals.TileWidth * (tilesY - 1), GameGlobals.TileWidth * (tilesXZ - 1));
-		
-		for (int x = shapeTopLeft.X; x <= shapeBottomRight.X; x += GameGlobals.TileWidth)
-		{
-			for (int y = shapeTopLeft.Y; y <= shapeBottomRight.Y; y += GameGlobals.TileWidth)
-			{
-				for (int z = shapeTopLeft.Z; z <= shapeBottomRight.Z; z += GameGlobals.TileWidth)
-				{
-					tilePositions.Add(new Godot.Vector3I(x,y,z));
-				}
-			}
-			
-		}
-		return tilePositions;
+		this.oreManager.GenerateObjects();
+		this.coinManager.GenerateObjects();
+		this.worldBaseObjectsManager.GenerateObjects();
 	}
 
 	public bool CheckIfFreeSpace(Godot.Vector3I tilePosition)
@@ -103,22 +84,6 @@ public partial class World : Node3D
 		return true;
 	}
 	
-
-	public bool CheckIfValidPosition(Godot.Vector3 globalPos)
-	{
-		if (
-			globalPos.X < GameGlobals.MaxWorldTopLeft.X ||
-			globalPos.X > GameGlobals.MaxWorldBottomRight.X ||
-
-			globalPos.Z < GameGlobals.MaxWorldTopLeft.Z ||
-			globalPos.Z > GameGlobals.MaxWorldBottomRight.Z ||
-			globalPos.Y < this.WorldPos.Y
-		)
-		{
-			return false;
-		}		
-		return true;
-	}
 	
 	public Chunk GetChunkAtPos(Godot.Vector3 globalPosition)
 	{
@@ -128,6 +93,21 @@ public partial class World : Node3D
 	{
 
 		return this.chunks.GetValueOrDefault(chunkGlobalPosition);
+	}
+
+	public Chunk CreateChunkAtPosition(Godot.Vector3I chunkGlobalPosition)
+	{
+
+		if (
+			!this.CheckIfValidGlobalPosition(chunkGlobalPosition) ||
+			this.GetChunkPositionFromGlobalPos(chunkGlobalPosition) != chunkGlobalPosition
+		) return null;
+		
+
+		Chunk chunk = GameGlobals.chunkScene.Instantiate<Chunk>();
+		chunk.Initialize(chunkGlobalPosition, this);
+
+		return chunk;
 	}
 
 	public WorldTile GetTileAtExactGlobalPosition(Godot.Vector3I exactTileGlobalPosition)
@@ -145,14 +125,7 @@ public partial class World : Node3D
 		return tile;
 	}
 
-	public Godot.Vector3I GetTilePosition(Godot.Vector3 globalPos)
-	{
-		int x = (int)MathF.Round(globalPos.X / (float)GameGlobals.TileWidth);
-		int y = (int)MathF.Round(globalPos.Y / (float)GameGlobals.TileWidth);
-		int z = (int)MathF.Round(globalPos.Z / (float)GameGlobals.TileWidth);
-
-		return new Godot.Vector3I(x,y,z); // TODO this works just for tileSize = 1
-	}
+	
 	public WorldTile GetTileAtGlobalPosition(Godot.Vector3 globalPosition)
 	{
 		
@@ -160,14 +133,17 @@ public partial class World : Node3D
 	}
 
 
-	public bool UpdateChunkAtPosition(Godot.Vector3I chunkPosition, Chunk chunk)
+	public bool UpdateChunkAtPosition(Godot.Vector3I chunkGlobalPosition, Chunk chunk)
 	{
-		if (this.CheckIfValidPosition(chunkPosition))
-		{
-			this.chunks[chunkPosition] = chunk;
-			return true;
-		}
-		return false;
+
+		if (
+			!this.CheckIfValidGlobalPosition(chunkGlobalPosition) ||
+			this.GetChunkPositionFromGlobalPos(chunkGlobalPosition) != chunkGlobalPosition
+		) return false;
+	
+		this.chunks[chunkGlobalPosition] = chunk;
+		return true;
+		
 	}
 
 	public List<Godot.Vector3I> GetAvailableChunkPositions()
@@ -195,13 +171,36 @@ public partial class World : Node3D
 		// return 5;
 	}
 
-	public Godot.Vector3I GetRandomPosInWorld()
+	public Godot.Vector3I GetRandomBlockPosInWorld()
 	{
-		int x = r.Next((int)GameGlobals.MaxWorldTopLeft.X + 1, (int)GameGlobals.MaxWorldBottomRight.X - 1);
-		int z = r.Next((int)GameGlobals.MaxWorldTopLeft.Z + 1, (int)GameGlobals.MaxWorldBottomRight.Z - 1);
+		int x = r.Next((int)this.MaxWorldTopLeftGlobal.X + 1, (int)this.MaxWorldBottomRightGlobal.X - 1);
+		int z = r.Next((int)this.MaxWorldTopLeftGlobal.Z + 1, (int)this.MaxWorldBottomRightGlobal.Z - 1);
 
 		return new Godot.Vector3I(x,this.getBlockHeightAtPos(x,z),z);
 	}
+	public void GameEnd()
+	{
+		endScreen.Visible = true;
+		GetTree().Paused = true;
+	}
+
+	public bool ShowChunkObjects(Chunk chunk)
+	{
+		this.oreManager.ShowChunkObjects(chunk.chunkPos);
+		this.coinManager.ShowChunkObjects(chunk.chunkPos);
+
+		return true;
+	}
+
+	public bool HideChunkObjects(Chunk chunk)
+	{
+		this.oreManager.ShowChunkObjects(chunk.chunkPos);
+		this.coinManager.ShowChunkObjects(chunk.chunkPos);
+
+		return true;
+	}
+
+
 
 
 

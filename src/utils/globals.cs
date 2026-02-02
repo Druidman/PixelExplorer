@@ -5,16 +5,14 @@ using Godot;
 class GameGlobals
 {
 
-    public static int ChunkCoinLimit = 1;
+    public static int CoinLimit = 1000;
     public static bool DebugMode = false;
     public static int ChunkWidth = 17;
     public static Godot.Vector3I StartWorldMiddle = new Godot.Vector3I(0,0,0);
     public static int chunkRadius = 10;
 
     public static int PlayerStartCoins = 10;
-    public static int WorldWidth = 500;
-    public static Godot.Vector3I MaxWorldTopLeft = new Godot.Vector3I(-WorldWidth / 2,0,-WorldWidth / 2);
-    public static Godot.Vector3I MaxWorldBottomRight = new Godot.Vector3I(WorldWidth / 2,0,WorldWidth / 2);
+    
 
     public static Godot.Vector3 PlayerStartPos = new Godot.Vector3(0,200,0);
     public static float GravitySpeed = 30.0f;
@@ -43,37 +41,28 @@ class GameGlobals
         new Godot.Vector2(0,YAxisMove)
     ];
 
-    public static ImageTexture texture = new ImageTexture();
-
-    public static PackedScene coinScene = null;
-    public static PackedScene GoldOreScene = null;
-    public static PackedScene GoldMineScene = null;
-    public static PackedScene SoldierHomeScene = null;
-    public static PackedScene chunkScene = null;
-    public static PackedScene soldierScene = null;
-    public static PackedScene ArcherTurretScene = null;
-    public static PackedScene MagicTurretScene = null;
-    public static Chunk placeholderChunk = null;
+    public static ImageTexture texture = makeTexture();
+    public static PackedScene coinScene = GD.Load<PackedScene>("res://src/objects/Coin/Coin.tscn");
+    public static PackedScene GoldOreScene = GD.Load<PackedScene>("res://src/objects/Ores/Gold/GoldOre.tscn");
+    public static PackedScene GoldMineScene = GD.Load<PackedScene>("res://src/objects/GoldMine/gold_mine.tscn");
+    public static PackedScene SoldierHomeScene = GD.Load<PackedScene>("res://src/objects/SoldierHome/soldier_home.tscn");
+    public static PackedScene chunkScene = GD.Load<PackedScene>("res://src/world/chunk/chunk.tscn");
+    public static PackedScene soldierScene = GD.Load<PackedScene>("res://src/entities/Soldier/soldier.tscn");
+    public static PackedScene ArcherTurretScene = GD.Load<PackedScene>("res://src/objects/Turrets/ArcherTurret/ArcherTurret.tscn");
+    public static PackedScene MagicTurretScene = GD.Load<PackedScene>("res://src/objects/Turrets/MagicTurret/MagicTurret.tscn");
+    public static Chunk placeholderChunk = chunkScene.Instantiate<Chunk>();
 
     public static int SoldierCost = 5;
 
 
-    public static void Initialize()
+    private static ImageTexture makeTexture()
     {
+        ImageTexture texture = new ImageTexture();
         Image img = new Image();
 		img.Load("res://images/TextureWithoutEdges.png");
 		
 		texture.SetImage(img);
-
-        coinScene = GD.Load<PackedScene>("res://src/objects/Coin/Coin.tscn");
-        chunkScene = GD.Load<PackedScene>("res://src/world/chunk/chunk.tscn");
-        soldierScene = GD.Load<PackedScene>("res://src/entities/Soldier/soldier.tscn");
-        GoldOreScene = GD.Load<PackedScene>("res://src/objects/Ores/Gold/GoldOre.tscn");
-        GoldMineScene = GD.Load<PackedScene>("res://src/objects/GoldMine/gold_mine.tscn");
-        SoldierHomeScene = GD.Load<PackedScene>("res://src/objects/SoldierHome/soldier_home.tscn");
-        MagicTurretScene = GD.Load<PackedScene>("res://src/objects/Turrets/MagicTurret/MagicTurret.tscn");
-        ArcherTurretScene = GD.Load<PackedScene>("res://src/objects/Turrets/ArcherTurret/ArcherTurret.tscn");
-        placeholderChunk = chunkScene.Instantiate<Chunk>();
- 
+        return texture;
     }
+
 }

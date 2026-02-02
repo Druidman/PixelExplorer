@@ -1,6 +1,8 @@
 using Godot;
 using System.Collections.Generic;
 
+#nullable enable
+
 public interface IBuilding
 {
     Vector3 GlobalPosition {get; set;}
@@ -22,7 +24,7 @@ public abstract partial class Building<T> : WorldBody<T>, IBuilding where T : IW
         set;
     } = 20;
     
-    protected Player player;
+    protected Player? player = null;
 
     public void TakeHealth(float delta)
     {
@@ -33,9 +35,11 @@ public abstract partial class Building<T> : WorldBody<T>, IBuilding where T : IW
         }
     }
     
-    protected void Initialize(Player player, Godot.Vector3 pos, World world)
+    protected void Initialize(Player? player, World? world)
     {
-        this.Initialize(world,pos);
+        if (world == null) throw new System.Exception("null world parameter not accepted! [Building(Initialize)]");
+
+        this.Initialize(world);
         this.player = player;
     }
 

@@ -21,7 +21,7 @@ public partial class Game : Node3D
 
 		
 
-		GameGlobals.Initialize();
+	
 		this.world.Initialize();
 
 		DisplayServer.MouseSetMode(DisplayServer.MouseMode.Confined);

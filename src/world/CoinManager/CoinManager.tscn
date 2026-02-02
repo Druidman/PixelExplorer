@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://cfrqciah5bixk"]
+
+[ext_resource type="Script" uid="uid://d1hcjti7txud5" path="res://src/world/CoinManager/CoinManager.cs" id="1_fo02g"]
+
+[node name="CoinManager" type="Node3D"]
+script = ExtResource("1_fo02g")

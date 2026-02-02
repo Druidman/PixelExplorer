@@ -14,7 +14,11 @@ public partial class SoldierHomePlacer : WorldObjectPlacer<SoldierHomeDimensions
 		}
 
 		SoldierHome home = GameGlobals.SoldierHomeScene.Instantiate<SoldierHome>();
-		home.Initialize(player, this.GlobalPosition, world);
+		home.Initialize(player, world);
+
+		home.Position = world.ConvertToLocalPos(this.GlobalPosition);
+
+		
 		world.AddChild(home);
 		player.removeCoins(GameGlobals.housePrice);
 		return true;
