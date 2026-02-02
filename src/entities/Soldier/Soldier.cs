@@ -76,7 +76,6 @@ public partial class Soldier : Area3D
 			globalPos.Y = topTilePosition.Y;
 			this.velocity.Y = 0;
 		}
-
 		else if (!this.world.CheckIfFreeSpace(bottomTilePosition))
 		// under us there is a tile so we won't apply gravity
 		{
