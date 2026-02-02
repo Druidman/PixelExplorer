@@ -24,7 +24,6 @@ world = NodePath("..")
 
 [node name="WorldBaseObjectsManager" parent="." node_paths=PackedStringArray("world", "turrets") instance=ExtResource("4_bsf3i")]
 world = NodePath("..")
-turrets = []
 
 [node name="MagicTurret2" parent="WorldBaseObjectsManager" node_paths=PackedStringArray("world") instance=ExtResource("7_5kmgb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, 0)
