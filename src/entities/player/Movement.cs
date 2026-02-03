@@ -18,14 +18,23 @@ public abstract class Movement
 		this.characterBodyRotation = this.player.character.Rotation;
 	}
     protected void RotateCharacterFacingMousePointer(){
-		Godot.Vector2 mousePos = this.player.GetViewport().GetMousePosition(); 
+		
 
+		var mousePointPos = GetMousePointInWorldPos();
 		var Player2DPos = new Godot.Vector2(this.player.Position.X, this.player.Position.Z);
-		var mousePointPos = Player2DPos + (mousePos - (DisplayServer.WindowGetSize() / 2));
 
 		var angle = Player2DPos.AngleToPoint(mousePointPos);
 		RotateCharacterBody(-(angle + this.player.character.Rotation.Y));
 		
+	}
+
+	public Godot.Vector2 GetMousePointInWorldPos(){
+		Godot.Vector2 mousePos = this.player.GetViewport().GetMousePosition(); 
+
+		var Player2DPos = new Godot.Vector2(this.player.Position.X, this.player.Position.Z);
+		
+
+		return Player2DPos + (mousePos - (DisplayServer.WindowGetSize() / 2));
 	}
 
     protected void ApplyGravity(double delta)

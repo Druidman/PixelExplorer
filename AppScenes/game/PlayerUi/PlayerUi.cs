@@ -14,6 +14,9 @@ public partial class PlayerUi : Control
 	public Label MaxSoldiers;
 
 	[Export]
+	public ProgressBar speed;
+
+	[Export]
 	public Player player;
 	
 	public override void _Ready()
@@ -26,5 +29,6 @@ public partial class PlayerUi : Control
 		Coins.Text = player.GetCoinCount().ToString();
 		Soldiers.Text = player.GetSoldierCount().ToString();
 		MaxSoldiers.Text = player.GetMaxSoldierCount().ToString();
+		speed.Value = (this.player.speed / GameGlobals.PlayerSpeed) * 100;
 	}
 }

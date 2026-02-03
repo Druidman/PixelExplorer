@@ -5,8 +5,13 @@ using System.Linq;
 
 public class MagicTurretDimensions : IWorldObjectDimensions<MagicTurretDimensions>
 {
+	
 	public static int TilesX => 3;
+
+	
 	public static int TilesY => 2;
+
+	
 	public static int TilesZ => 3;
 }
 

@@ -22,7 +22,7 @@ world = NodePath("..")
 objectScene = ExtResource("5_l0av5")
 world = NodePath("..")
 
-[node name="WorldBaseObjectsManager" parent="." node_paths=PackedStringArray("world", "turrets") instance=ExtResource("4_bsf3i")]
+[node name="WorldBaseObjectsManager" parent="." node_paths=PackedStringArray("world") instance=ExtResource("4_bsf3i")]
 world = NodePath("..")
 
 [node name="MagicTurret2" parent="WorldBaseObjectsManager" node_paths=PackedStringArray("world") instance=ExtResource("7_5kmgb")]
@@ -42,4 +42,5 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
 world = NodePath("../..")
 
 [node name="MagicTurret" parent="WorldBaseObjectsManager" node_paths=PackedStringArray("world") instance=ExtResource("7_5kmgb")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
 world = NodePath("../..")

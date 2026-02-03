@@ -29,7 +29,7 @@ public partial class Player : CharacterBody3D
 
 	private PlayerAction currentlyActiveAction = null;
 
-
+	public float speed = 0.0f;
 	public List<SoldierHome> houses = new List<SoldierHome>();
 	public List<ArcherTurret> archerTowers = new List<ArcherTurret>();
 	public List<MagicTurret> magicTurrets = new List<MagicTurret>();

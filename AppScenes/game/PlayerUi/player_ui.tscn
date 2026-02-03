@@ -2,52 +2,65 @@
 
 [ext_resource type="Script" uid="uid://ukvhat7uai3x" path="res://AppScenes/game/PlayerUi/PlayerUi.cs" id="1_8lcsp"]
 
-[node name="PlayerUi" type="Control" node_paths=PackedStringArray("Coins", "Soldiers", "MaxSoldiers")]
+[node name="PlayerUi" type="Control" node_paths=PackedStringArray("Coins", "Soldiers", "MaxSoldiers", "speed")]
 layout_mode = 3
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
 grow_vertical = 0
 script = ExtResource("1_8lcsp")
-Coins = NodePath("HBoxContainer/Coins/Value")
-Soldiers = NodePath("HBoxContainer/Soldiers/Value")
-MaxSoldiers = NodePath("HBoxContainer/Soldiers/value2")
+Coins = NodePath("MarginContainer/HBoxContainer/Coins/Value")
+Soldiers = NodePath("MarginContainer/HBoxContainer/Soldiers/Value")
+MaxSoldiers = NodePath("MarginContainer/HBoxContainer/Soldiers/value2")
+speed = NodePath("MarginContainer/HBoxContainer/ProgressBar")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_top = -40.0
-offset_right = 61.0
+offset_top = -27.0
+offset_right = 1920.0
 grow_vertical = 0
 
-[node name="Coins" type="HBoxContainer" parent="HBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="HBoxContainer/Coins"]
+[node name="Coins" type="HBoxContainer" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/Coins"]
 layout_mode = 2
 text = "Coins: "
 
-[node name="Value" type="Label" parent="HBoxContainer/Coins"]
+[node name="Value" type="Label" parent="MarginContainer/HBoxContainer/Coins"]
 layout_mode = 2
 text = "0"
 
-[node name="Soldiers" type="HBoxContainer" parent="HBoxContainer"]
+[node name="Soldiers" type="HBoxContainer" parent="MarginContainer/HBoxContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="HBoxContainer/Soldiers"]
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/Soldiers"]
 layout_mode = 2
 text = "Soldiers:"
 
-[node name="Value" type="Label" parent="HBoxContainer/Soldiers"]
+[node name="Value" type="Label" parent="MarginContainer/HBoxContainer/Soldiers"]
 layout_mode = 2
 text = "0"
 
-[node name="By" type="Label" parent="HBoxContainer/Soldiers"]
+[node name="By" type="Label" parent="MarginContainer/HBoxContainer/Soldiers"]
 layout_mode = 2
 text = "/"
 
-[node name="value2" type="Label" parent="HBoxContainer/Soldiers"]
+[node name="value2" type="Label" parent="MarginContainer/HBoxContainer/Soldiers"]
 layout_mode = 2
 text = "0"
+
+[node name="ProgressBar" type="ProgressBar" parent="MarginContainer/HBoxContainer"]
+layout_direction = 3
+layout_mode = 2
+size_flags_horizontal = 3
+step = 1.0
+rounded = true
+fill_mode = 1
+show_percentage = false
