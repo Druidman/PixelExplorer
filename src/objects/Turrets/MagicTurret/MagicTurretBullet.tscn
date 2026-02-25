@@ -14,7 +14,7 @@ height = 0.8
 
 [node name="MagicTurretBullet" type="Area3D"]
 collision_layer = 0
-collision_mask = 4
+collision_mask = 6
 script = ExtResource("1_enehh")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]

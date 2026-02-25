@@ -1,4 +1,5 @@
 using System;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Threading;
 using Godot;
@@ -22,6 +23,10 @@ public partial class ChunkRenderer : Node3D
 	[Export]
 	World world;
 	LinkedList<Chunk> pendingAdd = new LinkedList<Chunk>();
+
+
+	public bool firstGen = true;
+	public int chunkGenRequests = 0;
 
 
 	private Dictionary<Godot.Vector3I, Chunk> queuedChunks = new Dictionary<Godot.Vector3I, Chunk>();
@@ -66,6 +71,7 @@ public partial class ChunkRenderer : Node3D
 	}
 	private void CommitChunks()
 	{
+		chunkGenRequests -= 1;
 		Chunk chunk;
 		lock (_dataLock)
 		{
@@ -125,6 +131,8 @@ public partial class ChunkRenderer : Node3D
 		}
 
 		GenNewChunks();
+
+		
 		
 
 
@@ -136,6 +144,8 @@ public partial class ChunkRenderer : Node3D
 	}
 	private void GenNewChunks()
 	{
+
+
 		for (
 			int x = (int)this.origin.X - ((this.worldChunkRadius - 1) * GameGlobals.ChunkWidth); 
 			x <= (int)this.origin.X + ((this.worldChunkRadius - 1) * GameGlobals.ChunkWidth);
@@ -167,6 +177,10 @@ public partial class ChunkRenderer : Node3D
 					if (!this.world.UpdateChunkAtPosition(pos, nChunk)) throw new Exception("Something wrong with chunk update");
 
 					RequestChunkGen(nChunk);
+					if (firstGen) chunkGenRequests+=1;
+					
+				
+					
 				}
 				
 				else if (
@@ -179,13 +193,20 @@ public partial class ChunkRenderer : Node3D
 					lock (_dataLock)
 					{
 						RequestChunkGen(chunk);
+						if (firstGen) chunkGenRequests+=1;
+						
+				
 						GD.Print("add");
+
+				
 					}
 				}
 			
 			}
-			
+
+
 		}
+		
 	}
 	private void HideChunks()
 	{
@@ -276,7 +297,7 @@ public partial class ChunkRenderer : Node3D
 
 	private void startChunkGenThread(Chunk chunk)
 	{	
-		
+
 		StartThread(()=>GenChunk(chunk));
 	}
 	private void GenChunk(Chunk chunk)
@@ -302,6 +323,11 @@ public partial class ChunkRenderer : Node3D
 			addCount = this.pendingAdd.Count;
 		}
 		if (addCount > 0) CommitChunks();
+
+		if (firstGen && chunkGenRequests == 0)
+		{
+			firstGen = false;
+		}
 		
 		
 

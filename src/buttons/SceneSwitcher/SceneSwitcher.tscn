@@ -1,10 +1,31 @@
-[gd_scene load_steps=2 format=3 uid="uid://dbuo1pe6qxy7o"]
+[gd_scene load_steps=6 format=3 uid="uid://dbuo1pe6qxy7o"]
 
 [ext_resource type="Script" uid="uid://ox1cum6nblu4" path="res://src/buttons/SceneSwitcher/SceneSwitcher.cs" id="1_iyjdu"]
+[ext_resource type="FontFile" uid="uid://bgemwf3ascspc" path="res://images/assets/static/PixelifySans-Regular.ttf" id="2_axwm5"]
+[ext_resource type="Texture2D" uid="uid://b0lpg035nyx1" path="res://images/assets/Complete_UI_Essential_Pack_Free/01_Flat_Theme/Spritesheets/Spritesheet_UI_Flat.png" id="3_poaql"]
 
-[node name="Button" type="Button"]
-offset_right = 8.0
-offset_bottom = 8.0
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_axwm5"]
+texture = ExtResource("3_poaql")
+texture_margin_left = 2.0
+texture_margin_top = 3.0
+texture_margin_right = 2.0
+texture_margin_bottom = 3.0
+region_rect = Rect2(128, 32, 96, 64)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_poaql"]
+texture = ExtResource("3_poaql")
+texture_margin_left = 1.0
+texture_margin_top = 2.0
+texture_margin_right = 1.0
+texture_margin_bottom = 2.0
+region_rect = Rect2(128, 32, 96, 64)
+
+[node name="Button3" type="Button"]
+theme_override_colors/font_color = Color(16.737032, 16.737032, 16.737032, 1)
+theme_override_fonts/font = ExtResource("2_axwm5")
+theme_override_styles/normal = SubResource("StyleBoxTexture_axwm5")
+theme_override_styles/hover = SubResource("StyleBoxTexture_poaql")
+text = "Resume"
 script = ExtResource("1_iyjdu")
 
 [connection signal="pressed" from="." to="." method="on_pressed"]

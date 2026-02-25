@@ -8,8 +8,9 @@ public abstract partial class Turret<T> : Building<T> where T : IWorldObjectDime
 {
 	public abstract float attackDmg {get; protected set;}
 	protected List<Soldier> soldiersInAttackArea = new List<Soldier>();
+	protected Player enteredPlayer = null;
 
-    public new void Initialize(Player player, World world)
+  public new void Initialize(Player player, World world)
 	{
 		base.Initialize(player, world);
 		
@@ -31,8 +32,30 @@ public abstract partial class Turret<T> : Building<T> where T : IWorldObjectDime
 		return true;
 	}
 
+
 	protected abstract void OnEnemySoldierEntered(Soldier soldier);
 	protected abstract void OnEnemySoldierExited(Soldier soldier);
+
+	public void onBodyEntered(Node3D body)
+	{
+		GD.Print("whatever");
+		if (body is Player player){
+			GD.Print("hola");
+			if (player == this.player) return;
+			GD.Print("yeeeeeee");
+			this.enteredPlayer = player;
+		}
+
+	}
+
+	public void onBodyExited(Node3D body)
+	{
+		GD.Print("sema");
+		if (body is Player player){
+			GD.Print("siiiiiiiiiema");
+			this.enteredPlayer = null;
+		}
+	}
 	public void OnAreaEntered(Area3D area)
 	{
 		if (this.CheckIfIsEnemySoldier(area))

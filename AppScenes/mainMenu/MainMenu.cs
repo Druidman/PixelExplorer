@@ -3,32 +3,32 @@ using System;
 
 public partial class MainMenu : Control
 {
-	// Called when the node enters the scene tree for the first time.
 
-	[Export]
-	public PackedScene settingsScene = null;
 
 	[Export]
 	public PackedScene gameScene = null;
 
-	private Control settingsInstance = null;
+
+	[Export]
+	private Control settingsPage = null;
+
+	[Export]
+	public Control menuPage = null;
+
+	[Export]
+	public SpinBox chunkRadiusBox = null;
 
 	public void on_settings_pressed()
 	{
+		settingsPage.Show();
+		menuPage.Hide();
+	}
 
-		if (settingsScene == null)
-		{
-			return;
-		}
-
-		if (settingsInstance == null)
-		{
-			settingsInstance = (Control)settingsScene.Instantiate();
-			GetParent().AddChild(settingsInstance);
-		}
-		
-		settingsInstance.Show();
-		Hide();
+	public void onSettingsSave()
+	{
+		GameGlobals.chunkRadius = (int)chunkRadiusBox.Value;
+		menuPage.Show();
+		settingsPage.Hide();
 	}
 
 	public void on_start_pressed()

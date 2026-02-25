@@ -9,12 +9,11 @@ public partial class PlayerUi : Control
 
 	[Export]
 	public Label Soldiers;
-
+	[Export]
+	public Label Health;
+	
 	[Export]
 	public Label MaxSoldiers;
-
-	[Export]
-	public ProgressBar speed;
 
 	[Export]
 	public Player player;
@@ -31,6 +30,6 @@ public partial class PlayerUi : Control
 		Coins.Text = player.GetCoinCount().ToString();
 		Soldiers.Text = player.GetSoldierCount().ToString();
 		MaxSoldiers.Text = player.GetMaxSoldierCount().ToString();
-		speed.Value = (this.player.speed / GameGlobals.PlayerSpeed) * 100;
+		Health.Text = player.healthPoints.ToString();
 	}
 }

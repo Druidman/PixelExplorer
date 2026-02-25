@@ -1,9 +1,8 @@
-[gd_scene load_steps=12 format=3 uid="uid://b7agqiud0h5d7"]
+[gd_scene load_steps=14 format=3 uid="uid://b7agqiud0h5d7"]
 
 [ext_resource type="Script" uid="uid://cvtbrs4io30xe" path="res://AppScenes/mainMenu/MainMenu.cs" id="1_8ysov"]
 [ext_resource type="PackedScene" uid="uid://cwyc3bi48q0dq" path="res://AppScenes/game/GameScene.tscn" id="3_5evs8"]
 [ext_resource type="Texture2D" uid="uid://b0lpg035nyx1" path="res://images/assets/Complete_UI_Essential_Pack_Free/01_Flat_Theme/Spritesheets/Spritesheet_UI_Flat.png" id="3_85oqh"]
-[ext_resource type="PackedScene" uid="uid://b1oygfamiwlw7" path="res://AppScenes/settings/settings.tscn" id="3_edgpi"]
 [ext_resource type="FontFile" uid="uid://bgemwf3ascspc" path="res://images/assets/static/PixelifySans-Regular.ttf" id="4_5evs8"]
 [ext_resource type="Texture2D" uid="uid://cw8laxmp10v0m" path="res://images/assets/gameScreen.png" id="4_gcbb7"]
 [ext_resource type="Script" uid="uid://b2lgvwxa27ki4" path="res://AppScenes/mainMenu/CharacterPresenter.cs" id="6_aiibo"]
@@ -11,6 +10,26 @@
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_s03kp"]
 texture = ExtResource("4_gcbb7")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aiibo"]
+atlas = ExtResource("3_85oqh")
+region = Rect2(128, 96, 64, 32)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_gcbb7"]
+texture = ExtResource("3_85oqh")
+texture_margin_left = 2.0
+texture_margin_top = 3.0
+texture_margin_right = 2.0
+texture_margin_bottom = 3.0
+region_rect = Rect2(128, 32, 96, 64)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_wgb3j"]
+texture = ExtResource("3_85oqh")
+texture_margin_left = 1.0
+texture_margin_top = 2.0
+texture_margin_right = 1.0
+texture_margin_bottom = 2.0
+region_rect = Rect2(128, 32, 96, 64)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_np12c"]
 texture = ExtResource("3_85oqh")
@@ -28,7 +47,7 @@ texture_margin_right = 1.0
 texture_margin_bottom = 2.0
 region_rect = Rect2(128, 32, 96, 64)
 
-[node name="MainMenu" type="Control"]
+[node name="MainMenu" type="Control" node_paths=PackedStringArray("settingsPage", "menuPage", "chunkRadiusBox")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -36,8 +55,10 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_8ysov")
-settingsScene = ExtResource("3_edgpi")
 gameScene = ExtResource("3_5evs8")
+settingsPage = NodePath("Panel/CenterContainer")
+menuPage = NodePath("Panel/HBoxContainer")
+chunkRadiusBox = NodePath("Panel/CenterContainer/VBoxContainer/NinePatchRect/HBoxContainer/SpinBox")
 
 [node name="Panel" type="Panel" parent="."]
 layout_mode = 1
@@ -47,6 +68,56 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_s03kp")
+
+[node name="CenterContainer" type="CenterContainer" parent="Panel"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/CenterContainer"]
+layout_mode = 2
+
+[node name="NinePatchRect" type="NinePatchRect" parent="Panel/CenterContainer/VBoxContainer"]
+custom_minimum_size = Vector2(300, 50)
+layout_mode = 2
+texture = SubResource("AtlasTexture_aiibo")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/CenterContainer/VBoxContainer/NinePatchRect"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -107.5
+offset_top = -15.5
+offset_right = 107.5
+offset_bottom = 15.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="Panel/CenterContainer/VBoxContainer/NinePatchRect/HBoxContainer"]
+layout_mode = 2
+text = "Render distance"
+
+[node name="SpinBox" type="SpinBox" parent="Panel/CenterContainer/VBoxContainer/NinePatchRect/HBoxContainer"]
+layout_mode = 2
+min_value = 4.0
+max_value = 20.0
+value = 10.0
+
+[node name="Button3" type="Button" parent="Panel/CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(16.737032, 16.737032, 16.737032, 1)
+theme_override_fonts/font = ExtResource("4_5evs8")
+theme_override_styles/normal = SubResource("StyleBoxTexture_gcbb7")
+theme_override_styles/hover = SubResource("StyleBoxTexture_wgb3j")
+text = "Save
+"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Panel"]
 layout_mode = 1
@@ -132,6 +203,7 @@ theme_override_styles/normal = SubResource("StyleBoxTexture_np12c")
 theme_override_styles/hover = SubResource("StyleBoxTexture_5evs8")
 text = "Exit"
 
+[connection signal="pressed" from="Panel/CenterContainer/VBoxContainer/Button3" to="." method="onSettingsSave"]
 [connection signal="pressed" from="Panel/HBoxContainer/CenterContainer2/MarginContainer/CenterContainer/VBoxContainer/Button" to="." method="on_start_pressed"]
 [connection signal="pressed" from="Panel/HBoxContainer/CenterContainer2/MarginContainer/CenterContainer/VBoxContainer/Button3" to="." method="on_settings_pressed"]
 [connection signal="pressed" from="Panel/HBoxContainer/CenterContainer2/MarginContainer/CenterContainer/VBoxContainer/Button2" to="." method="on_exit_pressed"]

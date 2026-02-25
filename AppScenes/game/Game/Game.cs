@@ -19,9 +19,6 @@ public partial class Game : Node3D
 		if (world  == null ||  player == null) 
 			throw new Exception("Game: player or world not assigned");
 
-		
-
-	
 		this.world.Initialize();
 
 		DisplayServer.MouseSetMode(DisplayServer.MouseMode.Confined);

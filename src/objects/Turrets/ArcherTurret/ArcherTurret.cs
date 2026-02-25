@@ -42,6 +42,11 @@ public partial class ArcherTurret : Turret<ArcherTurretDimensions>
 		Soldier soldier = this.soldiersInAttackArea.ElementAtOrDefault(0);
 		if (soldier == null)
 		{
+			// first attack soldiers
+			GD.Print(enteredPlayer);
+			if (enteredPlayer == null) return;
+			enteredPlayer.TakeHealth(this.attackDmg);
+
 			return;
 		}
 		

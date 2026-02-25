@@ -21,6 +21,8 @@ public partial class MagicTurret : Turret<MagicTurretDimensions>
 	[Export]
 	PackedScene turretBullet;
 
+	
+
 	public override float attackDmg {get; protected set;} = 2f;
 	protected override void OnEnterSceneTree()
 	{
@@ -46,11 +48,20 @@ public partial class MagicTurret : Turret<MagicTurretDimensions>
 		}
 	}
 
+
+
 	public override void OnAttack()
 	{
 		Soldier soldier = this.soldiersInAttackArea.ElementAtOrDefault(0);
 		if (soldier == null)
 		{
+			// first attack soldiers
+			if (enteredPlayer == null) return;
+
+			MagicTurretBullet bulletP = this.turretBullet.Instantiate<MagicTurretBullet>();
+			bulletP.Instantiate(enteredPlayer.GlobalPosition, this.GlobalPosition, this.attackDmg);
+			AddChild(bulletP);
+
 			return;
 		}
 		

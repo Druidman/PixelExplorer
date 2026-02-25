@@ -21,6 +21,11 @@ public partial class Player : CharacterBody3D
 	[Export]
 	public SoldierManager soldierManager;
 
+
+	[Export]
+	public ChunkRenderer chunkRenderer = null;
+
+
 	[Export]
 	public Godot.Collections.Array<PlayerAction> playerActions = new Godot.Collections.Array<PlayerAction>
 	{
@@ -38,6 +43,21 @@ public partial class Player : CharacterBody3D
 	private int coins = GameGlobals.PlayerStartCoins;
 
 	public int SoldierSlots = 2;
+
+	public float healthPoints = 20;
+
+	public void TakeHealth(float delta)
+	{
+		if (delta < 0)
+		{
+			return;
+		}
+
+		this.healthPoints -= delta;
+		if (this.healthPoints <= 0){
+			this.world.GameLoose();
+		}
+	}
 
 	public bool canMove {
 		get
@@ -145,7 +165,8 @@ public partial class Player : CharacterBody3D
 
 	public override void _PhysicsProcess(double delta)
 	{
-
+		if (chunkRenderer.firstGen) return;
+		
 		
 		movement.HandleProcess(delta);
 

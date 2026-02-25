@@ -23,11 +23,21 @@ public partial class MagicTurretBullet : Area3D
 
 		if (this.GlobalPosition.DistanceSquaredTo(targetPosition) <= acceptableBulletTargetDistance * acceptableBulletTargetDistance){ // squared
 			Godot.Collections.Array<Area3D> areas = this.GetOverlappingAreas();
+			Godot.Collections.Array<Node3D> bodies = this.GetOverlappingBodies();
+
 			foreach (Area3D area in areas)
 			{
 				if (area is Soldier soldier)
 				{
 					soldier.TakeHealth(attackDmg);
+				}
+			}
+			foreach (Node3D body in bodies)
+			{
+				GD.Print(body);
+				if (body is Player player)
+				{
+					player.TakeHealth(attackDmg);
 				}
 			}
 

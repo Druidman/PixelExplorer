@@ -42,8 +42,6 @@ public partial class WorldBaseObjectsManager : Node3D
 	{
 		if (this.turrets.Count > 0) return;
 
-		GD.Print("END! YOU WON!");
-
 		this.world.GameEnd();
 	}
 

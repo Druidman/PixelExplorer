@@ -1,0 +1,66 @@
+[gd_scene load_steps=7 format=3 uid="uid://gcwxisnqfvmd"]
+
+[ext_resource type="Script" uid="uid://dkuirqyfbt4hc" path="res://AppScenes/game/GameLoose/GameLooseScreen.cs" id="1_hsg12"]
+[ext_resource type="PackedScene" uid="uid://dbuo1pe6qxy7o" path="res://src/buttons/SceneSwitcher/SceneSwitcher.tscn" id="2_5xed3"]
+[ext_resource type="FontFile" uid="uid://bgemwf3ascspc" path="res://images/assets/static/PixelifySans-Regular.ttf" id="2_ps7r3"]
+[ext_resource type="Texture2D" uid="uid://b0lpg035nyx1" path="res://images/assets/Complete_UI_Essential_Pack_Free/01_Flat_Theme/Spritesheets/Spritesheet_UI_Flat.png" id="3_5xed3"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2r1fn"]
+texture = ExtResource("3_5xed3")
+texture_margin_left = 2.0
+texture_margin_top = 3.0
+texture_margin_right = 2.0
+texture_margin_bottom = 3.0
+region_rect = Rect2(128, 32, 96, 64)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_8nd51"]
+texture = ExtResource("3_5xed3")
+texture_margin_left = 1.0
+texture_margin_top = 2.0
+texture_margin_right = 1.0
+texture_margin_bottom = 2.0
+region_rect = Rect2(128, 32, 96, 64)
+
+[node name="GameLooseScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_hsg12")
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+text = "You lost!
+You king has been slayed"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button3" parent="CenterContainer/VBoxContainer" instance=ExtResource("2_5xed3")]
+layout_mode = 2
+text = "Retry"
+scene = 3
+
+[node name="Button4" type="Button" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(16.737032, 16.737032, 16.737032, 1)
+theme_override_fonts/font = ExtResource("2_ps7r3")
+theme_override_styles/normal = SubResource("StyleBoxTexture_2r1fn")
+theme_override_styles/hover = SubResource("StyleBoxTexture_8nd51")
+text = "Quit
+"
+
+[connection signal="BeforeSceneChange" from="CenterContainer/VBoxContainer/Button3" to="." method="onRetry"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/Button4" to="." method="onQuit"]
