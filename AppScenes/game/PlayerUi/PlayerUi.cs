@@ -26,6 +26,8 @@ public partial class PlayerUi : Control
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
+		if (player == null) return;
+
 		Coins.Text = player.GetCoinCount().ToString();
 		Soldiers.Text = player.GetSoldierCount().ToString();
 		MaxSoldiers.Text = player.GetMaxSoldierCount().ToString();
