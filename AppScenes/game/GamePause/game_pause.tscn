@@ -78,18 +78,5 @@ layout_mode = 2
 text = "Leave"
 scene = 3
 
-[node name="CenterContainer3" type="CenterContainer" parent="CenterContainer/HBoxContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="CenterContainer/HBoxContainer/CenterContainer3"]
-layout_mode = 2
-text = "Press 'Q' to spawn a soldier: 5 coins
-Press 'B' to enter building mode:
-	-> Press `Q' to place tower: 10 coins
-	-> Press 'E' to place home: 10 coins
-	-> Press 'C' to place gold mine: 10 coins
-	-> Press 'M' to place magic tower: 10 coins
-Press 'Z' to enter attack mode -> click on building to attack"
-
 [connection signal="pressed" from="CenterContainer/HBoxContainer/VBoxContainer/CenterContainer/Button3" to="." method="resume"]
-[connection signal="BeforeSceneChange" from="CenterContainer/HBoxContainer/VBoxContainer/CenterContainer2/SceneSwitcher" to="." method="Leave"]
+[connection signal="BeforeSceneChange" from="CenterContainer/HBoxContainer/VBoxContainer/CenterContainer2/SceneSwitcher" to="." method="onLeave"]

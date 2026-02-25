@@ -20,7 +20,7 @@ public partial class GamePause : Control
 		GetTree().Paused = true;
 	}
 
-	public void Leave()
+	public void onLeave()
 	{
 		resume();
 	}

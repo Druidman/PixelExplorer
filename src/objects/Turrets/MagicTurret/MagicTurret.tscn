@@ -25,7 +25,6 @@ mesh = ExtResource("1_qgyn0")
 shape = SubResource("BoxShape3D_f7qv1")
 
 [node name="Timer" type="Timer" parent="."]
-wait_time = 2.0
 autostart = true
 
 [node name="DefenseArea" type="Area3D" parent="."]

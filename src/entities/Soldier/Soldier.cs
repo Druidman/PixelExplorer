@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics;
 using Godot;
 
@@ -5,6 +6,9 @@ public partial class Soldier : Area3D
 {
 	[Export]
 	Godot.Timer attackTimer;
+
+	bool hasCustomDestination = false;
+	Godot.Vector3 customDestination = default(Godot.Vector3);
 	
 	static float strength = 2;
 
@@ -16,20 +20,28 @@ public partial class Soldier : Area3D
 	public Godot.Vector3 relativeToPlayer;
 
 	Godot.Vector3 velocity;
-	public Godot.Vector3 destination;
 	
 	private float stopDistance = 2f;
 
 	public IBuilding destroyObjective = null;
 
 	Godot.Vector3 startOffsetPos = new Godot.Vector3(0,10,0);
-	public void Initialize(Player player, Godot.Vector3 relativeToPlayer)
+	Godot.Vector3 startingGlobalPos = default(Godot.Vector3);
+	Action onRemove = ()=>{};
+	public void Initialize(Player player, Godot.Vector3 relativeToPlayer, World world = null, Godot.Vector3 startingGlobalPos = default(Godot.Vector3), Action onRemove = default(Action))
 	{
 		this.player = player;
 		this.relativeToPlayer = relativeToPlayer;
-		this.world = this.player.world;
-		
-
+		this.startingGlobalPos = startingGlobalPos;
+		this.onRemove = onRemove;
+		if (world != null)
+		{
+			this.world = world;
+		}
+		else
+		{
+			this.world = this.player.world;	
+		}
 	}
 
 	public void TakeHealth(float delta)
@@ -47,13 +59,21 @@ public partial class Soldier : Area3D
 
 	private void Kill()
 	{
-		this.player.soldierManager.RemoveSoldier(this);
+		if (onRemove != default(Action))
+		{
+			onRemove();	
+		}
+		
+		if (this.player != null) this.player.soldierManager.RemoveSoldier(this);
+		
 		GetParent()?.RemoveChild(this);
 		QueueFree();
 	}
 	public override void _Ready()
 	{
-		this.GlobalPosition = this.player.GlobalPosition + startOffsetPos;
+		if (this.player != null) this.GlobalPosition = this.player.GlobalPosition + startOffsetPos;
+		else this.GlobalPosition = this.startingGlobalPos + startOffsetPos;
+		
 	}
 
 	public void MoveAndSlide()
@@ -85,7 +105,14 @@ public partial class Soldier : Area3D
 		globalPos += velocity;
 		if (globalPos.Y < GameGlobals.StartWorldMiddle.Y)
 		{
-			globalPos = this.player.GlobalPosition + this.startOffsetPos;
+			if (this.player == null)
+			{
+				globalPos = this.GlobalPosition + this.startOffsetPos;
+			}
+			else
+			{
+				globalPos = this.player.GlobalPosition + this.startOffsetPos;
+			}
 	
 		}
 
@@ -97,12 +124,38 @@ public partial class Soldier : Area3D
 		UpdateActions();
 		MoveAndSlide();
 		this.Rotation = rotation;
+		Godot.Vector3 destination;
+		if (destroyObjective == null)
+		{
+			if (player == null)
+			{
+				// so this is enemy
+				if (!hasCustomDestination)
+				{
+					customDestination = this.world.GetRandomBlockPosInWorld();
+					hasCustomDestination = true;	
+				}
+				destination = customDestination;
+				
+			}
+			else {
+				hasCustomDestination = false;
+				destination = this.player.GlobalPosition + relativeToPlayer;	
+			}
+		}
+		else
+		{
+			hasCustomDestination = false;
+			destination = destroyObjective.GlobalPosition;
+		}
+	
 		Godot.Vector3 direction = (destination - this.GlobalPosition) * 0.5f;
 		direction = direction.Normalized();
 		destination.Y = this.GlobalPosition.Y;
 
 		if (this.GlobalPosition.DistanceSquaredTo(destination) < this.stopDistance * this.stopDistance)
 		{
+			if (hasCustomDestination) hasCustomDestination = false;
 			direction *= 0;
 		}
 		else
@@ -124,9 +177,13 @@ public partial class Soldier : Area3D
 
 	public void UpdateActions()
 	{
-		if (this.GlobalPosition.DistanceSquaredTo(destination) <= 25 && destroyObjective != null && destroyObjective.healthPoints > 0) // squared 5
+		
+		if (destroyObjective != null ) // squared 5
 		{
-			if (this.attackTimer.IsStopped()) this.attackTimer.Start();
+			if (this.GlobalPosition.DistanceSquaredTo(destroyObjective.GlobalPosition) <= 25 && destroyObjective.healthPoints > 0)
+			{
+				if (this.attackTimer.IsStopped()) this.attackTimer.Start();
+			}
 		}
 		else
 		{

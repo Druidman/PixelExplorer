@@ -72,12 +72,12 @@ public partial class SoldierManager : Godot.Node3D
 		{
 			if (destroyObjective != null && destroyObjective.healthPoints > 0)
 			{
-				soldier.destination = this.destroyObjective.GlobalPosition;
+				
 				soldier.destroyObjective = this.destroyObjective;
 			}
 			else
 			{
-				soldier.destination = this.player.GlobalPosition + soldier.relativeToPlayer;	
+		
 				soldier.destroyObjective = null;
 				
 			}

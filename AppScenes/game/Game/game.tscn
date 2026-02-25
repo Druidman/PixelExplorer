@@ -17,9 +17,10 @@ world = NodePath("World")
 player = NodePath("Player")
 chunkRenderer = NodePath("ChunkRenderer")
 
-[node name="World" parent="." node_paths=PackedStringArray("endScreen", "endLooseScreen") instance=ExtResource("1_e2o6t")]
+[node name="World" parent="." node_paths=PackedStringArray("endScreen", "endLooseScreen", "player") instance=ExtResource("1_e2o6t")]
 endScreen = NodePath("../GameEndScreen")
 endLooseScreen = NodePath("../GameLooseScreen")
+player = NodePath("../Player")
 
 [node name="ChunkRenderer" parent="." node_paths=PackedStringArray("player", "world") instance=ExtResource("3_uwqyn")]
 player = NodePath("../Player")

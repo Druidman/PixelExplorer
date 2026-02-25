@@ -37,6 +37,9 @@ public partial class World : Node3D
 	[Export]
 	GameLooseScreen endLooseScreen;
 
+	[Export]
+	Player player;
+
 	public override void _Ready()
 	{
 		if (this.GlobalPosition.X !=0 || this.GlobalPosition.Y != 0 || this.GlobalPosition.Z != 0) 
@@ -208,6 +211,30 @@ public partial class World : Node3D
 		this.coinManager.HideChunkObjects(chunk.chunkPos);
 
 		return true;
+	}
+	public ObjectiveType GetBuildingTypeToAttackByEnemy()
+	{
+		
+		if (GetPlayerHomeToAttackByEnemy() != null) return ObjectiveType.Home;
+
+		
+		if (GetPlayerArcherTurretToAttackByEnemy() != null) return ObjectiveType.ArcherTurret;
+
+		if (GetPlayerMagicTurretToAttackByEnemy() != null) return ObjectiveType.MagicTurret;
+
+		return ObjectiveType.None;
+	}
+	public SoldierHome GetPlayerHomeToAttackByEnemy()
+	{
+		return this.player.houses.ElementAtOrDefault(0);
+	}
+	public ArcherTurret GetPlayerArcherTurretToAttackByEnemy()
+	{
+		return this.player.archerTowers.ElementAtOrDefault(0);
+	}
+	public MagicTurret GetPlayerMagicTurretToAttackByEnemy()
+	{
+		return this.player.magicTurrets.ElementAtOrDefault(0);
 	}
 
 
