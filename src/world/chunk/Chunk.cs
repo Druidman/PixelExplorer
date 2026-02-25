@@ -128,7 +128,7 @@ public partial class Chunk : MeshInstance3D
 		
 		mat.TextureFilter = BaseMaterial3D.TextureFilterEnum.Nearest;
 
-		mat.AlbedoTexture = GameGlobals.texture;
+		mat.AlbedoTexture = this.world.blockTexture;
 
 		this.MaterialOverride = mat; // IMPORTANT
 

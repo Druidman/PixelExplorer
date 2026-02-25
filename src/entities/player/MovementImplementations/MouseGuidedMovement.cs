@@ -56,6 +56,7 @@ public class MouseGuidedMovement : Movement
         
         velocity.X = direction.X;
         velocity.Z = direction.Z;
+        
         this.UpdateVelocity();
     }
     

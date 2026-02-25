@@ -167,7 +167,10 @@ public partial class Player : CharacterBody3D
 	{
 		if (chunkRenderer.firstGen) return;
 		
-		
+		if (!this.world.CheckIfValidGlobalPosition(this.GlobalPosition))
+		{
+			this.GlobalPosition -= this.Velocity;
+		}
 		movement.HandleProcess(delta);
 
 		if (allowDefaultActions)

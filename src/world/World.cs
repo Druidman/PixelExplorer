@@ -8,7 +8,8 @@ using Godot;
 
 public partial class World : Node3D
 {
-
+	[Export]
+	public CompressedTexture2D blockTexture;
 	public static int WorldWidth = 500;
 	public Godot.Vector3I MaxWorldTopLeftGlobal = new Godot.Vector3I(-WorldWidth / 2,0,-WorldWidth / 2);
 	public Godot.Vector3I MaxWorldBottomRightGlobal = new Godot.Vector3I(WorldWidth / 2,0,WorldWidth / 2);
@@ -203,8 +204,8 @@ public partial class World : Node3D
 
 	public bool HideChunkObjects(Chunk chunk)
 	{
-		this.oreManager.ShowChunkObjects(chunk.chunkPos);
-		this.coinManager.ShowChunkObjects(chunk.chunkPos);
+		this.oreManager.HideChunkObjects(chunk.chunkPos);
+		this.coinManager.HideChunkObjects(chunk.chunkPos);
 
 		return true;
 	}

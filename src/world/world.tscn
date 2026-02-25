@@ -1,7 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://bkb347g86res2"]
+[gd_scene load_steps=9 format=3 uid="uid://bkb347g86res2"]
 
 [ext_resource type="Script" uid="uid://cwhwq7874mqpk" path="res://src/world/World.cs" id="1_f3sb7"]
 [ext_resource type="PackedScene" uid="uid://cfrqciah5bixk" path="res://src/world/CoinManager/CoinManager.tscn" id="2_jte2u"]
+[ext_resource type="Texture2D" uid="uid://d2qrdkvaeysv4" path="res://images/TextureWithoutEdges.png" id="2_wg6dd"]
 [ext_resource type="PackedScene" uid="uid://i1pr1d6wr7p4" path="res://src/objects/Coin/Coin.tscn" id="3_43c6p"]
 [ext_resource type="PackedScene" uid="uid://c1ub56skyqcl4" path="res://src/world/OreManager/OreManager.tscn" id="3_bsf3i"]
 [ext_resource type="PackedScene" uid="uid://cct8s72fbxp7u" path="res://src/world/WorldBaseObjectsManager/WorldBaseObjectsManager.tscn" id="4_bsf3i"]
@@ -10,6 +11,7 @@
 
 [node name="World" type="Node3D" node_paths=PackedStringArray("oreManager", "coinManager", "worldBaseObjectsManager")]
 script = ExtResource("1_f3sb7")
+blockTexture = ExtResource("2_wg6dd")
 oreManager = NodePath("OreManager")
 coinManager = NodePath("CoinManager")
 worldBaseObjectsManager = NodePath("WorldBaseObjectsManager")
