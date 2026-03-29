@@ -5,7 +5,7 @@ Game about building a village for your soldier that help you destroy main turret
 **Game is inspired by `Lordz.io`**
 
 ## How to play?
-- Download latest release of game from github or `itch.io`
+- Download latest release of game from [github](https://github.com/Druidman/PixelExplorer/releases/tag/v1.0.0) or [itch.io](https://druidmanbober.itch.io/pixelexplorer)
 - Extract `.zip` file
 - Run `PixelExplorer.exe` (Or just binary on linux)
 
