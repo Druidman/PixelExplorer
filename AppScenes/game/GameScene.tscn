@@ -1,8 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://cwyc3bi48q0dq"]
+[gd_scene format=3 uid="uid://cwyc3bi48q0dq"]
 
 [ext_resource type="PackedScene" uid="uid://clbu5yls05nll" path="res://AppScenes/game/Game/game.tscn" id="2_i4801"]
 [ext_resource type="PackedScene" uid="uid://gn43e3ofmpb8" path="res://AppScenes/game/GamePause/game_pause.tscn" id="2_nfs5e"]
 [ext_resource type="PackedScene" uid="uid://bxbdurtrp6it3" path="res://src/utils/FpsCounter/fpsCounter.tscn" id="3_inqja"]
+[ext_resource type="AudioStream" uid="uid://bq1ux0yq04byx" path="res://sounds/backgroundMusic.mp3" id="4_ox2ma"]
+[ext_resource type="Script" uid="uid://c7187jq7upuvv" path="res://src/utils/MusicPlayer.cs" id="5_klhhl"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_hr5et"]
 sky_horizon_color = Color(1.0723789, 1.150212, 1.2487786, 1)
@@ -17,20 +19,25 @@ background_mode = 2
 sky = SubResource("Sky_61od6")
 tonemap_mode = 2
 
-[node name="GameScene" type="Node3D"]
+[node name="GameScene" type="Node3D" unique_id=2114581923]
 transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0, 0, 0)
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=547019765]
 transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
 shadow_enabled = true
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1794076730]
 environment = SubResource("Environment_6mfv6")
 
-[node name="Game" parent="." instance=ExtResource("2_i4801")]
+[node name="Game" parent="." unique_id=840402071 instance=ExtResource("2_i4801")]
 transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0)
 
-[node name="GamePause" parent="." instance=ExtResource("2_nfs5e")]
+[node name="GamePause" parent="." unique_id=2131972871 instance=ExtResource("2_nfs5e")]
 visible = false
 
-[node name="FpsCounter" parent="." instance=ExtResource("3_inqja")]
+[node name="FpsCounter" parent="." unique_id=624463300 instance=ExtResource("3_inqja")]
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=175523309]
+stream = ExtResource("4_ox2ma")
+autoplay = true
+script = ExtResource("5_klhhl")

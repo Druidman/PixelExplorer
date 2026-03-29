@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://b7agqiud0h5d7"]
+[gd_scene format=3 uid="uid://b7agqiud0h5d7"]
 
 [ext_resource type="Script" uid="uid://cvtbrs4io30xe" path="res://AppScenes/mainMenu/MainMenu.cs" id="1_8ysov"]
 [ext_resource type="PackedScene" uid="uid://cwyc3bi48q0dq" path="res://AppScenes/game/GameScene.tscn" id="3_5evs8"]
@@ -7,6 +7,8 @@
 [ext_resource type="Texture2D" uid="uid://cw8laxmp10v0m" path="res://images/assets/gameScreen.png" id="4_gcbb7"]
 [ext_resource type="Script" uid="uid://b2lgvwxa27ki4" path="res://AppScenes/mainMenu/CharacterPresenter.cs" id="6_aiibo"]
 [ext_resource type="ArrayMesh" uid="uid://h404y3oo05vk" path="res://images/CharacterMesh.res" id="7_aiibo"]
+[ext_resource type="AudioStream" uid="uid://bq1ux0yq04byx" path="res://sounds/backgroundMusic.mp3" id="8_s03kp"]
+[ext_resource type="Script" uid="uid://c7187jq7upuvv" path="res://src/utils/MusicPlayer.cs" id="9_wgb3j"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_s03kp"]
 texture = ExtResource("4_gcbb7")
@@ -47,7 +49,7 @@ texture_margin_right = 1.0
 texture_margin_bottom = 2.0
 region_rect = Rect2(128, 32, 96, 64)
 
-[node name="MainMenu" type="Control" node_paths=PackedStringArray("settingsPage", "menuPage", "chunkRadiusBox")]
+[node name="MainMenu" type="Control" unique_id=1095219888 node_paths=PackedStringArray("settingsPage", "menuPage", "chunkRadiusBox", "soundEffectsVolume", "musicEffectsVolume")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -58,9 +60,11 @@ script = ExtResource("1_8ysov")
 gameScene = ExtResource("3_5evs8")
 settingsPage = NodePath("Panel/CenterContainer")
 menuPage = NodePath("Panel/HBoxContainer")
-chunkRadiusBox = NodePath("Panel/CenterContainer/VBoxContainer/NinePatchRect/HBoxContainer/SpinBox")
+chunkRadiusBox = NodePath("Panel/CenterContainer/VBoxContainer/NinePatchRect/MarginContainer/VBoxContainer/HBoxContainer/SpinBox")
+soundEffectsVolume = NodePath("Panel/CenterContainer/VBoxContainer/NinePatchRect/MarginContainer/VBoxContainer/vbox/HSlider")
+musicEffectsVolume = NodePath("Panel/CenterContainer/VBoxContainer/NinePatchRect/MarginContainer/VBoxContainer/HBoxContainer2/HSlider")
 
-[node name="Panel" type="Panel" parent="."]
+[node name="Panel" type="Panel" parent="." unique_id=955786106]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -69,7 +73,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_s03kp")
 
-[node name="CenterContainer" type="CenterContainer" parent="Panel"]
+[node name="CenterContainer" type="CenterContainer" parent="Panel" unique_id=1346890864]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -78,39 +82,64 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel/CenterContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/CenterContainer" unique_id=1026283714]
 layout_mode = 2
 
-[node name="NinePatchRect" type="NinePatchRect" parent="Panel/CenterContainer/VBoxContainer"]
-custom_minimum_size = Vector2(300, 50)
+[node name="NinePatchRect" type="NinePatchRect" parent="Panel/CenterContainer/VBoxContainer" unique_id=690622937]
+custom_minimum_size = Vector2(300, 200)
 layout_mode = 2
 texture = SubResource("AtlasTexture_aiibo")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Panel/CenterContainer/VBoxContainer/NinePatchRect"]
+[node name="MarginContainer" type="MarginContainer" parent="Panel/CenterContainer/VBoxContainer/NinePatchRect" unique_id=2041540180]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -107.5
-offset_top = -15.5
-offset_right = 107.5
-offset_bottom = 15.5
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
 
-[node name="Label" type="Label" parent="Panel/CenterContainer/VBoxContainer/NinePatchRect/HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/CenterContainer/VBoxContainer/NinePatchRect/MarginContainer" unique_id=67882361]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/CenterContainer/VBoxContainer/NinePatchRect/MarginContainer/VBoxContainer" unique_id=313178300]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/CenterContainer/VBoxContainer/NinePatchRect/MarginContainer/VBoxContainer/HBoxContainer" unique_id=305106115]
 layout_mode = 2
 text = "Render distance"
 
-[node name="SpinBox" type="SpinBox" parent="Panel/CenterContainer/VBoxContainer/NinePatchRect/HBoxContainer"]
+[node name="SpinBox" type="SpinBox" parent="Panel/CenterContainer/VBoxContainer/NinePatchRect/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1131388077]
 layout_mode = 2
 min_value = 4.0
 max_value = 20.0
 value = 10.0
 
-[node name="Button3" type="Button" parent="Panel/CenterContainer/VBoxContainer"]
+[node name="vbox" type="VBoxContainer" parent="Panel/CenterContainer/VBoxContainer/NinePatchRect/MarginContainer/VBoxContainer" unique_id=1364335371]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/CenterContainer/VBoxContainer/NinePatchRect/MarginContainer/VBoxContainer/vbox" unique_id=1152966927]
+layout_mode = 2
+text = "SFX"
+
+[node name="HSlider" type="HSlider" parent="Panel/CenterContainer/VBoxContainer/NinePatchRect/MarginContainer/VBoxContainer/vbox" unique_id=1866497946]
+layout_mode = 2
+
+[node name="HBoxContainer2" type="VBoxContainer" parent="Panel/CenterContainer/VBoxContainer/NinePatchRect/MarginContainer/VBoxContainer" unique_id=1219587426]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/CenterContainer/VBoxContainer/NinePatchRect/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=104969289]
+layout_mode = 2
+text = "MUSIC"
+
+[node name="HSlider" type="HSlider" parent="Panel/CenterContainer/VBoxContainer/NinePatchRect/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=468011471]
+layout_mode = 2
+
+[node name="Button3" type="Button" parent="Panel/CenterContainer/VBoxContainer" unique_id=1056670319]
 layout_mode = 2
 theme_override_colors/font_color = Color(16.737032, 16.737032, 16.737032, 1)
 theme_override_fonts/font = ExtResource("4_5evs8")
@@ -119,7 +148,7 @@ theme_override_styles/hover = SubResource("StyleBoxTexture_wgb3j")
 text = "Save
 "
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Panel"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel" unique_id=1382192663]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -133,53 +162,53 @@ offset_bottom = 256.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="CenterContainer" type="CenterContainer" parent="Panel/HBoxContainer"]
+[node name="CenterContainer" type="CenterContainer" parent="Panel/HBoxContainer" unique_id=2141073035]
 layout_mode = 2
 
-[node name="SubViewportContainer" type="SubViewportContainer" parent="Panel/HBoxContainer/CenterContainer"]
+[node name="SubViewportContainer" type="SubViewportContainer" parent="Panel/HBoxContainer/CenterContainer" unique_id=1952074105]
 layout_mode = 2
 size_flags_horizontal = 0
 
-[node name="SubViewport" type="SubViewport" parent="Panel/HBoxContainer/CenterContainer/SubViewportContainer" node_paths=PackedStringArray("playerInstance")]
+[node name="SubViewport" type="SubViewport" parent="Panel/HBoxContainer/CenterContainer/SubViewportContainer" unique_id=737453541 node_paths=PackedStringArray("playerInstance")]
 transparent_bg = true
 handle_input_locally = false
 render_target_update_mode = 4
 script = ExtResource("6_aiibo")
 playerInstance = NodePath("Node3D")
 
-[node name="Node3D" type="Node3D" parent="Panel/HBoxContainer/CenterContainer/SubViewportContainer/SubViewport"]
+[node name="Node3D" type="Node3D" parent="Panel/HBoxContainer/CenterContainer/SubViewportContainer/SubViewport" unique_id=2053722500]
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Panel/HBoxContainer/CenterContainer/SubViewportContainer/SubViewport/Node3D"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Panel/HBoxContainer/CenterContainer/SubViewportContainer/SubViewport/Node3D" unique_id=1374718584]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 1.5, 0, -1)
 mesh = ExtResource("7_aiibo")
 skeleton = NodePath("../../../../../../..")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Panel/HBoxContainer/CenterContainer/SubViewportContainer/SubViewport"]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Panel/HBoxContainer/CenterContainer/SubViewportContainer/SubViewport" unique_id=1913605768]
 transform = Transform3D(1, 0, 0, 0, 0.99972284, 0.023542317, 0, -0.023542317, 0.99972284, 0, 7.906275, 0)
 
-[node name="Camera3D" type="Camera3D" parent="Panel/HBoxContainer/CenterContainer/SubViewportContainer/SubViewport"]
+[node name="Camera3D" type="Camera3D" parent="Panel/HBoxContainer/CenterContainer/SubViewportContainer/SubViewport" unique_id=41377752]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.4944105, 17.188763)
 current = true
 
-[node name="CenterContainer2" type="CenterContainer" parent="Panel/HBoxContainer"]
+[node name="CenterContainer2" type="CenterContainer" parent="Panel/HBoxContainer" unique_id=1065746746]
 layout_mode = 2
 size_flags_horizontal = 0
 
-[node name="MarginContainer" type="MarginContainer" parent="Panel/HBoxContainer/CenterContainer2"]
+[node name="MarginContainer" type="MarginContainer" parent="Panel/HBoxContainer/CenterContainer2" unique_id=908823523]
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="CenterContainer" type="CenterContainer" parent="Panel/HBoxContainer/CenterContainer2/MarginContainer"]
+[node name="CenterContainer" type="CenterContainer" parent="Panel/HBoxContainer/CenterContainer2/MarginContainer" unique_id=1687869923]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel/HBoxContainer/CenterContainer2/MarginContainer/CenterContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/HBoxContainer/CenterContainer2/MarginContainer/CenterContainer" unique_id=733310371]
 layout_mode = 2
 theme_override_constants/separation = 14
 
-[node name="Button" type="Button" parent="Panel/HBoxContainer/CenterContainer2/MarginContainer/CenterContainer/VBoxContainer"]
+[node name="Button" type="Button" parent="Panel/HBoxContainer/CenterContainer2/MarginContainer/CenterContainer/VBoxContainer" unique_id=678727519]
 layout_mode = 2
 theme_override_colors/font_color = Color(16.737032, 16.737032, 16.737032, 1)
 theme_override_fonts/font = ExtResource("4_5evs8")
@@ -187,7 +216,7 @@ theme_override_styles/normal = SubResource("StyleBoxTexture_np12c")
 theme_override_styles/hover = SubResource("StyleBoxTexture_5evs8")
 text = "Play"
 
-[node name="Button3" type="Button" parent="Panel/HBoxContainer/CenterContainer2/MarginContainer/CenterContainer/VBoxContainer"]
+[node name="Button3" type="Button" parent="Panel/HBoxContainer/CenterContainer2/MarginContainer/CenterContainer/VBoxContainer" unique_id=1165270405]
 layout_mode = 2
 theme_override_colors/font_color = Color(16.737032, 16.737032, 16.737032, 1)
 theme_override_fonts/font = ExtResource("4_5evs8")
@@ -195,7 +224,7 @@ theme_override_styles/normal = SubResource("StyleBoxTexture_np12c")
 theme_override_styles/hover = SubResource("StyleBoxTexture_5evs8")
 text = "Settings"
 
-[node name="Button2" type="Button" parent="Panel/HBoxContainer/CenterContainer2/MarginContainer/CenterContainer/VBoxContainer"]
+[node name="Button2" type="Button" parent="Panel/HBoxContainer/CenterContainer2/MarginContainer/CenterContainer/VBoxContainer" unique_id=2076214457]
 layout_mode = 2
 theme_override_colors/font_color = Color(16.737032, 16.737032, 16.737032, 1)
 theme_override_fonts/font = ExtResource("4_5evs8")
@@ -203,6 +232,13 @@ theme_override_styles/normal = SubResource("StyleBoxTexture_np12c")
 theme_override_styles/hover = SubResource("StyleBoxTexture_5evs8")
 text = "Exit"
 
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=814850554]
+stream = ExtResource("8_s03kp")
+autoplay = true
+script = ExtResource("9_wgb3j")
+
+[connection signal="value_changed" from="Panel/CenterContainer/VBoxContainer/NinePatchRect/MarginContainer/VBoxContainer/vbox/HSlider" to="." method="onSoundEffectsChange"]
+[connection signal="value_changed" from="Panel/CenterContainer/VBoxContainer/NinePatchRect/MarginContainer/VBoxContainer/HBoxContainer2/HSlider" to="." method="onMusicChange"]
 [connection signal="pressed" from="Panel/CenterContainer/VBoxContainer/Button3" to="." method="onSettingsSave"]
 [connection signal="pressed" from="Panel/HBoxContainer/CenterContainer2/MarginContainer/CenterContainer/VBoxContainer/Button" to="." method="on_start_pressed"]
 [connection signal="pressed" from="Panel/HBoxContainer/CenterContainer2/MarginContainer/CenterContainer/VBoxContainer/Button3" to="." method="on_settings_pressed"]
