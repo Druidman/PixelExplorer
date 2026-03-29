@@ -16,6 +16,9 @@ public partial class PlayerUi : Control
 	public Label MaxSoldiers;
 
 	[Export]
+	public Label CurrentMode;
+
+	[Export]
 	public Player player;
 	
 	public override void _Ready()
@@ -31,5 +34,12 @@ public partial class PlayerUi : Control
 		Soldiers.Text = player.GetSoldierCount().ToString();
 		MaxSoldiers.Text = player.GetMaxSoldierCount().ToString();
 		Health.Text = player.healthPoints.ToString();
+		if (player.currentlyActiveAction == null){
+			CurrentMode.Text = "Move";
+		}
+		else {
+			CurrentMode.Text = player.currentlyActiveAction.actionName;
+		}
+		
 	}
 }

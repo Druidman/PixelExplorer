@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://dw1qlpywtiiuo"]
+[gd_scene format=3 uid="uid://dw1qlpywtiiuo"]
 
 [ext_resource type="Script" uid="uid://ukvhat7uai3x" path="res://AppScenes/game/PlayerUi/PlayerUi.cs" id="1_8lcsp"]
 [ext_resource type="FontFile" uid="uid://bgemwf3ascspc" path="res://images/assets/static/PixelifySans-Regular.ttf" id="1_my2t8"]
@@ -11,7 +11,7 @@ default_font = ExtResource("1_my2t8")
 atlas = ExtResource("3_d1r8q")
 region = Rect2(128, 96, 64, 32)
 
-[node name="PlayerUi" type="Control" node_paths=PackedStringArray("Coins", "Soldiers", "Health", "MaxSoldiers")]
+[node name="PlayerUi" type="Control" unique_id=1459297461 node_paths=PackedStringArray("Coins", "Soldiers", "Health", "MaxSoldiers", "CurrentMode")]
 layout_mode = 3
 anchors_preset = 2
 anchor_top = 1.0
@@ -23,8 +23,9 @@ Coins = NodePath("MarginContainer/HBoxContainer/TextureRect/Coins/Value")
 Soldiers = NodePath("MarginContainer/HBoxContainer/TextureRect2/Soldiers/Value")
 Health = NodePath("MarginContainer/HBoxContainer/TextureRect3/Health/Value")
 MaxSoldiers = NodePath("MarginContainer/HBoxContainer/TextureRect2/Soldiers/value2")
+CurrentMode = NodePath("MarginContainer/HBoxContainer/TextureRect4/mode/Value")
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1731095710]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -33,16 +34,16 @@ offset_top = -27.0
 offset_right = 1920.0
 grow_vertical = 0
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer" unique_id=1046977684]
 layout_mode = 2
 theme_override_constants/separation = 59
 
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer"]
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer" unique_id=1074060595]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 texture = SubResource("AtlasTexture_3jw86")
 
-[node name="Coins" type="HBoxContainer" parent="MarginContainer/HBoxContainer/TextureRect"]
+[node name="Coins" type="HBoxContainer" parent="MarginContainer/HBoxContainer/TextureRect" unique_id=1015936283]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -56,22 +57,22 @@ offset_bottom = 13.5
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/TextureRect/Coins"]
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/TextureRect/Coins" unique_id=1352678752]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_my2t8")
 text = "Coins: "
 
-[node name="Value" type="Label" parent="MarginContainer/HBoxContainer/TextureRect/Coins"]
+[node name="Value" type="Label" parent="MarginContainer/HBoxContainer/TextureRect/Coins" unique_id=565555058]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_my2t8")
 text = "0"
 
-[node name="TextureRect3" type="TextureRect" parent="MarginContainer/HBoxContainer"]
+[node name="TextureRect3" type="TextureRect" parent="MarginContainer/HBoxContainer" unique_id=1709133438]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 texture = SubResource("AtlasTexture_3jw86")
 
-[node name="Health" type="HBoxContainer" parent="MarginContainer/HBoxContainer/TextureRect3"]
+[node name="Health" type="HBoxContainer" parent="MarginContainer/HBoxContainer/TextureRect3" unique_id=1457857340]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -85,22 +86,22 @@ offset_bottom = 13.5
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/TextureRect3/Health"]
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/TextureRect3/Health" unique_id=791335047]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_my2t8")
 text = "Health"
 
-[node name="Value" type="Label" parent="MarginContainer/HBoxContainer/TextureRect3/Health"]
+[node name="Value" type="Label" parent="MarginContainer/HBoxContainer/TextureRect3/Health" unique_id=1800755998]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_my2t8")
 text = "0"
 
-[node name="TextureRect2" type="TextureRect" parent="MarginContainer/HBoxContainer"]
+[node name="TextureRect2" type="TextureRect" parent="MarginContainer/HBoxContainer" unique_id=1333555753]
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 texture = SubResource("AtlasTexture_3jw86")
 
-[node name="Soldiers" type="HBoxContainer" parent="MarginContainer/HBoxContainer/TextureRect2"]
+[node name="Soldiers" type="HBoxContainer" parent="MarginContainer/HBoxContainer/TextureRect2" unique_id=564172380]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -114,18 +115,45 @@ offset_bottom = 16.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/TextureRect2/Soldiers"]
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/TextureRect2/Soldiers" unique_id=369835401]
 layout_mode = 2
 text = "Soldiers:"
 
-[node name="Value" type="Label" parent="MarginContainer/HBoxContainer/TextureRect2/Soldiers"]
+[node name="Value" type="Label" parent="MarginContainer/HBoxContainer/TextureRect2/Soldiers" unique_id=1795871092]
 layout_mode = 2
 text = "0"
 
-[node name="By" type="Label" parent="MarginContainer/HBoxContainer/TextureRect2/Soldiers"]
+[node name="By" type="Label" parent="MarginContainer/HBoxContainer/TextureRect2/Soldiers" unique_id=63514789]
 layout_mode = 2
 text = "/"
 
-[node name="value2" type="Label" parent="MarginContainer/HBoxContainer/TextureRect2/Soldiers"]
+[node name="value2" type="Label" parent="MarginContainer/HBoxContainer/TextureRect2/Soldiers" unique_id=1515282036]
 layout_mode = 2
 text = "0"
+
+[node name="TextureRect4" type="TextureRect" parent="MarginContainer/HBoxContainer" unique_id=420316625]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+texture = SubResource("AtlasTexture_3jw86")
+
+[node name="mode" type="HBoxContainer" parent="MarginContainer/HBoxContainer/TextureRect4" unique_id=965883495]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -75.0
+offset_top = -16.0
+offset_right = 125.0
+offset_bottom = 16.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/TextureRect4/mode" unique_id=934614298]
+layout_mode = 2
+text = "Current mode"
+
+[node name="Value" type="Label" parent="MarginContainer/HBoxContainer/TextureRect4/mode" unique_id=656506942]
+layout_mode = 2
+text = "Move"

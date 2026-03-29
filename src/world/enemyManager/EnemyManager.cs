@@ -58,26 +58,49 @@ public partial class EnemyManager : Godot.Node3D
 		}
 		
 		foreach (Soldier soldier in this.soldiers)
-	{
-	  if (soldier.destroyObjective == null && objective != null)
-	  {
-	  if (objective.healthPoints > 0)
-	  {
-		soldier.destroyObjective = objective;      
-	  }
-		  
-	  }
-	else
-	{
-	  if (!IsInstanceValid(soldier.destroyObjective as Node3D))
-	  { 
-		soldier.destroyObjective = null;
-	  } 
-	}
-	  
+		{
+			if (soldier.destroyObjective == null && objective != null)
+			{
+			if (objective.healthPoints > 0)
+			{
+				soldier.destroyObjective = objective;      
+			}
+				
+			}
+			else
+			{
+			if (!IsInstanceValid(soldier.destroyObjective as Node3D))
+			{ 
+				soldier.destroyObjective = null;
+			} 
+			}
+			if (this.CheckIfPositionVisible(soldier.GlobalPosition)){
+				if (!soldier.Visible){
+					soldier.Visible = true;
+				}
+				
+			}
+			else {
+				if (soldier.Visible){
+					soldier.Visible = false;
+				}
+			}
+			
+			
 
-	  soldier.Tick((float)delta, this.Rotation);
-	}
+			soldier.Tick((float)delta, this.Rotation);
+		}
 	prevObj = objective;
+  }
+  bool CheckIfPositionVisible(Godot.Vector3 pos){
+	if (
+		pos.X > this.world.player.GlobalPosition.X - (GameGlobals.chunkRadius / 2 * GameGlobals.ChunkWidth) &&
+		pos.X < this.world.player.GlobalPosition.X + (GameGlobals.chunkRadius / 2 * GameGlobals.ChunkWidth) &&
+
+		pos.Z > this.world.player.GlobalPosition.Z - (GameGlobals.chunkRadius / 2 * GameGlobals.ChunkWidth) &&
+		pos.Z < this.world.player.GlobalPosition.Z + (GameGlobals.chunkRadius / 2 * GameGlobals.ChunkWidth)
+
+	) {return true;};
+	return false;
   }
 }

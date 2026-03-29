@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://c2v8gyshy0hav"]
+[gd_scene format=3 uid="uid://c2v8gyshy0hav"]
 
 [ext_resource type="Script" uid="uid://dfhi4s40pwwj7" path="res://src/entities/player/Actions/ObjectPlacingAction/ObjectPlacingPlayerAction.cs" id="1_udk4x"]
 [ext_resource type="PackedScene" uid="uid://bq260ntypcifh" path="res://src/objects/SoldierHome/soldier_home.tscn" id="2_32lq0"]
@@ -10,7 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://drt1hjylw66v2" path="res://src/objects/Turrets/MagicTurret/MagicTurret.tscn" id="8_yovp8"]
 [ext_resource type="Script" uid="uid://duy25w27r2v8w" path="res://src/objects/Turrets/MagicTurret/MagicTurretPlacer.cs" id="9_xrtf2"]
 
-[node name="PlayerObjectPlacingAction" type="Node3D" node_paths=PackedStringArray("worldObjects")]
+[node name="PlayerObjectPlacingAction" type="Node3D" unique_id=1345444717 node_paths=PackedStringArray("worldObjects")]
 script = ExtResource("1_udk4x")
 worldObjects = {
 "PlaceArcherTurret": NodePath("ArcherTurret"),
@@ -18,30 +18,29 @@ worldObjects = {
 "PlaceMagicTurret": NodePath("MagicTurret"),
 "PlaceSoldierHome": NodePath("SoldierHome")
 }
-actionName = "StartPlacingObjects"
+actionName = "Build"
 blocksMovement = true
 
-[node name="ArcherTurret" parent="." instance=ExtResource("2_hywmy")]
+[node name="ArcherTurret" parent="." unique_id=1653642153 instance=ExtResource("2_hywmy")]
 physics_interpolation_mode = 2
 visible = false
 collision_layer = 0
 script = ExtResource("3_5a385")
 
-[node name="SoldierHome" parent="." instance=ExtResource("2_32lq0")]
+[node name="SoldierHome" parent="." unique_id=1375240879 instance=ExtResource("2_32lq0")]
 physics_interpolation_mode = 2
 visible = false
 collision_layer = 0
 script = ExtResource("3_qu26l")
 
-[node name="GoldMine" parent="." instance=ExtResource("4_l2j2o")]
+[node name="GoldMine" parent="." unique_id=1525997693 instance=ExtResource("4_l2j2o")]
 physics_interpolation_mode = 2
 visible = false
 collision_layer = 0
 script = ExtResource("5_32lq0")
 
-[node name="MagicTurret" parent="." instance=ExtResource("8_yovp8")]
+[node name="MagicTurret" parent="." unique_id=1693434749 instance=ExtResource("8_yovp8")]
 physics_interpolation_mode = 2
 visible = false
 collision_layer = 0
-collision_mask = 0
 script = ExtResource("9_xrtf2")

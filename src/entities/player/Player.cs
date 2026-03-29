@@ -32,7 +32,7 @@ public partial class Player : CharacterBody3D
 	};
 
 
-	private PlayerAction currentlyActiveAction = null;
+	public PlayerAction currentlyActiveAction = null;
 
 	public float speed = 0.0f;
 	public List<SoldierHome> houses = new List<SoldierHome>();

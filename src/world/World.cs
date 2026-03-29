@@ -38,7 +38,7 @@ public partial class World : Node3D
 	GameLooseScreen endLooseScreen;
 
 	[Export]
-	Player player;
+	public Player player;
 
 	public override void _Ready()
 	{
