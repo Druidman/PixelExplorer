@@ -50,5 +50,23 @@ public abstract partial class Building<T> : WorldBody<T>, IBuilding where T : IW
         GetParent()?.RemoveChild(this);
     }
 
+    protected virtual void OnBuildingEnterTree(){
+
+    }
+    protected virtual void OnBuildingExitTree(){
+        
+    }
+
+    protected override void OnEnterSceneTree(){
+        GD.Print("PLAY place");
+        if (GameGlobals.buildingPlacedSound!=null) GameGlobals.buildingPlacedSound.Play();
+        OnBuildingEnterTree();
+    }
+    protected override void OnExitSceneTree(){
+        GD.Print("PLAY destroy");
+        if (GameGlobals.buildingDestroyedSound!=null) GameGlobals.buildingDestroyedSound.Play();
+        OnBuildingExitTree();
+    }
+
     
 }

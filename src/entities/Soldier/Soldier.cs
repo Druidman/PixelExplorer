@@ -64,7 +64,13 @@ public partial class Soldier : Area3D
 			onRemove();	
 		}
 		
-		if (this.player != null) this.player.soldierManager.RemoveSoldier(this);
+		if (this.player != null) {
+			this.player.soldierManager.RemoveSoldier(this);
+			if (GameGlobals.dieSound != null) {
+				GameGlobals.dieSound.Stop(); // funny effect
+				GameGlobals.dieSound.Play();
+			};
+		}
 		
 		GetParent()?.RemoveChild(this);
 		QueueFree();
@@ -73,6 +79,8 @@ public partial class Soldier : Area3D
 	{
 		if (this.player != null) this.GlobalPosition = this.player.GlobalPosition + startOffsetPos;
 		else this.GlobalPosition = this.startingGlobalPos + startOffsetPos;
+
+		
 		
 	}
 

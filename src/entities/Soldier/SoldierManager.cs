@@ -60,6 +60,11 @@ public partial class SoldierManager : Godot.Node3D
 		this.soldiers.Add(soldier);
 
 		this.player.removeCoins(5);
+		if (GameGlobals.spawnSound != null) {
+				GameGlobals.spawnSound.Stop(); // funny effect
+				GameGlobals.spawnSound.Play();
+			};
+	
 
 		return true;
 

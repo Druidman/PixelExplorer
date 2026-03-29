@@ -13,11 +13,11 @@ public class ArcherTurretDimensions : IWorldObjectDimensions<ArcherTurretDimensi
 public partial class ArcherTurret : Turret<ArcherTurretDimensions>
 {
 	public override float attackDmg {get; protected set;} = 2f;
-	protected override void OnEnterSceneTree()
+	protected override void OnBuildingEnterTree()
 	{
 		this.player?.archerTowers.Add(this); // TODO, not elegant
 	}
-	protected override void OnExitSceneTree()
+	protected override void OnBuildingExitTree()
 	{
 		this.player?.archerTowers.Remove(this); // TODO, fix performance somehow
 	}

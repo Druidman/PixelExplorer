@@ -57,6 +57,7 @@ public partial class Player : CharacterBody3D
 		if (this.healthPoints <= 0){
 			this.world.GameLoose();
 		}
+		if (GameGlobals.punchSound != null) GameGlobals.punchSound.Play();
 	}
 
 	public bool canMove {

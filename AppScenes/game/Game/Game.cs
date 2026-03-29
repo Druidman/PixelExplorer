@@ -12,6 +12,20 @@ public partial class Game : Node3D
 	public Player player = null;
 
 	[Export]
+	SfxPlayer coinCollectedSound;
+	[Export]
+	SfxPlayer buildingPlacedSound;
+	[Export]
+	SfxPlayer buildingDestroyedSound;
+	[Export]
+	SfxPlayer punchSound;
+
+	[Export]
+	SfxPlayer spawnSound;
+	[Export]
+	SfxPlayer dieSound;
+
+	[Export]
 	public ChunkRenderer chunkRenderer = null;
 	public override void _Ready()
 	{
@@ -22,5 +36,12 @@ public partial class Game : Node3D
 		this.world.Initialize();
 
 		DisplayServer.MouseSetMode(DisplayServer.MouseMode.Confined);
+
+		GameGlobals.coinCollectedSound = coinCollectedSound;
+		GameGlobals.buildingPlacedSound = buildingPlacedSound;
+		GameGlobals.buildingDestroyedSound = buildingDestroyedSound;
+		GameGlobals.punchSound = punchSound;
+		GameGlobals.spawnSound = spawnSound;
+		GameGlobals.dieSound = dieSound;
 	}
 }

@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://bkb347g86res2"]
+[gd_scene format=3 uid="uid://bkb347g86res2"]
 
 [ext_resource type="Script" uid="uid://cwhwq7874mqpk" path="res://src/world/World.cs" id="1_f3sb7"]
 [ext_resource type="PackedScene" uid="uid://cfrqciah5bixk" path="res://src/world/CoinManager/CoinManager.tscn" id="2_jte2u"]
@@ -9,44 +9,58 @@
 [ext_resource type="PackedScene" uid="uid://c08fxbj58dv0l" path="res://src/objects/Ores/Gold/GoldOre.tscn" id="5_l0av5"]
 [ext_resource type="PackedScene" uid="uid://drt1hjylw66v2" path="res://src/objects/Turrets/MagicTurret/MagicTurret.tscn" id="7_5kmgb"]
 [ext_resource type="PackedScene" uid="uid://bou4anyq7woic" path="res://src/world/enemyManager/EnemyManager.tscn" id="9_hg6dy"]
+[ext_resource type="AudioStream" uid="uid://clon8cy4wev8d" path="res://sounds/gameOver.mp3" id="10_jsigt"]
+[ext_resource type="Script" uid="uid://d0atbcljlhpo6" path="res://src/utils/SfxPlayer.cs" id="11_lid7q"]
+[ext_resource type="AudioStream" uid="uid://crysxnumhb7h3" path="res://sounds/gameWin.mp3" id="12_lid7q"]
 
-[node name="World" type="Node3D" node_paths=PackedStringArray("oreManager", "coinManager", "worldBaseObjectsManager")]
+[node name="World" type="Node3D" unique_id=876558298 node_paths=PackedStringArray("looseSound", "oreManager", "coinManager", "worldBaseObjectsManager")]
 script = ExtResource("1_f3sb7")
 blockTexture = ExtResource("2_wg6dd")
+looseSound = NodePath("AudioStreamPlayer")
 oreManager = NodePath("OreManager")
 coinManager = NodePath("CoinManager")
 worldBaseObjectsManager = NodePath("WorldBaseObjectsManager")
 
-[node name="CoinManager" parent="." node_paths=PackedStringArray("world") instance=ExtResource("2_jte2u")]
+[node name="CoinManager" parent="." unique_id=184898627 node_paths=PackedStringArray("world") instance=ExtResource("2_jte2u")]
 objectScene = ExtResource("3_43c6p")
 world = NodePath("..")
 
-[node name="OreManager" parent="." node_paths=PackedStringArray("world") instance=ExtResource("3_bsf3i")]
+[node name="OreManager" parent="." unique_id=1929404728 node_paths=PackedStringArray("world") instance=ExtResource("3_bsf3i")]
 objectScene = ExtResource("5_l0av5")
 world = NodePath("..")
 
-[node name="WorldBaseObjectsManager" parent="." node_paths=PackedStringArray("world") instance=ExtResource("4_bsf3i")]
+[node name="WorldBaseObjectsManager" parent="." unique_id=1540136300 node_paths=PackedStringArray("world") instance=ExtResource("4_bsf3i")]
 world = NodePath("..")
 
-[node name="MagicTurret2" parent="WorldBaseObjectsManager" node_paths=PackedStringArray("world") instance=ExtResource("7_5kmgb")]
+[node name="MagicTurret2" parent="WorldBaseObjectsManager" unique_id=640416195 node_paths=PackedStringArray("world") instance=ExtResource("7_5kmgb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, 0)
 world = NodePath("../..")
 
-[node name="MagicTurret3" parent="WorldBaseObjectsManager" node_paths=PackedStringArray("world") instance=ExtResource("7_5kmgb")]
+[node name="MagicTurret3" parent="WorldBaseObjectsManager" unique_id=1163060362 node_paths=PackedStringArray("world") instance=ExtResource("7_5kmgb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 0)
 world = NodePath("../..")
 
-[node name="MagicTurret4" parent="WorldBaseObjectsManager" node_paths=PackedStringArray("world") instance=ExtResource("7_5kmgb")]
+[node name="MagicTurret4" parent="WorldBaseObjectsManager" unique_id=1492025069 node_paths=PackedStringArray("world") instance=ExtResource("7_5kmgb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 6)
 world = NodePath("../..")
 
-[node name="MagicTurret5" parent="WorldBaseObjectsManager" node_paths=PackedStringArray("world") instance=ExtResource("7_5kmgb")]
+[node name="MagicTurret5" parent="WorldBaseObjectsManager" unique_id=1848175695 node_paths=PackedStringArray("world") instance=ExtResource("7_5kmgb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
 world = NodePath("../..")
 
-[node name="MagicTurret" parent="WorldBaseObjectsManager" node_paths=PackedStringArray("world") instance=ExtResource("7_5kmgb")]
+[node name="MagicTurret" parent="WorldBaseObjectsManager" unique_id=1185858119 node_paths=PackedStringArray("world") instance=ExtResource("7_5kmgb")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
 world = NodePath("../..")
 
-[node name="EnemyManager" parent="." node_paths=PackedStringArray("world") instance=ExtResource("9_hg6dy")]
+[node name="EnemyManager" parent="." unique_id=1054057979 node_paths=PackedStringArray("world") instance=ExtResource("9_hg6dy")]
 world = NodePath("..")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1896357433]
+process_mode = 3
+stream = ExtResource("10_jsigt")
+script = ExtResource("11_lid7q")
+
+[node name="AudioStreamPlayer2" type="AudioStreamPlayer" parent="." unique_id=82679365]
+stream = ExtResource("12_lid7q")
+volume_db = 3.0
+script = ExtResource("11_lid7q")

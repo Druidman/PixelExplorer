@@ -10,11 +10,24 @@
 [ext_resource type="PackedScene" uid="uid://bscyq51oo4mby" path="res://src/entities/player/Actions/AttackPlayerAction/AttackPlayerAction.tscn" id="6_k2ghl"]
 [ext_resource type="PackedScene" uid="uid://da8ngix44aqpa" path="res://AppScenes/game/GameEnd/game_end_screen.tscn" id="9_dotuk"]
 [ext_resource type="PackedScene" uid="uid://gcwxisnqfvmd" path="res://AppScenes/game/GameLoose/GameLooseScreen.tscn" id="10_dhhh2"]
+[ext_resource type="AudioStream" uid="uid://b5ufjnupy0c0i" path="res://sounds/gameStart.mp3" id="11_fxcn6"]
+[ext_resource type="Script" uid="uid://d0atbcljlhpo6" path="res://src/utils/SfxPlayer.cs" id="12_hc42i"]
+[ext_resource type="AudioStream" uid="uid://bxyd2a6ldav67" path="res://sounds/placeBuilding.mp3" id="13_hc42i"]
+[ext_resource type="AudioStream" uid="uid://dec4p2de3i4ow" path="res://sounds/punch.mp3" id="14_wg834"]
+[ext_resource type="AudioStream" uid="uid://0q7ft4n7ran4" path="res://sounds/destroyBuilding.mp3" id="15_r8ufw"]
+[ext_resource type="AudioStream" uid="uid://c1wlpkdnq356f" path="res://sounds/soldierSpawn.mp3" id="16_r8ufw"]
+[ext_resource type="AudioStream" uid="uid://qsyo6s01680b" path="res://sounds/soldierDied.mp3" id="17_vqskr"]
 
-[node name="Game" type="Node3D" unique_id=1931327391 node_paths=PackedStringArray("world", "player", "chunkRenderer")]
+[node name="Game" type="Node3D" unique_id=1931327391 node_paths=PackedStringArray("world", "player", "coinCollectedSound", "buildingPlacedSound", "buildingDestroyedSound", "punchSound", "spawnSound", "dieSound", "chunkRenderer")]
 script = ExtResource("1_feb5d")
 world = NodePath("World")
 player = NodePath("Player")
+coinCollectedSound = NodePath("AudioStreamPlayer")
+buildingPlacedSound = NodePath("AudioStreamPlayer2")
+buildingDestroyedSound = NodePath("AudioStreamPlayer3")
+punchSound = NodePath("AudioStreamPlayer4")
+spawnSound = NodePath("AudioStreamPlayer5")
+dieSound = NodePath("AudioStreamPlayer6")
 chunkRenderer = NodePath("ChunkRenderer")
 
 [node name="World" parent="." unique_id=2126579782 node_paths=PackedStringArray("endScreen", "endLooseScreen", "player") instance=ExtResource("1_e2o6t")]
@@ -57,3 +70,31 @@ visible = false
 [node name="GameLooseScreen" parent="." unique_id=1760283620 instance=ExtResource("10_dhhh2")]
 process_mode = 3
 visible = false
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1500025587]
+stream = ExtResource("11_fxcn6")
+script = ExtResource("12_hc42i")
+
+[node name="AudioStreamPlayer2" type="AudioStreamPlayer" parent="." unique_id=856483494]
+stream = ExtResource("13_hc42i")
+volume_db = 7.0
+script = ExtResource("12_hc42i")
+
+[node name="AudioStreamPlayer4" type="AudioStreamPlayer" parent="." unique_id=72571575]
+stream = ExtResource("14_wg834")
+volume_db = 5.0
+script = ExtResource("12_hc42i")
+
+[node name="AudioStreamPlayer3" type="AudioStreamPlayer" parent="." unique_id=845497528]
+stream = ExtResource("15_r8ufw")
+script = ExtResource("12_hc42i")
+
+[node name="AudioStreamPlayer5" type="AudioStreamPlayer" parent="." unique_id=1488795856]
+stream = ExtResource("16_r8ufw")
+volume_db = -5.0
+script = ExtResource("12_hc42i")
+
+[node name="AudioStreamPlayer6" type="AudioStreamPlayer" parent="." unique_id=514093061]
+stream = ExtResource("17_vqskr")
+volume_db = -5.0
+script = ExtResource("12_hc42i")

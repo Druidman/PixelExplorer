@@ -14,7 +14,11 @@ public partial class World : Node3D
 	public Godot.Vector3I MaxWorldTopLeftGlobal = new Godot.Vector3I(-WorldWidth / 2,0,-WorldWidth / 2);
 	public Godot.Vector3I MaxWorldBottomRightGlobal = new Godot.Vector3I(WorldWidth / 2,0,WorldWidth / 2);
 
+	[Export]
+	SfxPlayer looseSound;
 
+	[Export]
+	SfxPlayer winSound;
 
 	private WorldNoise noise = new WorldNoise();
 	private Godot.Vector3I WorldPos = GameGlobals.StartWorldMiddle;
@@ -187,12 +191,14 @@ public partial class World : Node3D
 	}
 	public void GameEnd()
 	{
+		winSound.Play();
 		endScreen.Visible = true;
 		GetTree().Paused = true;
 	}
 
 	public void GameLoose()
 	{
+		looseSound.Play();
 		endLooseScreen.Visible = true;
 		GetTree().Paused = true;
 	}

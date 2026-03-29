@@ -12,13 +12,13 @@ public class SoldierHomeDimensions : IWorldObjectDimensions<SoldierHomeDimension
 public partial class SoldierHome : Building<SoldierHomeDimensions>
 {
 	bool canRemoveSlots = false;
-	protected override void OnEnterSceneTree()
+	protected override void OnBuildingEnterTree()
 	{
 		this.player.houses.Add(this); // TODO, not elegant
 		if (this.player != null) this.player.ExpandSoldierSlots(10);
 		this.canRemoveSlots = true;
 	}
-	protected override void OnExitSceneTree()
+	protected override void OnBuildingExitTree()
 	{
 		this.player.houses.Remove(this); // TODO, fix performance somehow
 		if (this.player != null && canRemoveSlots) this.player.ExpandSoldierSlots(-10);

@@ -54,6 +54,12 @@ class GameGlobals
 
     public static int SoldierCost = 5;
 
+    public static SfxPlayer coinCollectedSound = null;
+    public static SfxPlayer buildingPlacedSound = null;
+    public static SfxPlayer buildingDestroyedSound = null;
+    public static SfxPlayer punchSound = null;
+    public static SfxPlayer spawnSound = null;
+    public static SfxPlayer dieSound = null;
 
     private static ImageTexture makeTexture()
     {

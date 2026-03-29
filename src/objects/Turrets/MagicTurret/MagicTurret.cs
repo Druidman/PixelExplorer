@@ -24,11 +24,11 @@ public partial class MagicTurret : Turret<MagicTurretDimensions>
 	
 
 	public override float attackDmg {get; protected set;} = 2f;
-	protected override void OnEnterSceneTree()
+	protected override void OnBuildingEnterTree()
 	{
 		this.player?.magicTurrets.Add(this); // TODO, not elegant
 	}
-	protected override void OnExitSceneTree()
+	protected override void OnBuildingExitTree()
 	{
 		this.player?.magicTurrets.Remove(this); // TODO, fix performance somehow
 	}

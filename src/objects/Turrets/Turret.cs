@@ -15,9 +15,9 @@ public abstract partial class Turret<T> : Building<T> where T : IWorldObjectDime
 		base.Initialize(player, world);
 		
 	}
-	protected abstract override void OnEnterSceneTree();
+	protected abstract override void OnBuildingEnterTree();
 	
-	protected abstract override void OnExitSceneTree();
+	protected abstract override void OnBuildingExitTree();
 
 
 	private bool CheckIfIsEnemySoldier(Area3D area)
