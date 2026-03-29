@@ -30,5 +30,6 @@ Game about building a village for your soldier that help you destroy main turret
 - `q` - archer tower
 - `e` - soldier home
 - `m` - magic tower
+- `c` - gold mine
 #### Attack mode
 - Click object you want your soldiers to target
