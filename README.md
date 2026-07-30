@@ -22,14 +22,16 @@ Game about building a village for your soldier that help you destroy main turret
 - `b` - build mode
 - `z` - attack mode
 - `<Regular>` - move mode
+
+Mode buttons act as toggle on/off. To enter any `build` or `attack` mode you need to be in `regular` mode (Hit activation button for currently selected mode)
 #### Regular mode
 - mouse guided controls
-- To enter this mode from other mode just click button that activates mode you are currently on
-**Mode activate buttons work as toggle**
 #### Build mode
+- `b` - toggle mode
 - `q` - archer tower
 - `e` - soldier home
 - `m` - magic tower
 - `c` - gold mine
 #### Attack mode
+- `z` - toggle mode
 - Click object you want your soldiers to target
